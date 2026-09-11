@@ -4,7 +4,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libpng-dev libjpeg-dev libfreetype6-dev libonig-dev libzip-dev libicu-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd pdo_mysql mysqli mbstring zip intl exif \
-    && a2dismod mpm_event mpm_worker || true \
+    && a2dismod mpm_event || true \
+    && a2dismod mpm_worker || true \
     && a2enmod mpm_prefork rewrite headers \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
