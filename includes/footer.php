@@ -4,7 +4,7 @@ declare(strict_types=1);
 </main>
 <footer class="edu-footer text-center py-4 mt-5">
   <div class="container">
-    <span class="edu-logo" style="color:#fff"><span class="logo-mark">E</span> EduNova</span>
+    <span class="edu-logo" style="color:#fff"><span class="logo-mark">N</span> NovaTeam</span>
     <div class="d-flex justify-content-center gap-3 mt-2 flex-wrap">
       <a href="descargar.php" class="text-decoration-none small"><i class="bi bi-phone"></i> Descargar app</a>
       <a href="login.php" class="text-decoration-none small"><i class="bi bi-box-arrow-in-right"></i> Iniciar sesión</a>
@@ -26,19 +26,20 @@ function togglePass(id, btn) {
 (function(){
   const btn = document.getElementById('theme-toggle');
   if (!btn) return;
-  const icon = btn.querySelector('i');
+  let icon = btn.querySelector('i');
+  if (!icon) { btn.innerHTML = '<i class="bi bi-sun"></i>'; icon = btn.querySelector('i'); }
   const updateIcon = (t) => {
-    if (icon) icon.className = t === 'dark' ? 'bi bi-sun-fill' : 'bi bi-moon-stars';
+    if (icon) icon.className = t === 'dark' ? 'bi bi-sun' : 'bi bi-moon-stars';
   };
   const updateMeta = (t) => {
     const m = document.querySelector('meta[name="theme-color"]');
-    if (m) m.setAttribute('content', t === 'dark' ? '#141a33' : '#6d5dfc');
+    if (m) m.setAttribute('content', t === 'dark' ? '#17181A' : '#4F8FF7');
   };
   btn.addEventListener('click', () => {
     const cur = document.documentElement.getAttribute('data-bs-theme') === 'dark' ? 'dark' : 'light';
     const next = cur === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-bs-theme', next);
-    localStorage.setItem('edunova-theme', next);
+    localStorage.setItem('novateam-theme', next);
     updateIcon(next);
     updateMeta(next);
   });

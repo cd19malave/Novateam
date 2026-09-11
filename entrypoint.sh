@@ -3,7 +3,7 @@ set -e
 
 PORT="${PORT:-8080}"
 
-echo "== EduNova entrypoint =="
+echo "== NovaTeam entrypoint =="
 echo "PORT=$PORT"
 
 # Dejar que PHP lea los secrets desde variables de entorno/railway.
@@ -13,9 +13,9 @@ if [ -n "$DATABASE_URL" ]; then
   cat > /var/www/html/.env <<EOL
 DATABASE_URL=${DATABASE_URL}
 DB_CHARSET=utf8mb4
-APP_NAME=EduNova
+APP_NAME=NovaTeam
 APP_ENV=production
-SESSION_NAME=EDUNOVASESS
+SESSION_NAME=NOVATEAMSESS
 GEMINI_API_KEY=${GEMINI_API_KEY:-}
 EOL
 else
@@ -27,9 +27,9 @@ DB_NAME=${DB_NAME:-novateam_db}
 DB_USER=${DB_USER:-root}
 DB_PASS=${DB_PASS:-}
 DB_CHARSET=utf8mb4
-APP_NAME=EduNova
+APP_NAME=NovaTeam
 APP_ENV=production
-SESSION_NAME=EDUNOVASESS
+SESSION_NAME=NOVATEAMSESS
 GEMINI_API_KEY=${GEMINI_API_KEY:-}
 EOL
 fi

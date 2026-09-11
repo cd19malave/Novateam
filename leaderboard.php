@@ -10,7 +10,7 @@ require __DIR__ . '/includes/header.php';
 ?>
 <div class="container py-5">
   <h1 class="h3 fw-bold">Leaderboard</h1>
-  <p class="text-muted">Estudiantes con más puntos en EduNova.</p>
+  <p class="text-muted">Estudiantes con más puntos en NovaTeam.</p>
   <div class="table-responsive card-edu p-3">
     <table class="table align-middle mb-0">
       <thead><tr><th>#</th><th>Estudiante</th><th>Grado</th><th>Puntos</th><th>Ejercicios</th><th>Insignias</th></tr></thead>

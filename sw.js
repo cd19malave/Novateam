@@ -1,4 +1,4 @@
-const CACHE_NAME = 'edunova-v2';
+const CACHE_NAME = 'novateam-v1';
 const ASSETS = [
   '/',
   '/index.php',

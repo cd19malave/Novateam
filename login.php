@@ -25,7 +25,7 @@ require __DIR__ . '/includes/header.php';
 ?>
 <div class="container py-5" style="max-width:480px">
   <div class="card-edu p-4">
-    <h1 class="h3 fw-bold">Entrar a EduNova</h1>
+    <h1 class="h3 fw-bold">Entrar a NovaTeam</h1>
     <p class="text-muted">Usa tu correo institucional.</p>
     <?php render_alerts(); ?>
     <form method="post" novalidate>

@@ -34,7 +34,7 @@ require __DIR__ . '/includes/header.php';
 <section class="hero" id="inicio">
   <div class="container text-center">
     <span class="section-eyebrow">NovaTeam presenta</span>
-    <h1 class="mt-2">Aprende <span class="accent">Matemáticas</span> e <span class="accent2">Inglés</span><br>jugando con EduNova 🚀</h1>
+    <h1 class="mt-2">Aprende <span class="accent">Matemáticas</span> e <span class="accent2">Inglés</span><br>jugando con NovaTeam 🚀</h1>
     <p class="lead mt-3 mx-auto" style="max-width:640px">
       Recurso didáctico multimedia para estudiantes de cuarto de primaria: actividades,
       juegos y retos interactivos que se adaptan al ritmo de cada niño.
@@ -79,7 +79,7 @@ require __DIR__ . '/includes/header.php';
 <section id="features" class="container py-5">
   <div class="text-center mb-4">
     <span class="section-eyebrow">Lo que incluye</span>
-    <h2 class="fw-bold mt-2">¿Por qué EduNova?</h2>
+    <h2 class="fw-bold mt-2">¿Por qué NovaTeam?</h2>
   </div>
   <div class="row g-4">
     <div class="col-md-4">
@@ -165,20 +165,20 @@ require __DIR__ . '/includes/header.php';
     <span class="section-eyebrow">NovaTeam</span>
     <h2 class="fw-bold mt-2">Equipo de desarrollo</h2>
   </div>
-  <div class="row g-3 text-center justify-content-center">
-    <div class="col-6 col-md-3"><div class="card-edu p-3"><i class="bi bi-person-circle" style="font-size:2.2rem;color:var(--edu-primary)"></i><p class="fw-bold mt-2 mb-0 small">Carlos Damian Malave Diaz</p></div></div>
-    <div class="col-6 col-md-3"><div class="card-edu p-3"><i class="bi bi-person-circle" style="font-size:2.2rem;color:var(--edu-primary)"></i><p class="fw-bold mt-2 mb-0 small">Danna Alexandra Ortega Saavedra</p></div></div>
-    <div class="col-6 col-md-3"><div class="card-edu p-3"><i class="bi bi-person-circle" style="font-size:2.2rem;color:var(--edu-primary)"></i><p class="fw-bold mt-2 mb-0 small">Giselle Nayeli Jaimes Galvis</p></div></div>
-    <div class="col-6 col-md-3"><div class="card-edu p-3"><i class="bi bi-person-circle" style="font-size:2.2rem;color:var(--edu-primary)"></i><p class="fw-bold mt-2 mb-0 small">Jhoan Andres Ortiz Galvis</p></div></div>
-    <div class="col-6 col-md-3"><div class="card-edu p-3"><i class="bi bi-person-circle" style="font-size:2.2rem;color:var(--edu-primary)"></i><p class="fw-bold mt-2 mb-0 small">Carlos Andrey Delgado Castañeda</p></div></div>
+  <div class="equipo-grid">
+    <div class="card-edu p-4 text-center"><div class="equipo-avatar"><i class="bi bi-person-fill"></i></div><p class="fw-bold mb-0 small">Carlos Damian Malave Diaz</p></div>
+    <div class="card-edu p-4 text-center"><div class="equipo-avatar"><i class="bi bi-person-fill"></i></div><p class="fw-bold mb-0 small">Danna Alexandra Ortega Saavedra</p></div>
+    <div class="card-edu p-4 text-center"><div class="equipo-avatar"><i class="bi bi-person-fill"></i></div><p class="fw-bold mb-0 small">Giselle Nayeli Jaimes Galvis</p></div>
+    <div class="card-edu p-4 text-center"><div class="equipo-avatar"><i class="bi bi-person-fill"></i></div><p class="fw-bold mb-0 small">Jhoan Andres Ortiz Galvis</p></div>
+    <div class="card-edu p-4 text-center"><div class="equipo-avatar"><i class="bi bi-person-fill"></i></div><p class="fw-bold mb-0 small">Carlos Andrey Delgado Castañeda</p></div>
   </div>
 </section>
 
 <section id="contacto" class="container py-5">
-  <div class="card-edu p-4 p-md-5" style="background:linear-gradient(135deg,var(--edu-primary),var(--edu-accent));color:#fff">
+  <div class="card-edu contacto-grad p-4 p-md-5">
     <div class="row g-4 align-items-center">
       <div class="col-lg-5">
-        <h2 class="fw-bold">¿Listo para llevar EduNova a tu institución?</h2>
+        <h2 class="fw-bold">¿Listo para llevar NovaTeam a tu institución?</h2>
         <p class="mb-0">Déjanos tus datos y coordinamos una reunión para la propuesta técnica.</p>
       </div>
       <div class="col-lg-7">

@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         );
         $nt->execute([
             't' => 'Nueva guía: ' . $guia['titulo'],
-            'm' => 'Ya puedes resolverla en EduNova.',
+            'm' => 'Ya puedes resolverla en NovaTeam.',
             'p' => $user['id_usuario'],
         ]);
         flash('ok', 'Guía publicada.');

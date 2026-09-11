@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 /** @var string $pageTitle */
-$pageTitle = $pageTitle ?? 'EduNova';
+$pageTitle = $pageTitle ?? 'NovaTeam';
 $user = current_user();
 $unreadCount = $user ? unread_messages_count((int) $user['id_usuario']) : 0;
 ?>
@@ -12,21 +12,21 @@ $unreadCount = $user ? unread_messages_count((int) $user['id_usuario']) : 0;
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script>
     (function(){
-      var t = localStorage.getItem('edunova-theme') ||
-        (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      var t = localStorage.getItem('novateam-theme');
+      if (t !== 'light' && t !== 'dark') t = 'dark';
       document.documentElement.setAttribute('data-bs-theme', t);
     })();
   </script>
-  <title><?= e($pageTitle) ?> | EduNova</title>
+  <title><?= e($pageTitle) ?> | NovaTeam</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
   <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700;800&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/app.css">
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#6d5dfc">
+  <meta name="theme-color" content="#17181A">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="EduNova">
+  <meta name="apple-mobile-web-app-title" content="NovaTeam">
   <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
 </head>
 <body>
@@ -38,11 +38,11 @@ if ('serviceWorker' in navigator) {
 <nav class="navbar navbar-expand-lg navbar-light navbar-edu sticky-top px-3">
   <div class="container">
     <a class="edu-logo" href="<?= $user ? e(home_for_role()) : 'index.php' ?>">
-      <span class="logo-mark">E</span> EduNova
+      <span class="logo-mark">N</span> NovaTeam
     </a>
     <div class="d-flex align-items-center gap-2">
       <button class="theme-toggle" type="button" id="theme-toggle" title="Cambiar tema claro/oscuro" aria-label="Cambiar tema">
-        <i class="bi bi-moon-stars"></i>
+        <i class="bi bi-sun"></i>
       </button>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Menú">
         <i class="bi bi-list"></i>

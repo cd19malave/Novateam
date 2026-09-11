@@ -1,5 +1,5 @@
 -- ============================================================================
---  NOVATEAM / EDUNOVA — MySQL / MariaDB para phpMyAdmin
+--  NOVATEAM — MySQL / MariaDB para phpMyAdmin
 --  Charset: utf8mb4  |  Motor: InnoDB
 --
 --  Importar en phpMyAdmin:
@@ -279,4 +279,4 @@ VALUES
     (2, 3, 'What color is the sky on a sunny day?', 'Green', 'Blue', 'Red', 'Yellow', 2);
 
 INSERT INTO notificaciones (titulo, mensaje, id_profesor) VALUES
-    ('¡Bienvenidos a EduNova!', 'Ya puedes resolver las primeras guias de matematicas e ingles. Gana puntos e insignias.', 2);
+    ('¡Bienvenidos a NovaTeam!', 'Ya puedes resolver las primeras guias de matematicas e ingles. Gana puntos e insignias.', 2);

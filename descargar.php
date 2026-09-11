@@ -7,10 +7,10 @@ require __DIR__ . '/includes/header.php';
 ?>
 <div class="container py-5">
   <div class="text-center mb-4">
-    <span class="section-eyebrow">Descarga EduNova</span>
+    <span class="section-eyebrow">Descarga NovaTeam</span>
     <h1 class="fw-bold mt-2">Llévala a tu PC o a tu teléfono</h1>
     <p class="text-muted mx-auto" style="max-width:620px">
-      EduNova es una <strong>app web progresiva (PWA)</strong>: la instalas una sola vez y funciona como una
+      NovaTeam es una <strong>app web progresiva (PWA)</strong>: la instalas una sola vez y funciona como una
       aplicación normal, incluso sin conexión.
     </p>
   </div>
@@ -28,7 +28,7 @@ require __DIR__ . '/includes/header.php';
         <div class="text-start mt-3">
           <div class="step-card"><span class="step-num">1</span><p>Entra a <a href="https://novateam-production.up.railway.app" target="_blank" rel="noopener">novateam</a> desde Chrome o Edge.</p></div>
           <div class="step-card"><span class="step-num">2</span><p>Haz clic en el icono <i class="bi bi-arrow-down-circle"></i> de la barra de direcciones.</p></div>
-          <div class="step-card"><span class="step-num">3</span><p>Elige <strong>«Instalar EduNova»</strong> y listo.</p></div>
+          <div class="step-card"><span class="step-num">3</span><p>Elige <strong>«Instalar NovaTeam»</strong> y listo.</p></div>
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-# EduNova (NovaTeam)
+# NovaTeam
 
 Plataforma PHP + MySQL para el piloto de **lógica matemática e inglés** en cuarto de primaria. La landing original quedó como inicio; los datos viven en MySQL y se administran con **phpMyAdmin**.
 

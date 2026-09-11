@@ -11,7 +11,7 @@ if (!headers_sent()) {
 }
 
 $secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
-session_name(env('SESSION_NAME', 'EDUNOVASESS') ?? 'EDUNOVASESS');
+session_name(env('SESSION_NAME', 'NOVATEAMSESS') ?? 'NOVATEAMSESS');
 session_set_cookie_params([
     'lifetime' => 0,
     'path' => '/',
@@ -40,7 +40,7 @@ if (!empty($_SESSION['user']['id_usuario'])) {
             $_SESSION['_last_refresh'] = $now;
         } catch (Throwable $e) {
             // Si falla la conexión, mantener la sesión actual sin destruirla
-            error_log('EduNova: refresh_user error: ' . $e->getMessage());
+            error_log('NovaTeam: refresh_user error: ' . $e->getMessage());
         }
     }
 }

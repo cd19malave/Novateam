@@ -1,6 +1,6 @@
 {
-  "appId": "com.novateam.edunova",
-  "appName": "EduNova",
+  "appId": "com.novateam.novateam",
+  "appName": "NovaTeam",
   "webDir": "www",
   "server": {
     "androidScheme": "https",
