@@ -33,6 +33,9 @@ if (isset($_GET['envio'])) {
     $c2 = @fsockopen('smtp.gmail.com', 587, $e3, $e4, 10);
     echo "PLAIN587=" . ($c2 ? 'ok' : "fail ($e3) $e4") . "\n";
     if ($c2) fclose($c2);
+    $c3 = @fsockopen('www.google.com', 443, $e5, $e6, 10);
+    echo "GOOGLE443=" . ($c3 ? 'ok' : "fail ($e5) $e6") . "\n";
+    if ($c3) fclose($c3);
     exit;
 }
 
