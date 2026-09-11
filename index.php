@@ -170,6 +170,7 @@ require __DIR__ . '/includes/header.php';
     <div class="col-6 col-md-3"><div class="card-edu p-3"><i class="bi bi-person-circle" style="font-size:2.2rem;color:var(--edu-primary)"></i><p class="fw-bold mt-2 mb-0 small">Danna Alexandra Ortega Saavedra</p></div></div>
     <div class="col-6 col-md-3"><div class="card-edu p-3"><i class="bi bi-person-circle" style="font-size:2.2rem;color:var(--edu-primary)"></i><p class="fw-bold mt-2 mb-0 small">Giselle Nayeli Jaimes Galvis</p></div></div>
     <div class="col-6 col-md-3"><div class="card-edu p-3"><i class="bi bi-person-circle" style="font-size:2.2rem;color:var(--edu-primary)"></i><p class="fw-bold mt-2 mb-0 small">Jhoan Andres Ortiz Galvis</p></div></div>
+    <div class="col-6 col-md-3"><div class="card-edu p-3"><i class="bi bi-person-circle" style="font-size:2.2rem;color:var(--edu-primary)"></i><p class="fw-bold mt-2 mb-0 small">Carlos Andrey Delgado Castañeda</p></div></div>
   </div>
 </section>
 
