@@ -24,6 +24,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'i' => mb_substr($institucion, 0, 150),
         'm' => $mensaje,
     ]);
+
+    $contactEmail = env('CONTACTO_EMAIL', 'novateamrecuperacion@gmail.com') ?? 'novateamrecuperacion@gmail.com';
+    $body = '<div style="font-family:Arial,Helvetica,sans-serif;background:#17181A;padding:24px;border-radius:16px;max-width:520px;margin:0 auto">'
+        . '<div style="background:#1F2126;border:1px solid #2A2D33;border-radius:14px;padding:20px;color:#E8E8F2">'
+        . '<h1 style="font-size:16px;margin:0 0 12px;color:#fff">Nueva solicitud de institución</h1>'
+        . '<p style="margin:0 0 6px;font-size:14px"><strong>Nombre:</strong> ' . e($nombre) . '</p>'
+        . '<p style="margin:0 0 6px;font-size:14px"><strong>Correo:</strong> ' . e($correo) . '</p>'
+        . '<p style="margin:0 0 6px;font-size:14px"><strong>Institución:</strong> ' . e($institucion) . '</p>'
+        . '<p style="margin:0 0 6px;font-size:14px"><strong>Mensaje:</strong></p>'
+        . '<p style="margin:0;font-size:14px;line-height:1.6">' . nl2br(e($mensaje)) . '</p>'
+        . '</div></div>';
+    send_email($contactEmail, 'NovaTeam: nueva solicitud de contacto', $body);
+
     flash('ok', 'Recibimos tu solicitud. NovaTeam te contactará pronto.');
     redirect('index.php#contacto');
 }
