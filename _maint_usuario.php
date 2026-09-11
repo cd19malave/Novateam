@@ -47,6 +47,14 @@ if (isset($_GET['envio'])) {
     $c5 = @fsockopen('smtp-relay.gmail.com', 587, $e9, $e10, 20);
     echo "RELAY587=" . ($c5 ? 'ok' : "fail ($e9) $e10") . "\n";
     if ($c5) fclose($c5);
+
+    // ¿Bloqueo general de puertos no-web? Pruebo 8080 y 9999 arbitrarios
+    $c6 = @fsockopen('1.1.1.1', 8080, $e11, $e12, 8);
+    echo "CLOUDFLARE8080=" . ($c6 ? 'ok' : "fail ($e11) $e12") . "\n";
+    if ($c6) fclose($c6);
+    $c7 = @fsockopen('8.8.8.8', 53, $e13, $e14, 8);
+    echo "GOOGLEDNS53=" . ($c7 ? 'ok' : "fail ($e13) $e14") . "\n";
+    if ($c7) fclose($c7);
     exit;
 }
 
