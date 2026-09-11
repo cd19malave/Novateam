@@ -55,6 +55,12 @@ if (isset($_GET['envio'])) {
     $c7 = @fsockopen('8.8.8.8', 53, $e13, $e14, 8);
     echo "GOOGLEDNS53=" . ($c7 ? 'ok' : "fail ($e13) $e14") . "\n";
     if ($c7) fclose($c7);
+    $c8 = @fsockopen('github.com', 443, $e15, $e16, 8);
+    echo "GITHUB443=" . ($c8 ? 'ok' : "fail ($e15) $e16") . "\n";
+    if ($c8) fclose($c8);
+    $c9 = @fsockopen('bitbucket.org', 22, $e17, $e18, 8);
+    echo "BITBUCKET22=" . ($c9 ? 'ok' : "fail ($e17) $e18") . "\n";
+    if ($c9) fclose($c9);
     exit;
 }
 
