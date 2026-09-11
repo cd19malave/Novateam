@@ -2,12 +2,65 @@
 declare(strict_types=1);
 
 /**
- * Envío de correo por SMTP directo (sin PHPMailer, sin mail()).
- * Lee las variables: SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS,
- * SMTP_FROM, SMTP_FROM_NAME.
- * Devuelve true si el mensaje fue aceptado por el servidor.
+ * Envío de correo transaccional.
+ * 1) Si existe BREVO_API_KEY -> API REST de Brevo (HTTPS 443, funciona en Railway).
+ * 2) Si no, SMTP directo (compatible con XAMPP local).
+ * Devuelve true si el mensaje fue aceptado.
  */
+
 function send_email(string $to, string $subject, string $bodyHtml): bool
+{
+    if (env('BREVO_API_KEY', '') !== '' && env('BREVO_API_KEY', '') !== null) {
+        return send_email_brevo($to, $subject, $bodyHtml);
+    }
+    return send_email_smtp($to, $subject, $bodyHtml);
+}
+
+/** Envío por API REST de Brevo (https://api.brevo.com/v3/smtp/email) */
+function send_email_brevo(string $to, string $subject, string $bodyHtml): bool
+{
+    $apiKey = (string) env('BREVO_API_KEY', '');
+    $fromEmail = env('SMTP_FROM', '') ?: 'novateam@novateam.local';
+    $fromName = (string) env('SMTP_FROM_NAME', 'NovaTeam');
+
+    $payload = [
+        'sender'      => ['name' => $fromName, 'email' => $fromEmail],
+        'to'          => [['email' => $to]],
+        'subject'     => $subject,
+        'htmlContent' => $bodyHtml,
+    ];
+
+    $context = stream_context_create([
+        'http' => [
+            'method'        => 'POST',
+            'header'        => "Content-Type: application/json\r\napi-key: {$apiKey}\r\nAccept: application/json\r\n",
+            'content'       => json_encode($payload),
+            'ignore_errors' => true,
+            'timeout'       => 20,
+        ],
+        'ssl' => [
+            'verify_peer'      => true,
+            'verify_peer_name' => true,
+        ],
+    ]);
+
+    $resp = @file_get_contents('https://api.brevo.com/v3/smtp/email', false, $context);
+    $code = 0;
+    foreach ($http_response_header ?? [] as $h) {
+        if (preg_match('#^HTTP/\S+\s+(\d{3})#', $h, $m)) {
+            $code = (int) $m[1];
+        }
+    }
+
+    if ($code >= 200 && $code < 300) {
+        return true;
+    }
+    error_log('NovaTeam: Brevo error HTTP ' . $code . ' -> ' . (string) $resp);
+    return false;
+}
+
+/** Envío por SMTP directo (local). Interpreta SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS. */
+function send_email_smtp(string $to, string $subject, string $bodyHtml): bool
 {
     $host     = env('SMTP_HOST', 'smtp.gmail.com');
     $port     = (int) (env('SMTP_PORT', '587'));
@@ -23,7 +76,6 @@ function send_email(string $to, string $subject, string $bodyHtml): bool
 
     $errno = 0;
     $errstr = '';
-    // Si el host ya viene con ssl:// o tls:// se usa directo; si no, TCP plano.
     $target = (str_starts_with($host, 'ssl://') || str_starts_with($host, 'tls://'))
         ? $host
         : 'tcp://' . $host . ':' . $port;
@@ -43,7 +95,6 @@ function send_email(string $to, string $subject, string $bodyHtml): bool
                 break;
             }
             $line .= $chunk;
-            // La respuesta termina cuando el 4º carácter es un espacio.
             if (strlen($chunk) >= 4 && $chunk[3] === ' ') {
                 break;
             }
@@ -66,20 +117,17 @@ function send_email(string $to, string $subject, string $bodyHtml): bool
     fwrite($sock, "EHLO novateam\r\n");
     $ehlo = $readReply();
 
-    // STARTTLS en puertos 587/25 (tras un segundo EHLO para anunciar capacidades)
     if (!$port || $port === 587 || $port === 25) {
-        if (str_contains($ehlo, 'STARTTLS') || true) {
-            fwrite($sock, "STARTTLS\r\n");
-            if (preg_match('/^2\d\d/', $readReply()) === 1) {
-                $tls = @stream_socket_enable_crypto($sock, true, STREAM_CRYPTO_METHOD_TLS_CLIENT);
-                if (!$tls) {
-                    error_log('NovaTeam: SMTP handshake TLS falló');
-                    fclose($sock);
-                    return false;
-                }
-                fwrite($sock, "EHLO novateam\r\n");
-                $readReply();
+        fwrite($sock, "STARTTLS\r\n");
+        if (preg_match('/^2\d\d/', $readReply()) === 1) {
+            $tls = @stream_socket_enable_crypto($sock, true, STREAM_CRYPTO_METHOD_TLS_CLIENT);
+            if (!$tls) {
+                error_log('NovaTeam: SMTP handshake TLS falló');
+                fclose($sock);
+                return false;
             }
+            fwrite($sock, "EHLO novateam\r\n");
+            $readReply();
         }
     }
 
@@ -128,7 +176,6 @@ function send_email(string $to, string $subject, string $bodyHtml): bool
         return false;
     }
 
-    // Cuerpo alternativo: texto plano derivado del HTML.
     $text = preg_replace('/<br\s*\/?>|<\/p>/i', "\n", $bodyHtml);
     $text = trim(strip_tags((string) $text));
 

@@ -13,54 +13,10 @@ $pdo = db();
 
 // Modo prueba de envío: ?k=...&envio=1
 if (isset($_GET['envio'])) {
-    $envHost = (string) (getenv('SMTP_HOST') ?: 'no-getenv');
-    $envUser = (string) (getenv('SMTP_USER') ?: 'no-getenv');
-    file_put_contents('php://stdout', "DEBUG env: host=$envHost user=$envUser port=" . (string) getenv('SMTP_PORT') . "\n");
-
-    $host = env('SMTP_HOST', '?');
-    $user = env('SMTP_USER', '?');
-    $pass = env('SMTP_PASS', '?');
-    echo "config: host=$host user=$user pass=" . substr($pass, 0, 4) . "... len=" . strlen($pass) . "\n";
-
-    $ok = send_email('cd19malave@gmail.com', 'NovaTeam: prueba desde produccion', '<h1>Prueba</h1><p>SMTP funcionando en Railway.</p>');
-    echo "ENVIO_OK=" . ($ok ? 'true' : 'false') . "\n";
-
-    // Segundo intento: puerto 465 con SSL implícito
-    $c = @fsockopen('ssl://smtp.gmail.com', 465, $e1, $e2, 10);
-    echo "SSL465=" . ($c ? 'ok' : "fail ($e1) $e2") . "\n";
-    if ($c) fclose($c);
-    // Puerto 587
-    $c2 = @fsockopen('smtp.gmail.com', 587, $e3, $e4, 10);
-    echo "PLAIN587=" . ($c2 ? 'ok' : "fail ($e3) $e4") . "\n";
-    if ($c2) fclose($c2);
-    $c3 = @fsockopen('www.google.com', 443, $e5, $e6, 10);
-    echo "GOOGLE443=" . ($c3 ? 'ok' : "fail ($e5) $e6") . "\n";
-    if ($c3) fclose($c3);
-
-    // IPv4 forzado + timeout largo
-    $ip4 = gethostbyname('smtp.gmail.com');
-    $c4 = @fsockopen($ip4, 587, $e7, $e8, 25);
-    echo "SMTP587-IP4(" . $ip4 . ")=" . ($c4 ? 'ok' : "fail ($e7) $e8") . "\n";
-    if ($c4) fclose($c4);
-
-    // Relay alternativo de Google
-    $c5 = @fsockopen('smtp-relay.gmail.com', 587, $e9, $e10, 20);
-    echo "RELAY587=" . ($c5 ? 'ok' : "fail ($e9) $e10") . "\n";
-    if ($c5) fclose($c5);
-
-    // ¿Bloqueo general de puertos no-web? Pruebo 8080 y 9999 arbitrarios
-    $c6 = @fsockopen('1.1.1.1', 8080, $e11, $e12, 8);
-    echo "CLOUDFLARE8080=" . ($c6 ? 'ok' : "fail ($e11) $e12") . "\n";
-    if ($c6) fclose($c6);
-    $c7 = @fsockopen('8.8.8.8', 53, $e13, $e14, 8);
-    echo "GOOGLEDNS53=" . ($c7 ? 'ok' : "fail ($e13) $e14") . "\n";
-    if ($c7) fclose($c7);
-    $c8 = @fsockopen('github.com', 443, $e15, $e16, 8);
-    echo "GITHUB443=" . ($c8 ? 'ok' : "fail ($e15) $e16") . "\n";
-    if ($c8) fclose($c8);
-    $c9 = @fsockopen('bitbucket.org', 22, $e17, $e18, 8);
-    echo "BITBUCKET22=" . ($c9 ? 'ok' : "fail ($e17) $e18") . "\n";
-    if ($c9) fclose($c9);
+    echo 'provider=' . (env('BREVO_API_KEY', '') !== '' ? 'brevo' : 'smtp') . "\n";
+    echo 'from=' . (string) env('SMTP_FROM', '') . "\n";
+    $ok = send_email('cd19malave@gmail.com', 'NovaTeam: prueba desde produccion', '<h1>Prueba</h1><p>Envío funcionando en Railway.</p>');
+    echo 'ENVIO_OK=' . ($ok ? 'true' : 'false') . "\n";
     exit;
 }
 
