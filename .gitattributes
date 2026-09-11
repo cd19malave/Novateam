@@ -1,0 +1,4 @@
+*.sh text eol=lf
+Dockerfile text eol=lf
+*.php text eol=crlf
+*.sql text eol=crlf

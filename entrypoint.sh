@@ -1,18 +1,17 @@
 #!/bin/bash
 set -e
 
-# Construir variables de BD desde DATABASE_URL (Railway)
-# Formato: mysql://user:pass@host:port/dbname
+PORT="${PORT:-80}"
+
 if [ -n "$DATABASE_URL" ]; then
-  export DB_HOST=$(echo "$DATABASE_URL" | sed -E 's/^mysql:\/\/([^:]+):([^@]+)@([^:\/]+)(:([0-9]+))?\/([^?]+).*$/\3/')
-  export DB_USER=$(echo "$DATABASE_URL" | sed -E 's/^mysql:\/\/([^:]+):([^@]+)@([^:\/]+)(:([0-9]+))?\/([^?]+).*$/\1/')
-  export DB_PASS=$(echo "$DATABASE_URL" | sed -E 's/^mysql:\/\/([^:]+):([^@]+)@([^:\/]+)(:([0-9]+))?\/([^?]+).*$/\2/')
-  export DB_NAME=$(echo "$DATABASE_URL" | sed -E 's/^mysql:\/\/([^:]+):([^@]+)@([^:\/]+)(:([0-9]+))?\/([^?]+).*$/\6/')
-  export DB_PORT=$(echo "$DATABASE_URL" | sed -E 's/^mysql:\/\/([^:]+):([^@]+)@([^:\/]+):?([0-9]+)?\/.*$/\4/')
+  export DB_HOST=$(echo "$DATABASE_URL" | sed -E 's|^mysql://([^:]+):([^@]+)@([^:\/]+):?([0-9]+)?/([^?]+).*|\3|')
+  export DB_USER=$(echo "$DATABASE_URL" | sed -E 's|^mysql://([^:]+):([^@]+)@([^:\/]+):?([0-9]+)?/([^?]+).*|\1|')
+  export DB_PASS=$(echo "$DATABASE_URL" | sed -E 's|^mysql://([^:]+):([^@]+)@([^:\/]+):?([0-9]+)?/([^?]+).*|\2|')
+  export DB_NAME=$(echo "$DATABASE_URL" | sed -E 's|^mysql://([^:]+):([^@]+)@([^:\/]+):?([0-9]+)?/([^?]+).*|\5|')
+  export DB_PORT=$(echo "$DATABASE_URL" | sed -E 's|^mysql://([^:]+):([^@]+)@([^:\/]+):?([0-9]+)?/([^?]+).*|\4|')
   [ -z "$DB_PORT" ] && export DB_PORT=3306
 
-  # Escribir .env conn los datos de production
-  cat > /var/www/html/.env <<EOF
+  cat > /var/www/html/.env <<EOL
 DB_HOST=${DB_HOST}
 DB_PORT=${DB_PORT}
 DB_NAME=${DB_NAME}
@@ -23,18 +22,21 @@ APP_NAME=EduNova
 APP_ENV=production
 SESSION_NAME=EDUNOVASESS
 GEMINI_API_KEY=${GEMINI_API_KEY:-}
-EOF
+EOL
 fi
 
-# Esperar a MySQL si no está listo (máx 90s)
 if [ -n "$DB_HOST" ]; then
-  for i in $(seq 1 90); do
+  for i in $(seq 1 60); do
     if timeout 2 bash -c "echo > /dev/tcp/${DB_HOST}/${DB_PORT:-3306}" 2>/dev/null; then
+      echo "MySQL listo"
       break
     fi
     sleep 1
-    if [ "$i" -eq 90 ]; then echo "WARN: MySQL no respondió a tiempo, continuando..."; fi
+    if [ "$i" -eq 60 ]; then echo "WARN: MySQL timeout, continuando..."; fi
   done
 fi
+
+sed -i "s/Listen 80/Listen ${PORT}/" /etc/apache2/ports.conf
+sed -i "s/Listen 80/Listen ${PORT}/" /etc/apache2/sites-available/000-default.conf
 
 exec apache2-foreground

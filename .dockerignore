@@ -1,0 +1,10 @@
+.node/
+node_modules/
+android/
+ios/
+www/
+.git/
+.env
+*.apk
+*.exe
+EDUNOVA-DEPLOY.zip
