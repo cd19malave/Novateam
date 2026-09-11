@@ -17,6 +17,6 @@ RUN mkdir -p uploads/archivos uploads/perfiles && \
 
 ENV PORT=80
 
-EXPOSE ${PORT}
+EXPOSE 80
 
 CMD ["/var/www/html/entrypoint.sh"]
