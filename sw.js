@@ -1,4 +1,4 @@
-const CACHE_NAME = 'novateam-v1';
+const CACHE_NAME = 'novateam-v2';
 const ASSETS = [
   '/',
   '/index.php',
@@ -8,8 +8,8 @@ const ASSETS = [
   '/profesor.php',
   '/admin.php',
   '/descargar.php',
-  '/assets/css/app.css',
-  '/assets/js/app.js',
+  '/assets/css/app.css?v=2',
+  '/assets/js/app.js?v=2',
   '/assets/icons/icon-192.png',
   '/assets/icons/icon-512.png',
   'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css',
@@ -33,16 +33,21 @@ self.addEventListener('activate', e => {
 
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
+  const isAsset =
+    e.request.destination === 'style' ||
+    e.request.destination === 'script' ||
+    e.request.destination === 'image' ||
+    e.request.destination === 'font' ||
+    e.request.url.includes('/assets/');
   e.respondWith(
-    caches.match(e.request).then(cached => {
-      const fetched = fetch(e.request).then(resp => {
-        if (resp && resp.status === 200) {
+    fetch(e.request)
+      .then(resp => {
+        if (resp && resp.status === 200 && isAsset) {
           const clone = resp.clone();
           caches.open(CACHE_NAME).then(c => c.put(e.request, clone));
         }
         return resp;
-      }).catch(() => cached);
-      return cached || fetched;
-    })
+      })
+      .catch(() => caches.match(e.request))
   );
 });

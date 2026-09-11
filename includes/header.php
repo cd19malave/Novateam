@@ -21,8 +21,8 @@ $unreadCount = $user ? unread_messages_count((int) $user['id_usuario']) : 0;
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
   <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700;800&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/app.css">
-  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="assets/css/app.css?v=2">
+  <link rel="manifest" href="manifest.json?v=2">
   <meta name="theme-color" content="#17181A">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
