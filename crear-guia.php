@@ -142,7 +142,7 @@ require __DIR__ . '/includes/header.php';
       </div>
     </div>
 
-    <div class="card-edu p-4 mb-4" style="background:linear-gradient(135deg,#e8f5e9,#fff3e0);border:2px dashed var(--edu-primary);">
+    <div class="ia-panel p-4 mb-4">
       <div class="d-flex align-items-center gap-3 mb-3">
         <div style="font-size:2rem;">🤖</div>
         <div>

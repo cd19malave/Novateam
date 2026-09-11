@@ -1,4 +1,4 @@
-const CACHE_NAME = 'edunova-v1';
+const CACHE_NAME = 'edunova-v2';
 const ASSETS = [
   '/',
   '/index.php',
@@ -7,6 +7,7 @@ const ASSETS = [
   '/estudiante.php',
   '/profesor.php',
   '/admin.php',
+  '/descargar.php',
   '/assets/css/app.css',
   '/assets/js/app.js',
   '/assets/icons/icon-192.png',

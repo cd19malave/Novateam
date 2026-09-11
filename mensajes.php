@@ -64,18 +64,17 @@ $pageTitle = 'Mensajes';
 require __DIR__ . '/includes/header.php';
 ?>
 <style>
-  html,body{height:100%;}
-  .chat-wrapper{height:calc(100vh - 80px);max-height:700px;}
+  .chat-wrapper{height:calc(100vh - 130px);max-height:700px;}
   .chat-sidebar{overflow-y:auto;max-height:100%;}
   .chat-main{display:flex;flex-direction:column;height:100%;}
-  .chat-messages{flex:1 1 auto;overflow-y:auto;padding:1rem;background:#f8f9fa;}
-  .chat-input-bar{padding:.75rem 1rem;border-top:1px solid #e9ecef;background:#fff;display:flex;align-items:flex-end;gap:.5rem;}
+  .chat-messages{flex:1 1 auto;overflow-y:auto;padding:1rem;background:var(--edu-messages-bg);}
+  .chat-input-bar{padding:.75rem 1rem;border-top:1px solid var(--edu-border);background:var(--edu-surface);display:flex;align-items:flex-end;gap:.5rem;}
   .chat-input-bar textarea{flex:1;resize:none;min-height:40px;max-height:120px;border-radius:12px;padding:.5rem .75rem;}
-  .chat-input-bar .file-label{flex:0 0 auto;cursor:pointer;padding:.5rem;border-radius:12px;border:1px solid #dee2e6;background:#fff;color:var(--edu-primary);font-size:1.1rem;}
-  .chat-input-bar .file-label:hover{background:#f0f4ff;}
+  .chat-input-bar .file-label{flex:0 0 auto;cursor:pointer;padding:.5rem;border-radius:12px;border:1px solid var(--edu-border);background:var(--edu-surface);color:var(--edu-primary);font-size:1.1rem;}
+  .chat-input-bar .file-label:hover{background:var(--edu-hover);}
   .chat-input-bar input[type="file"]{display:none;}
   .chat-input-bar .btn-send{flex:0 0 auto;border-radius:50%;width:40px;height:40px;display:grid;place-items:center;}
-  .file-preview{font-size:.72rem;color:#666;margin-top:4px;display:flex;align-items:center;gap:4px;}
+  .file-preview{font-size:.72rem;color:var(--edu-muted);margin-top:4px;display:flex;align-items:center;gap:4px;}
   .file-preview i{color:var(--edu-primary);}
 </style>
 
@@ -84,7 +83,7 @@ require __DIR__ . '/includes/header.php';
     <div class="row g-0 flex-grow-1" style="min-height:0;">
       <!-- Sidebar contacts -->
       <div class="col-md-4 border-end chat-sidebar" style="max-height:100%;">
-        <div class="p-3 border-bottom sticky-top bg-white" style="z-index:2;">
+        <div class="p-3 border-bottom sticky-top bg-surface" style="z-index:2;">
           <h5 class="fw-bold mb-0"><i class="bi bi-chat-dots"></i> Mensajes</h5>
         </div>
         <div class="list-group list-group-flush">
@@ -116,7 +115,7 @@ require __DIR__ . '/includes/header.php';
       <div class="col-md-8 chat-main">
         <?php if ($contacto): ?>
           <!-- Header -->
-          <div class="p-3 border-bottom d-flex align-items-center gap-2 bg-white" style="flex:0 0 auto;">
+          <div class="p-3 border-bottom d-flex align-items-center gap-2 bg-surface" style="flex:0 0 auto;">
             <?= user_avatar_html($contacto, 36) ?>
             <strong class="text-truncate"><?= e($contacto['nombre']) ?></strong>
           </div>
@@ -127,7 +126,7 @@ require __DIR__ . '/includes/header.php';
               <?php $isMe = (int) $msg['id_emisor'] === $user['id_usuario']; ?>
               <div class="mb-2 d-flex <?= $isMe ? 'justify-content-end' : 'justify-content-start' ?>">
                 <div class="px-3 py-2 rounded-3 <?= $isMe ? '' : 'chat-bubble-recv' ?>"
-                     style="max-width:75%;background:<?= $isMe ? 'var(--edu-primary);color:#fff;' : '#fff;border:1px solid #e0e0e0;' ?>;word-break:break-word;">
+                     style="max-width:75%;background:<?= $isMe ? 'var(--edu-primary);color:#fff;' : 'var(--edu-surface);border:1px solid var(--edu-border);' ?>;word-break:break-word;">
                   <div style="font-size:.9rem;line-height:1.4;"><?= nl2br(e($msg['contenido'])) ?></div>
                   <?php
                   $archivos = $pdo->prepare(

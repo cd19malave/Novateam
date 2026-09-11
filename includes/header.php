@@ -10,6 +10,13 @@ $unreadCount = $user ? unread_messages_count((int) $user['id_usuario']) : 0;
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+    (function(){
+      var t = localStorage.getItem('edunova-theme') ||
+        (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-bs-theme', t);
+    })();
+  </script>
   <title><?= e($pageTitle) ?> | EduNova</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
@@ -33,9 +40,14 @@ if ('serviceWorker' in navigator) {
     <a class="edu-logo" href="<?= $user ? e(home_for_role()) : 'index.php' ?>">
       <span class="logo-mark">E</span> EduNova
     </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Menú">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+    <div class="d-flex align-items-center gap-2">
+      <button class="theme-toggle" type="button" id="theme-toggle" title="Cambiar tema claro/oscuro" aria-label="Cambiar tema">
+        <i class="bi bi-moon-stars"></i>
+      </button>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Menú">
+        <i class="bi bi-list"></i>
+      </button>
+    </div>
     <div class="collapse navbar-collapse" id="nav">
       <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
         <?php if (!$user): ?>
@@ -55,7 +67,7 @@ if ('serviceWorker' in navigator) {
             <?php endif; ?>
           </a></li>
           <li class="nav-item"><a class="nav-link" href="perfil.php"><?= user_avatar_html($user, 28) ?></a></li>
-          <li class="nav-item"><a class="nav-link" href="instalar.php" title="Instalar app"><i class="bi bi-phone"></i></a></li>
+          <li class="nav-item"><a class="nav-link" href="descargar.php" title="Descargar app"><i class="bi bi-phone"></i> <span class="d-lg-none">Descargar</span></a></li>
           <li class="nav-item"><a class="btn btn-edu-outline py-1" href="logout.php">Salir</a></li>
         <?php elseif ($user['rol'] === 'profesor'): ?>
           <li class="nav-item"><a class="nav-link" href="profesor.php">Panel</a></li>
@@ -69,14 +81,14 @@ if ('serviceWorker' in navigator) {
             <?php endif; ?>
           </a></li>
           <li class="nav-item"><a class="nav-link" href="perfil.php"><?= user_avatar_html($user, 28) ?></a></li>
-          <li class="nav-item"><a class="nav-link" href="instalar.php" title="Instalar app"><i class="bi bi-phone"></i></a></li>
+          <li class="nav-item"><a class="nav-link" href="descargar.php" title="Descargar app"><i class="bi bi-phone"></i> <span class="d-lg-none">Descargar</span></a></li>
           <li class="nav-item"><a class="btn btn-edu-outline py-1" href="logout.php">Salir</a></li>
         <?php else: ?>
           <li class="nav-item"><a class="nav-link" href="admin.php">Administración</a></li>
           <li class="nav-item"><a class="nav-link" href="leaderboard.php">Ranking</a></li>
           <li class="nav-item"><a class="nav-link" href="mensajes.php">Mensajes</a></li>
           <li class="nav-item"><a class="nav-link" href="perfil.php"><?= user_avatar_html($user, 28) ?></a></li>
-          <li class="nav-item"><a class="nav-link" href="instalar.php" title="Instalar app"><i class="bi bi-phone"></i></a></li>
+          <li class="nav-item"><a class="nav-link" href="descargar.php" title="Descargar app"><i class="bi bi-phone"></i> <span class="d-lg-none">Descargar</span></a></li>
           <li class="nav-item"><a class="btn btn-edu-outline py-1" href="logout.php">Salir</a></li>
         <?php endif; ?>
       </ul>

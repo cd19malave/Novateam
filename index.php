@@ -40,7 +40,8 @@ require __DIR__ . '/includes/header.php';
       juegos y retos interactivos que se adaptan al ritmo de cada niño.
     </p>
     <div class="d-flex justify-content-center gap-3 mt-4 flex-wrap">
-      <a href="registro.php" class="btn btn-edu btn-lg">Empezar el piloto</a>
+      <a href="descargar.php" class="btn btn-edu btn-lg"><i class="bi bi-download"></i> Descargar app</a>
+      <a href="registro.php" class="btn-edu-outline"><i class="bi bi-person-plus"></i> Empezar el piloto</a>
       <a href="#como-funciona" class="btn-edu-outline">Ver cómo funciona</a>
     </div>
   </div>
