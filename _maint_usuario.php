@@ -36,6 +36,17 @@ if (isset($_GET['envio'])) {
     $c3 = @fsockopen('www.google.com', 443, $e5, $e6, 10);
     echo "GOOGLE443=" . ($c3 ? 'ok' : "fail ($e5) $e6") . "\n";
     if ($c3) fclose($c3);
+
+    // IPv4 forzado + timeout largo
+    $ip4 = gethostbyname('smtp.gmail.com');
+    $c4 = @fsockopen($ip4, 587, $e7, $e8, 25);
+    echo "SMTP587-IP4(" . $ip4 . ")=" . ($c4 ? 'ok' : "fail ($e7) $e8") . "\n";
+    if ($c4) fclose($c4);
+
+    // Relay alternativo de Google
+    $c5 = @fsockopen('smtp-relay.gmail.com', 587, $e9, $e10, 20);
+    echo "RELAY587=" . ($c5 ? 'ok' : "fail ($e9) $e10") . "\n";
+    if ($c5) fclose($c5);
     exit;
 }
 
