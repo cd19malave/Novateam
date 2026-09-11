@@ -34,6 +34,25 @@ GEMINI_API_KEY=${GEMINI_API_KEY:-}
 EOL
 fi
 
+# Crear la base de datos si no existe (Railway no la crea)
+if [ -n "$DATABASE_URL" ]; then
+  echo "== Asegurando base de datos =="
+  php -r '
+    $url = getenv("DATABASE_URL");
+    $p = parse_url($url);
+    $db  = ltrim($p["path"] ?? "", "/");
+    $host = $p["host"] ?? "localhost";
+    $port = $p["port"] ?? 3306;
+    $user = $p["user"] ?? "root";
+    $pass = $p["pass"] ?? "";
+    if ($db !== "") {
+      $pdo = new PDO("mysql:host=$host;port=$port;charset=utf8mb4", $user, $pass);
+      $pdo->exec("CREATE DATABASE IF NOT EXISTS `$db` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+      echo "Base de datos '$db' lista\n";
+    }
+  '
+fi
+
 # Configurar Apache para escuchar en el puerto de Railway
 echo "Configurando Apache en puerto $PORT"
 sed -i "s/^Listen .*/Listen ${PORT}/" /etc/apache2/ports.conf
