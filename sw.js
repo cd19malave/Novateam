@@ -1,4 +1,4 @@
-const CACHE_NAME = 'novateam-v2';
+const CACHE_NAME = 'novateam-v3';
 const ASSETS = [
   '/',
   '/index.php',
@@ -8,8 +8,19 @@ const ASSETS = [
   '/profesor.php',
   '/admin.php',
   '/descargar.php',
-  '/assets/css/app.css?v=2',
-  '/assets/js/app.js?v=2',
+  '/estudiante.php',
+  '/leaderboard.php',
+  '/progreso.php',
+  '/perfil.php',
+  '/mensajes.php',
+  '/recuperar.php',
+  '/nueva-clave.php',
+  '/alumnos.php',
+  '/guia.php',
+  '/crear-guia.php',
+  '/editar-guia.php',
+  '/assets/css/app.css?v=3',
+  '/assets/js/app.js?v=3',
   '/assets/icons/icon-192.png',
   '/assets/icons/icon-512.png',
   'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css',

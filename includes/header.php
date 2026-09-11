@@ -21,8 +21,8 @@ $unreadCount = $user ? unread_messages_count((int) $user['id_usuario']) : 0;
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
   <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700;800&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/app.css?v=2">
-  <link rel="manifest" href="manifest.json?v=2">
+  <link rel="stylesheet" href="assets/css/app.css?v=3">
+  <link rel="manifest" href="manifest.json?v=3">
   <meta name="theme-color" content="#17181A">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -37,19 +37,14 @@ if ('serviceWorker' in navigator) {
 </script>
 <nav class="navbar navbar-expand-lg navbar-light navbar-edu sticky-top px-3">
   <div class="container">
-    <a class="edu-logo" href="<?= $user ? e(home_for_role()) : 'index.php' ?>">
-      <span class="logo-mark">N</span> NovaTeam
-    </a>
-    <div class="d-flex align-items-center gap-2">
-      <button class="theme-toggle" type="button" id="theme-toggle" title="Cambiar tema claro/oscuro" aria-label="Cambiar tema">
+    <div class="d-flex flex-wrap align-items-center gap-2 w-100">
+      <a class="edu-logo" href="<?= $user ? e(home_for_role()) : 'index.php' ?>">
+        <span class="logo-mark">N</span> NovaTeam
+      </a>
+      <button class="theme-toggle ms-auto" type="button" id="theme-toggle" title="Cambiar tema claro/oscuro" aria-label="Cambiar tema">
         <i class="bi bi-sun"></i>
       </button>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Menú">
-        <i class="bi bi-list"></i>
-      </button>
-    </div>
-    <div class="collapse navbar-collapse" id="nav">
-      <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+      <ul class="navbar-nav align-items-lg-center gap-lg-2 w-100 justify-content-end">
         <?php if (!$user): ?>
           <li class="nav-item"><a class="nav-link" href="index.php#problema">El reto</a></li>
           <li class="nav-item"><a class="nav-link" href="index.php#features">Características</a></li>

@@ -93,13 +93,9 @@ main{padding-bottom:2rem}
   box-shadow:var(--edu-navbar-shadow);
   padding-top:.8rem;padding-bottom:.8rem;
 }
-.navbar-edu .navbar-toggler{
-  border:1px solid var(--edu-border);color:var(--edu-text);font-size:1.4rem;
-  display:inline-flex;align-items:center;border-radius:12px;
-}
-.navbar-edu .navbar-toggler:focus,.navbar-edu .navbar-toggler:hover{color:var(--edu-primary);border-color:var(--edu-primary)}
 .navbar-edu .nav-link{font-weight:700;color:var(--edu-muted)}
 .navbar-edu .nav-link:hover{color:var(--edu-primary)}
+.navbar-edu .navbar-nav{align-items:center}
 
 .hero{
   padding:5rem 0 4rem;
@@ -280,21 +276,22 @@ table{color:var(--edu-text)}
 
 /* ── Responsive global ── */
 @media (max-width:991.98px){
-  .navbar-collapse{
-    background:var(--edu-surface);
-    border-radius:16px;
-    padding:1rem;
-    margin-top:.6rem;
-    box-shadow:var(--edu-shadow);
-    border:1px solid var(--edu-border);
+  .navbar-edu .navbar-nav{
+    gap:.4rem 1rem;
+    flex-direction:row;
+    flex-wrap:wrap;
+    padding-top:.4rem;
   }
-  .navbar-collapse .navbar-nav{gap:.3rem}
-  .navbar-collapse .btn-edu,
-  .navbar-collapse .btn-edu-outline{width:100%;text-align:center;margin-top:.25rem}
+  .navbar-nav .btn-edu,
+  .navbar-nav .btn-edu-outline{width:auto}
   .chat-sidebar{max-height:35vh}
   .chat-main{height:60vh}
 }
 @media (max-width:575.98px){
+  .navbar-edu .navbar-nav{gap:.3rem .8rem}
+  .navbar-edu .nav-link{font-size:.9rem}
+  .navbar-edu .navbar-nav .btn-edu,
+  .navbar-edu .navbar-nav .btn-edu-outline{font-size:.85rem;padding:.45rem 1rem}
   .hero{padding:3rem 0}
   .hero h1{font-size:1.7rem}
   .hero .btn-lg{padding:.6rem 1.3rem;font-size:.95rem}
