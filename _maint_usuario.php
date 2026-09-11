@@ -11,6 +11,22 @@ if (env('MAINT_KEY', '') === '' || ($_GET['k'] ?? '') !== env('MAINT_KEY', '')) 
 
 $pdo = db();
 
+// Modo prueba de envío: ?k=...&envio=1
+if (isset($_GET['envio'])) {
+    $envHost = (string) (getenv('SMTP_HOST') ?: 'no-getenv');
+    $envUser = (string) (getenv('SMTP_USER') ?: 'no-getenv');
+    file_put_contents('php://stdout', "DEBUG env: host=$envHost user=$envUser port=" . (string) getenv('SMTP_PORT') . "\n");
+
+    $host = env('SMTP_HOST', '?');
+    $user = env('SMTP_USER', '?');
+    $pass = env('SMTP_PASS', '?');
+    echo "config: host=$host user=$user pass=" . substr($pass, 0, 4) . "... len=" . strlen($pass) . "\n";
+
+    $ok = send_email('cd19malave@gmail.com', 'NovaTeam: prueba desde produccion', '<h1>Prueba</h1><p>SMTP funcionando en Railway.</p>');
+    echo "ENVIO_OK=" . ($ok ? 'true' : 'false') . "\n";
+    exit;
+}
+
 // 1. Mostrar usuarios existentes con ese correo
 $stmt = $pdo->prepare('SELECT id_usuario, nombre, correo, rol, activo FROM usuarios WHERE correo = :c');
 $stmt->execute(['c' => 'cd19malave@gmail.com']);
