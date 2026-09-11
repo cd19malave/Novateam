@@ -7,34 +7,43 @@ if (($_GET['token'] ?? '') !== 'novateam2026') {
     exit('Acceso denegado.');
 }
 
-$host = '127.0.0.1';
-$name = 'novateam_db';
-$user = 'root';
-$pass = '';
+require __DIR__ . '/config/config.php';
 
-// Intentar leer config ya existente
-$envFile = __DIR__ . '/.env';
-if (is_file($envFile)) {
-    foreach (file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
-        if (str_starts_with($line, 'DB_')) {
-            [$k, $v] = explode('=', $line, 2);
-            $v = trim($v, " \t\n\r\0\x0B\"'");
-            if ($k === 'DB_HOST') $host = $v;
-            if ($k === 'DB_NAME') $name = $v;
-            if ($k === 'DB_USER') $user = $v;
-            if ($k === 'DB_PASS') $pass = $v;
-        }
-    }
+$url = (string) env('DATABASE_URL', '');
+if ($url !== '') {
+    $p = parse_url($url);
+    $host = $p['host'] ?? '127.0.0.1';
+    $port = (string) ($p['port'] ?? '3306');
+    $user = urldecode((string) ($p['user'] ?? 'root'));
+    $pass = urldecode((string) ($p['pass'] ?? ''));
+    $name = ltrim((string) ($p['path'] ?? '/novateam_db'), '/');
+} else {
+    $host = (string) env('DB_HOST', '127.0.0.1');
+    $port = (string) env('DB_PORT', '3306');
+    $user = (string) env('DB_USER', 'root');
+    $pass = (string) env('DB_PASS', '');
+    $name = (string) env('DB_NAME', 'novateam_db');
 }
 
 header('Content-Type: text/plain; charset=utf-8');
 echo "=== Instalador EduNova ===\n\n";
-echo "Conectando a: $host / $name / $user\n\n";
+echo "Servidor: $host:$port\n";
+echo "Base: $name\n";
+echo "Usuario: $user\n\n";
 
 try {
-    $pdo = new PDO("mysql:host={$host};dbname={$name};charset=utf8mb4", $user, $pass, [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-    ]);
+    if ($url !== '') {
+        // Conectar sin seleccionar BD y crearla si no existe
+        $pdo = new PDO("mysql:host={$host};port={$port};charset=utf8mb4", $user, $pass, [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        ]);
+        $pdo->exec("CREATE DATABASE IF NOT EXISTS `{$name}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+        $pdo->exec("USE `{$name}`");
+    } else {
+        $pdo = new PDO("mysql:host={$host};port={$port};dbname={$name};charset=utf8mb4", $user, $pass, [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        ]);
+    }
     echo "Conexión OK ✓\n";
 } catch (Throwable $e) {
     echo "ERROR de conexión: {$e->getMessage()}\n";
@@ -51,8 +60,9 @@ if (!is_file($sqlFile)) {
 }
 
 $sql = file_get_contents($sqlFile);
-// El SQL usa CREATE DATABASE novateam_db y USE - lo ajustamos
-$sql = preg_replace('/CREATE DATABASE IF NOT EXISTS novateam_db.*?USE novateam_db;\s*/s', '', $sql);
+// El SQL usa CREATE DATABASE novateam_db y USE - los quitamos (ya usamos la BD activa)
+$sql = preg_replace('/(CREATE DATABASE IF NOT EXISTS novateam_db.*?USE novateam_db;\s*)/s', '', $sql);
+$sql = preg_replace('/(CREATE DATABASE novateam_db.*?USE novateam_db;\s*)/s', '', $sql);
 // Quitar líneas de comentario antes de dividir por ';'
 $sql = preg_replace('/^--.*$/m', '', $sql);
 $sql = preg_replace('/\/\*.*?\*\//s', '', $sql);
