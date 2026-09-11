@@ -1,0 +1,19 @@
+{
+  "name": "novateam",
+  "version": "1.0.0",
+  "description": "Plataforma PHP + MySQL para el piloto de **lógica matemática e inglés** en cuarto de primaria. La landing original quedó como inicio; los datos viven en MySQL y se administran con **phpMyAdmin**.",
+  "main": "sw.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@capacitor/android": "^8.5.1",
+    "@capacitor/cli": "^7.6.9",
+    "@capacitor/core": "^8.5.1",
+    "@capacitor/electron": "^2.5.0",
+    "@capacitor/ios": "^8.5.1"
+  }
+}

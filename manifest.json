@@ -1,0 +1,50 @@
+{
+  "name": "EduNova - Plataforma Educativa",
+  "short_name": "EduNova",
+  "description": "Aprende matemáticas e inglés de forma interactiva con guías, ejercicios y retos.",
+  "start_url": "/index.php",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#6d5dfc",
+  "orientation": "any",
+  "categories": ["education", "productivity"],
+  "lang": "es",
+  "icons": [
+    {
+      "src": "assets/icons/icon-72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icons/icon-96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icons/icon-128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icons/icon-144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+Options -Indexes
+
+# Proteger archivos sensibles
+<FilesMatch "^\.(env|htaccess|htpasswd)$">
+  Require all denied
+</FilesMatch>
+
+# Bloquear acceso a carpetas de datos
+RewriteEngine On
+RewriteRule ^(node_modules|\.node|android|ios|www)/ - [F,L]
+
+# PHP 7.4+ / 8.x
+<IfModule mod_rewrite.c>
+  RewriteRule ^index\.php$ - [L]
+</IfModule>

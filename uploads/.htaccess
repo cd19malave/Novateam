@@ -1,0 +1,6 @@
+# Impide ejecutar PHP u otros scripts si alguien sube un archivo.
+<FilesMatch "\.(php|phtml|php3|php4|php5|phar|cgi|pl|py|exe)$">
+  Require all denied
+</FilesMatch>
+Options -ExecCGI
+RemoveHandler .php .phtml .php3 .php4 .php5
