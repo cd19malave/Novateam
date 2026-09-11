@@ -24,6 +24,15 @@ if (isset($_GET['envio'])) {
 
     $ok = send_email('cd19malave@gmail.com', 'NovaTeam: prueba desde produccion', '<h1>Prueba</h1><p>SMTP funcionando en Railway.</p>');
     echo "ENVIO_OK=" . ($ok ? 'true' : 'false') . "\n";
+
+    // Segundo intento: puerto 465 con SSL implícito
+    $c = @fsockopen('ssl://smtp.gmail.com', 465, $e1, $e2, 10);
+    echo "SSL465=" . ($c ? 'ok' : "fail ($e1) $e2") . "\n";
+    if ($c) fclose($c);
+    // Puerto 587
+    $c2 = @fsockopen('smtp.gmail.com', 587, $e3, $e4, 10);
+    echo "PLAIN587=" . ($c2 ? 'ok' : "fail ($e3) $e4") . "\n";
+    if ($c2) fclose($c2);
     exit;
 }
 
