@@ -30,6 +30,7 @@ require_once __DIR__ . '/db.php';
 require_once __DIR__ . '/helpers.php';
 require_once __DIR__ . '/csrf.php';
 require_once __DIR__ . '/auth.php';
+require_once __DIR__ . '/mailer.php';
 
 if (!empty($_SESSION['user']['id_usuario'])) {
     $lastRefresh = (int) ($_SESSION['_last_refresh'] ?? 0);

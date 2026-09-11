@@ -38,12 +38,9 @@ if ('serviceWorker' in navigator) {
 <nav class="navbar navbar-expand-lg navbar-light navbar-edu sticky-top px-3">
   <div class="container">
     <div class="d-flex flex-wrap align-items-center gap-2 w-100">
-      <a class="edu-logo" href="<?= $user ? e(home_for_role()) : 'index.php' ?>">
+<a class="edu-logo" href="<?= $user ? e(home_for_role()) : 'index.php' ?>">
         <span class="logo-mark">N</span> NovaTeam
       </a>
-      <button class="theme-toggle ms-auto" type="button" id="theme-toggle" title="Cambiar tema claro/oscuro" aria-label="Cambiar tema">
-        <i class="bi bi-sun"></i>
-      </button>
       <ul class="navbar-nav align-items-lg-center gap-lg-2 w-100 justify-content-end">
         <?php if (!$user): ?>
           <li class="nav-item"><a class="nav-link" href="index.php#problema">El reto</a></li>
@@ -51,6 +48,7 @@ if ('serviceWorker' in navigator) {
           <li class="nav-item"><a class="nav-link" href="index.php#materias">Materias</a></li>
           <li class="nav-item"><a class="nav-link" href="login.php">Entrar</a></li>
           <li class="nav-item"><a class="btn btn-edu" href="registro.php">Registrarme</a></li>
+          <li class="nav-item ms-lg-2"><button class="theme-toggle" type="button" id="theme-toggle" title="Cambiar tema claro/oscuro" aria-label="Cambiar tema"><i class="bi bi-sun"></i></button></li>
         <?php elseif ($user['rol'] === 'estudiante'): ?>
           <li class="nav-item"><a class="nav-link" href="estudiante.php">Mis guías</a></li>
           <li class="nav-item"><a class="nav-link" href="leaderboard.php">Ranking</a></li>
@@ -64,6 +62,7 @@ if ('serviceWorker' in navigator) {
           <li class="nav-item"><a class="nav-link" href="perfil.php"><?= user_avatar_html($user, 28) ?></a></li>
           <li class="nav-item"><a class="nav-link" href="descargar.php" title="Descargar app"><i class="bi bi-phone"></i> <span class="d-lg-none">Descargar</span></a></li>
           <li class="nav-item"><a class="btn btn-edu-outline py-1" href="logout.php">Salir</a></li>
+          <li class="nav-item ms-lg-2"><button class="theme-toggle" type="button" id="theme-toggle" title="Cambiar tema claro/oscuro" aria-label="Cambiar tema"><i class="bi bi-sun"></i></button></li>
         <?php elseif ($user['rol'] === 'profesor'): ?>
           <li class="nav-item"><a class="nav-link" href="profesor.php">Panel</a></li>
           <li class="nav-item"><a class="nav-link" href="crear-guia.php">Nueva guía</a></li>
@@ -78,6 +77,7 @@ if ('serviceWorker' in navigator) {
           <li class="nav-item"><a class="nav-link" href="perfil.php"><?= user_avatar_html($user, 28) ?></a></li>
           <li class="nav-item"><a class="nav-link" href="descargar.php" title="Descargar app"><i class="bi bi-phone"></i> <span class="d-lg-none">Descargar</span></a></li>
           <li class="nav-item"><a class="btn btn-edu-outline py-1" href="logout.php">Salir</a></li>
+          <li class="nav-item ms-lg-2"><button class="theme-toggle" type="button" id="theme-toggle" title="Cambiar tema claro/oscuro" aria-label="Cambiar tema"><i class="bi bi-sun"></i></button></li>
         <?php else: ?>
           <li class="nav-item"><a class="nav-link" href="admin.php">Administración</a></li>
           <li class="nav-item"><a class="nav-link" href="leaderboard.php">Ranking</a></li>
