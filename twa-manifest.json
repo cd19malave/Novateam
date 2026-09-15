@@ -8,6 +8,7 @@
   "navigationColor": "#4F8FF7",
   "backgroundColor": "#17181A",
   "startUrl": "/index.php",
+  "enableNotifications": false,
   "statusBar": "#17181A",
   "iconUrl": "https://novateam-production.up.railway.app/assets/icons/icon-512.png",
   "maskableIconUrl": "https://novateam-production.up.railway.app/assets/icons/icon-512.png",

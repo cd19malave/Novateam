@@ -4,7 +4,7 @@
     "target": {
       "namespace": "android_app",
       "package_name": "co.edu.sena.novateam",
-      "sha256_cert_fingerprints": ["REEMPLAZAR_POR_LA_HUELLA_DEL_CERTIFICADO"]
+      "sha256_cert_fingerprints": ["54:D5:57:0E:5F:7D:16:1C:60:65:2D:7A:02:39:B1:39:57:AD:FA:0B:D5:B8:32:59:10:C7:1D:CE:B8:DF:8B:E6"]
     }
   }
 ]

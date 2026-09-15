@@ -19,7 +19,22 @@ Thumbs.db
 # Build
 *.apk
 *.aab
+*.idsig
 *.exe
+
+# Android TWA (Bubblewrap) - proyecto generado y clave de firma
+android.keystore
+.gradle/
+app/
+build/
+build.gradle
+gradle/
+gradlew
+gradlew.bat
+gradle.properties
+settings.gradle
+manifest-checksum.txt
+store_icon.png
 
 # Deploy package
 EDUNOVA-DEPLOY.zip
