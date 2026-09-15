@@ -34,9 +34,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      # Para publicar en producción usa claves estables y guárdalas en Secrets del repo:
-      #   KEYSTORE_BASE64 (el .jks/.keystore en base64), KEYSTORE_PASSWORD, KEY_PASSWORD
-      # Si no hay secrets, se genera una clave temporal automáticamente (solo para probar).
       BUBBLEWRAP_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD || 'novateam2026' }}
       BUBBLEWRAP_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD || 'novateam2026' }}
     steps:
@@ -49,13 +46,23 @@ jobs:
           distribution: temurin
           java-version: '17'
 
+      - name: Instalar Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          packages: 'platform-tools platforms;android-36 build-tools;36.1.0'
+
+      - name: Configurar Bubblewrap (sin preguntas interactivas)
+        shell: bash
+        run: |
+          mkdir -p ~/.bubblewrap
+          echo "{\"jdkPath\":\"$JAVA_HOME\",\"androidSdkPath\":\"$ANDROID_HOME\"}" > ~/.bubblewrap/config.json
+          # Bubblewrap requiere que exista $SDK/bin o $SDK/tools para validar el SDK.
+          mkdir -p "$ANDROID_HOME/bin"
+
       - name: Instalar Node.js 20
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-
-      - name: Instalar Bubblewrap
-        run: npm i -g @bubblewrap/cli
 
       - name: Preparar clave de firma
         run: |
@@ -73,13 +80,14 @@ jobs:
           fi
           ls -la android.keystore
 
-      - name: Generar proyecto Android desde twa-manifest.json
+      - name: Generar proyecto Android (version en blanco)
         run: |
-          npx @bubblewrap/cli update --manifest twa-manifest.json
+          # versionCode/versionName salen del propio twa-manifest.json
+          npx --yes @bubblewrap/cli update --manifest twa-manifest.json --skipVersionUpgrade
 
       - name: Compilar AAB y APK firmados
         run: |
-          npx @bubblewrap/cli build --skipPwaValidation
+          npx --yes @bubblewrap/cli build --skipPwaValidation
 
       - name: Mostrar huella de firma (para assetlinks.json)
         run: |
@@ -106,7 +114,7 @@ jobs:
           name: NovaTeam Android ${{ inputs.app_version }}
           body: |
             APK de prueba y AAB para Google Play.
-            - TODO Play Store: ver guía (Play Console -> cuenta desarrollador -> App Bundle .aab)
+            Para Play Store: subir el .aab en Play Console (cuenta desarrollador).
           files: |
             **/*.apk
             **/*.aab
