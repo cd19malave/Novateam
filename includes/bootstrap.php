@@ -32,6 +32,36 @@ require_once __DIR__ . '/csrf.php';
 require_once __DIR__ . '/auth.php';
 require_once __DIR__ . '/mailer.php';
 
+$tabIn = $_REQUEST['tab'] ?? '';
+if (is_string($tabIn) && preg_match('/^[A-Za-z0-9_-]{16,64}$/', $tabIn)) {
+    $_SESSION['active_tab'] = $tabIn;
+    if (!isset($_SESSION['tabs'][$tabIn]) || !is_array($_SESSION['tabs'][$tabIn])) {
+        $_SESSION['tabs'][$tabIn] = ['user' => null];
+        if (count($_SESSION['tabs']) > 24) {
+            foreach ($_SESSION['tabs'] as $k => $slot) {
+                if ($k === $tabIn || !empty($slot['user'])) {
+                    continue;
+                }
+                unset($_SESSION['tabs'][$k]);
+                if (count($_SESSION['tabs']) <= 20) {
+                    break;
+                }
+            }
+        }
+    }
+} else {
+    unset($_SESSION['active_tab']);
+}
+
+$activeTab = current_tab();
+if ($activeTab !== null) {
+    $_SESSION['user'] = isset($_SESSION['tabs'][$activeTab]['user'])
+        ? $_SESSION['tabs'][$activeTab]['user']
+        : null;
+} else {
+    unset($_SESSION['user']);
+}
+
 if (!empty($_SESSION['user']['id_usuario'])) {
     $lastRefresh = (int) ($_SESSION['_last_refresh'] ?? 0);
     $now = time();

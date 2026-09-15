@@ -61,9 +61,7 @@ CREATE TABLE usuarios (
     fondo_perfil         VARCHAR(255)        NULL COMMENT 'Ruta imagen de fondo de perfil',
     tema_color           VARCHAR(20)         NOT NULL DEFAULT 'default' COMMENT 'Tema de color: default,oscuro,verde,rosa,purpura',
     remember_token       VARCHAR(64)         NULL COMMENT 'Token para recuperación de contraseña',
-    token_expires        DATETIME            NULL COMMENT 'Expiración del token de recuperación',
-    CONSTRAINT chk_grado CHECK (rol <> 'estudiante' OR (grado BETWEEN 1 AND 5)),
-    CONSTRAINT chk_materia CHECK (rol <> 'profesor' OR materia IS NOT NULL)
+    token_expires        DATETIME            NULL COMMENT 'Expiración del token de recuperación'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE insignias (
@@ -174,8 +172,14 @@ CREATE TABLE notificaciones (
     titulo          VARCHAR(150) NOT NULL,
     mensaje         TEXT NOT NULL,
     id_profesor     INT NULL,
+    id_guia         INT NULL,
+    id_destinatario INT NULL,
+    leida           TINYINT(1) NOT NULL DEFAULT 0,
     fecha_creacion  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_notif_profesor FOREIGN KEY (id_profesor) REFERENCES usuarios(id_usuario) ON DELETE SET NULL
+    KEY idx_notif_dest (id_destinatario),
+    CONSTRAINT fk_notif_profesor FOREIGN KEY (id_profesor)     REFERENCES usuarios(id_usuario) ON DELETE SET NULL,
+    CONSTRAINT fk_notif_guia     FOREIGN KEY (id_guia)         REFERENCES guias(id_guia)       ON DELETE SET NULL,
+    CONSTRAINT fk_notif_dest     FOREIGN KEY (id_destinatario) REFERENCES usuarios(id_usuario) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE mensajes (
@@ -278,5 +282,6 @@ VALUES
     (2, 2, '¿Como se dice "gato" en ingles?', 'Dog', 'Bird', 'Cat', 'Cow', 3),
     (2, 3, 'What color is the sky on a sunny day?', 'Green', 'Blue', 'Red', 'Yellow', 2);
 
-INSERT INTO notificaciones (titulo, mensaje, id_profesor) VALUES
-    ('¡Bienvenidos a NovaTeam!', 'Ya puedes resolver las primeras guias de matematicas e ingles. Gana puntos e insignias.', 2);
+INSERT INTO notificaciones (titulo, mensaje, id_profesor, id_guia, id_destinatario, leida) VALUES
+    ('¡Bienvenidos a NovaTeam!', 'Ya puedes resolver las primeras guias de matematicas e ingles. Gana puntos e insignias.', 2, NULL, 4, 0),
+    ('¡Bienvenidos a NovaTeam!', 'Ya puedes resolver las primeras guias de matematicas e ingles. Gana puntos e insignias.', 2, NULL, 5, 0);

@@ -6,20 +6,62 @@ function e(?string $value): string
     return htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
 
+function current_tab(): ?string
+{
+    $t = $_SESSION['active_tab'] ?? null;
+    if (is_string($t) && preg_match('/^[A-Za-z0-9_-]{16,64}$/', $t)) {
+        return $t;
+    }
+    return null;
+}
+
 function redirect(string $path): never
 {
+    $tab = current_tab();
+    if ($tab !== null) {
+        $frag = '';
+        $base = $path;
+        if (str_contains($base, '#')) {
+            [$base, $frag] = explode('#', $base, 2);
+        }
+        if (str_contains($base, '://')) {
+            $parts = parse_url($base);
+            $q = ($parts['query'] ?? '');
+            $q = ($q !== '' ? $q . '&' : '') . 'tab=' . urlencode($tab);
+            $base = ($parts['scheme'] ?? '') . '://' . ($parts['host'] ?? '') . ($parts['path'] ?? '') . '?' . $q;
+        } else {
+            $base .= (str_contains($base, '?') ? '&' : '?') . 'tab=' . urlencode($tab);
+        }
+        if ($frag !== '') {
+            $base .= '#' . $frag;
+        }
+        $path = $base;
+    }
     header('Location: ' . $path);
     exit;
 }
 
 function flash(string $key, ?string $message = null): ?string
 {
+    $tab = current_tab();
+    $scope = $tab !== null ? 'tab_flash' : 'flash';
+    $bucket = $tab !== null ? ($_SESSION[$scope][$tab] ?? []) : ($_SESSION[$scope] ?? []);
     if ($message !== null) {
-        $_SESSION['flash'][$key] = $message;
+        $bucket[$key] = $message;
+        if ($tab !== null) {
+            $_SESSION[$scope][$tab] = $bucket;
+        } else {
+            $_SESSION[$scope] = $bucket;
+        }
         return null;
     }
-    $stored = $_SESSION['flash'][$key] ?? null;
-    unset($_SESSION['flash'][$key]);
+    $stored = $bucket[$key] ?? null;
+    unset($bucket[$key]);
+    if ($tab !== null) {
+        $_SESSION[$scope][$tab] = $bucket;
+    } else {
+        $_SESSION[$scope] = $bucket;
+    }
     return $stored;
 }
 
@@ -239,6 +281,50 @@ function unread_messages_count(int $userId): int
     $stmt = db()->prepare('SELECT COUNT(*) FROM mensajes WHERE id_receptor = :id AND leido = 0');
     $stmt->execute(['id' => $userId]);
     return (int) $stmt->fetchColumn();
+}
+
+/* ── Notificaciones ── */
+
+function unread_notifications_count(int $userId): int
+{
+    $stmt = db()->prepare(
+        'SELECT COUNT(*) FROM notificaciones WHERE id_destinatario = :id AND leida = 0'
+    );
+    $stmt->execute(['id' => $userId]);
+    return (int) $stmt->fetchColumn();
+}
+
+function notify_guide_published(array $guia, int $profesorId): void
+{
+    $pdo = db();
+    $sel = $pdo->prepare(
+        'SELECT DISTINCT u.id_usuario
+         FROM matriculas m
+         JOIN usuarios u ON u.id_usuario = m.id_usuario
+         WHERE m.materia = :m AND u.rol = :r AND u.activo = 1'
+    );
+    $sel->execute(['m' => $guia['categoria'], 'r' => 'estudiante']);
+    $ids = array_map('intval', $sel->fetchAll(PDO::FETCH_COLUMN));
+    if (!$ids) {
+        return;
+    }
+
+    $ins = $pdo->prepare(
+        'INSERT INTO notificaciones (titulo, mensaje, id_profesor, id_guia, id_destinatario)
+         VALUES (:t, :m, :p, :g, :d)'
+    );
+    $titulo = mb_substr('Nueva guía: ' . $guia['titulo'], 0, 150);
+    $mensaje = 'Tu profesor publicó la guía «' . $guia['titulo'] . '» de '
+        . categoria_label($guia['categoria']) . '. Ya puedes resolverla.';
+    foreach ($ids as $dest) {
+        $ins->execute([
+            't' => $titulo,
+            'm' => $mensaje,
+            'p' => $profesorId,
+            'g' => (int) $guia['id_guia'],
+            'd' => $dest,
+        ]);
+    }
 }
 
 /* ── Matriculas ── */

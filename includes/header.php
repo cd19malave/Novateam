@@ -4,6 +4,7 @@ declare(strict_types=1);
 $pageTitle = $pageTitle ?? 'NovaTeam';
 $user = current_user();
 $unreadCount = $user ? unread_messages_count((int) $user['id_usuario']) : 0;
+$notifCount = $user ? unread_notifications_count((int) $user['id_usuario']) : 0;
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -21,7 +22,7 @@ $unreadCount = $user ? unread_messages_count((int) $user['id_usuario']) : 0;
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
   <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700;800&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/app.css?v=3">
+  <link rel="stylesheet" href="assets/css/app.css?v=4">
   <link rel="manifest" href="manifest.json?v=3">
   <meta name="theme-color" content="#17181A">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -53,6 +54,12 @@ if ('serviceWorker' in navigator) {
           <li class="nav-item"><a class="nav-link" href="estudiante.php">Mis guías</a></li>
           <li class="nav-item"><a class="nav-link" href="leaderboard.php">Ranking</a></li>
           <li class="nav-item"><a class="nav-link" href="progreso.php">Mi progreso</a></li>
+          <li class="nav-item"><a class="nav-link" href="notificaciones.php" title="Notificaciones">
+            <i class="bi bi-bell"></i>
+            <?php if ($notifCount > 0): ?>
+              <span class="badge bg-danger rounded-pill ms-1" id="notif-badge" style="font-size:.65rem;"><?= $notifCount ?></span>
+            <?php endif; ?>
+          </a></li>
           <li class="nav-item"><a class="nav-link" href="mensajes.php">
             Mensajes
             <?php if ($unreadCount > 0): ?>

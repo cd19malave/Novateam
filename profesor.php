@@ -19,6 +19,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if ($accion === 'publicar') {
+        if ($guia['estado'] === 'publicada') {
+            flash('ok', 'Esa guía ya estaba publicada.');
+            redirect('profesor.php');
+        }
         $n = db()->prepare('SELECT COUNT(*) FROM ejercicios WHERE id_guia = :id');
         $n->execute(['id' => $id]);
         if ((int) $n->fetchColumn() < 1) {
@@ -29,15 +33,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'UPDATE guias SET estado = :e, fecha_publicacion = NOW() WHERE id_guia = :id'
         );
         $upd->execute(['e' => 'publicada', 'id' => $id]);
-        $nt = db()->prepare(
-            'INSERT INTO notificaciones (titulo, mensaje, id_profesor) VALUES (:t, :m, :p)'
-        );
-        $nt->execute([
-            't' => 'Nueva guía: ' . $guia['titulo'],
-            'm' => 'Ya puedes resolverla en NovaTeam.',
-            'p' => $user['id_usuario'],
-        ]);
-        flash('ok', 'Guía publicada.');
+        notify_guide_published($guia, (int) $user['id_usuario']);
+        flash('ok', 'Guía publicada. Se notificó a los estudiantes.');
     } elseif ($accion === 'borrar') {
         $del = db()->prepare('DELETE FROM guias WHERE id_guia = :id AND id_profesor = :p');
         $del->execute(['id' => $id, 'p' => $user['id_usuario']]);

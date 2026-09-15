@@ -6,9 +6,14 @@ require_role('estudiante');
 $user = current_user();
 $materias = user_materias($user['id_usuario']);
 
-$notifs = db()->query(
-    'SELECT titulo, mensaje, fecha_creacion FROM notificaciones ORDER BY fecha_creacion DESC LIMIT 5'
-)->fetchAll();
+$notifsStmt = db()->prepare(
+    'SELECT titulo, mensaje, fecha_creacion, id_guia
+     FROM notificaciones
+     WHERE id_destinatario = :id AND leida = 0
+     ORDER BY fecha_creacion DESC LIMIT 5'
+);
+$notifsStmt->execute(['id' => $user['id_usuario']]);
+$notifs = $notifsStmt->fetchAll();
 
 if (!empty($materias)) {
     $named = [];
@@ -62,8 +67,22 @@ require __DIR__ . '/includes/header.php';
   <?php render_alerts(); ?>
 
   <?php if ($notifs): ?>
-    <div class="alert alert-info">
-      <strong><?= e($notifs[0]['titulo']) ?></strong> — <?= e($notifs[0]['mensaje']) ?>
+    <div class="card-edu p-3 mb-4">
+      <div class="d-flex justify-content-between align-items-center mb-1">
+        <h2 class="h6 fw-bold mb-0"><i class="bi bi-bell-fill"></i> Notificaciones</h2>
+        <a class="small" href="notificaciones.php"><i class="bi bi-chevron-right"></i> Ver todas</a>
+      </div>
+      <?php foreach ($notifs as $nf): ?>
+        <div class="d-flex justify-content-between align-items-start border-top pt-2 mt-2">
+          <div>
+            <strong><?= e($nf['titulo']) ?></strong>
+            <div class="text-muted small"><?= e($nf['mensaje']) ?> · <?= e(date('d/m/Y H:i', strtotime((string) $nf['fecha_creacion']))) ?></div>
+          </div>
+          <?php if (!empty($nf['id_guia'])): ?>
+            <a class="btn btn-edu-outline btn-sm py-0 ms-2" href="guia.php?id=<?= (int) $nf['id_guia'] ?>">Jugar</a>
+          <?php endif; ?>
+        </div>
+      <?php endforeach; ?>
     </div>
   <?php endif; ?>
 

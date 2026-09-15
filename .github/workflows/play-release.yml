@@ -1,0 +1,113 @@
+name: Compilar APK / AAB (NovaTeam)
+
+# Cómo usarlo:
+#  1. Ve a la pestaña "Actions" de GitHub.
+#  2. Elige "Compilar APK / AAB (NovaTeam)" -> botón "Run workflow".
+#  3. Cuando termine, baja el artefacto "novateam-android" (contiene app-release-signed.apk y app-release-bundle.aab).
+#  4. El .aab es el que se sube a Google Play. El .apk sirve para instalar/probar en un celular.
+
+on:
+  workflow_dispatch:
+    inputs:
+      app_version:
+        description: 'Versión visible de la app (versionName)'
+        required: false
+        default: '1.0.0'
+      app_version_code:
+        description: 'Código de versión (versionCode). Debe subir en cada release'
+        required: false
+        default: '1'
+      publish_release:
+        description: 'Además crear una GitHub Release con el APK/AAB'
+        required: false
+        type: boolean
+        default: false
+      release_tag:
+        description: 'Tag de la Release (ej: apk-v1.0.0) - usado si publish_release = true'
+        required: false
+        default: 'apk-v1.0.0'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      # Para publicar en producción usa claves estables y guárdalas en Secrets del repo:
+      #   KEYSTORE_BASE64 (el .jks/.keystore en base64), KEYSTORE_PASSWORD, KEY_PASSWORD
+      # Si no hay secrets, se genera una clave temporal automáticamente (solo para probar).
+      BUBBLEWRAP_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD || 'novateam2026' }}
+      BUBBLEWRAP_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD || 'novateam2026' }}
+    steps:
+      - name: Clonar repositorio
+        uses: actions/checkout@v4
+
+      - name: Instalar Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Instalar Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Instalar Bubblewrap
+        run: npm i -g @bubblewrap/cli
+
+      - name: Preparar clave de firma
+        run: |
+          if [ -n "${{ secrets.KEYSTORE_BASE64 }}" ]; then
+            echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > android.keystore
+          else
+            # Clave temporal: solo para pruebas. No sirve para Play Store de forma definitiva.
+            keytool -genkeypair -v \
+              -keystore android.keystore \
+              -alias novateam \
+              -keyalg RSA -keysize 2048 -validity 10000 \
+              -storepass "$BUBBLEWRAP_KEYSTORE_PASSWORD" \
+              -keypass "$BUBBLEWRAP_KEY_PASSWORD" \
+              -dname "CN=NovaTeam, OU=SENA, O=NovaTeam, L=Cucuta, S=Norte de Santander, C=CO" 2>/dev/null
+          fi
+          ls -la android.keystore
+
+      - name: Generar proyecto Android desde twa-manifest.json
+        run: |
+          npx @bubblewrap/cli update --manifest twa-manifest.json
+
+      - name: Compilar AAB y APK firmados
+        run: |
+          npx @bubblewrap/cli build --skipPwaValidation
+
+      - name: Mostrar huella de firma (para assetlinks.json)
+        run: |
+          APK=$(find . -name 'app-release-signed.apk' | head -1)
+          if [ -n "$APK" ]; then
+            echo "=== Huella SHA-256 del certificado ==="
+            keytool -printcert -jarfile "$APK" | grep -A1 "SHA256:" || true
+          fi
+
+      - name: Subir APK/AAB como artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: novateam-android
+          path: |
+            **/*.apk
+            **/*.aab
+          if-no-files-found: error
+
+      - name: Publicar GitHub Release (opcional)
+        if: inputs.publish_release == true
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ inputs.release_tag }}
+          name: NovaTeam Android ${{ inputs.app_version }}
+          body: |
+            APK de prueba y AAB para Google Play.
+            - TODO Play Store: ver guía (Play Console -> cuenta desarrollador -> App Bundle .aab)
+          files: |
+            **/*.apk
+            **/*.aab
+          fail_on_unmatched_files: false

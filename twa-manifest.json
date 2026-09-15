@@ -1,0 +1,24 @@
+{
+  "packageId": "co.edu.sena.novateam",
+  "host": "novateam-production.up.railway.app",
+  "name": "NovaTeam - Plataforma Educativa",
+  "launcherName": "NovaTeam",
+  "display": "standalone",
+  "themeColor": "#4F8FF7",
+  "navigationColor": "#4F8FF7",
+  "backgroundColor": "#17181A",
+  "startUrl": "/index.php",
+  "statusBar": "#17181A",
+  "iconUrl": "https://novateam-production.up.railway.app/assets/icons/icon-512.png",
+  "maskableIconUrl": "https://novateam-production.up.railway.app/assets/icons/icon-512.png",
+  "splashScreenFadeOutDuration": 300,
+  "appVersion": "1.0.0",
+  "appVersionCode": 1,
+  "fallbackType": "customtabs",
+  "framework": "androidBubblewrap",
+  "keepWebViewAliveInBackground": true,
+  "signingKey": {
+    "path": "android.keystore",
+    "alias": "novateam"
+  }
+}

@@ -29,6 +29,10 @@ function refresh_user(int $id): void
         redirect('login.php');
     }
     $_SESSION['user'] = $row;
+    $tab = current_tab();
+    if ($tab !== null) {
+        $_SESSION['tabs'][$tab]['user'] = $row;
+    }
 }
 
 function require_login(): void
@@ -99,6 +103,10 @@ function attempt_login(string $correo, string $password): bool
 
     session_regenerate_id(true);
     $_SESSION['user'] = public_user($user);
+    $tab = current_tab();
+    if ($tab !== null) {
+        $_SESSION['tabs'][$tab]['user'] = $_SESSION['user'];
+    }
 
     $upd = db()->prepare('UPDATE usuarios SET ultimo_acceso = NOW() WHERE id_usuario = :id');
     $upd->execute(['id' => $user['id_usuario']]);

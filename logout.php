@@ -2,6 +2,15 @@
 declare(strict_types=1);
 require_once __DIR__ . '/includes/bootstrap.php';
 
+$tab = current_tab();
+if ($tab !== null) {
+    unset($_SESSION['tabs'][$tab]);
+    unset($_SESSION['active_tab']);
+    unset($_SESSION['user']);
+    $_SESSION['tab_flash'][$tab] = ['ok' => 'Cerraste la sesión de esta pestaña.'];
+    redirect('login.php');
+}
+
 $_SESSION = [];
 if (ini_get('session.use_cookies')) {
     $p = session_get_cookie_params();
