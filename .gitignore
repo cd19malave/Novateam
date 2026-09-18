@@ -5,6 +5,10 @@
 # Servidor
 database/*.sql.bak
 
+# APKs de compilación (pero sí publicar el APK descargable)
+*.apk
+!assets/downloads/*.apk
+
 # Sistema
 .DS_Store
 Thumbs.db
