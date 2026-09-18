@@ -1,10 +1,9 @@
-.node/
-node_modules/
-android/
-ios/
-www/
 .git/
+.github/
 .env
-*.apk
-*.exe
-EDUNOVA-DEPLOY.zip
+.env.example
+android.keystore
+dist/
+*.aab
+*.idsig
+node_modules/

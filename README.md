@@ -27,8 +27,6 @@ Si MySQL tiene contraseña, ponla en `DB_PASS`.
 
 ## Cuentas de prueba
 
-Contraseña de todas: `EduNova2026!`
-
 | Correo | Rol |
 |---|---|
 | admin@novateam.edu.co | Administrador |
@@ -37,7 +35,14 @@ Contraseña de todas: `EduNova2026!`
 | ana.torres@colegio.edu.co | Estudiante 4° |
 | luis.rodriguez@colegio.edu.co | Estudiante 4° |
 
-Cambia esas contraseñas después del piloto.
+Las contraseñas de la semilla no se documentan por seguridad. Para probar una cuenta: en el login usa **«Recuperar contraseña»** (requiere SMTP/Brevo en `.env`) o resétala directo en MySQL con `password_hash()`.
+
+## App Android (TWA)
+
+- `assets/downloads/` contiene el instalador **APK** firmado; `descargar.php` lo ofrece con un botón de descarga.
+- `dist/` guarda el **AAB** para Google Play (solo local, no se sube al repositorio).
+- El proyecto Android se genera y compila con **Bubblewrap**; el workflow `.github/workflows/play-release.yml` lo hace en GitHub Actions y publica APK/AAB firmados.
+- Clave de firma: `android.keystore` (solo local, nunca subir). `twa-manifest.json` controla versión, orientación, colores e íconos.
 
 ## Qué incluye
 

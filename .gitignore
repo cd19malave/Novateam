@@ -1,10 +1,3 @@
-# Node / Capacitor
-.node/
-node_modules/
-android/
-ios/
-www/
-
 # Entorno
 .env
 *.local
@@ -16,27 +9,15 @@ database/*.sql.bak
 .DS_Store
 Thumbs.db
 
-# Build
-*.apk
+# Android: clave de firma y artefactos de compilación
+android.keystore
+dist/
 *.aab
 *.idsig
-*.exe
 
-# Android TWA (Bubblewrap) - proyecto generado y clave de firma
-android.keystore
-.gradle/
-app/
-build/
-build.gradle
-gradle/
-gradlew
-gradlew.bat
-gradle.properties
-settings.gradle
-manifest-checksum.txt
-store_icon.png
+# APKs de compilación (pero sí publicar el APK descargable)
+*.apk
+!assets/downloads/*.apk
 
-# Deploy package
-EDUNOVA-DEPLOY.zip
+# Subidas de usuarios
 uploads/perfiles/2026/
-generate_icons.php

@@ -17,6 +17,27 @@ require __DIR__ . '/includes/header.php';
 
   <?php render_alerts(); ?>
 
+  <?php
+  $apks = glob(__DIR__ . '/assets/downloads/*.apk') ?: [];
+  $apk = $apks ? basename($apks[0]) : null;
+  $apkVersion = '1.1.0';
+  $apkTamano = $apk ? number_format(filesize(__DIR__ . '/assets/downloads/' . $apk) / 1048576, 1, ',', '') . ' MB' : '';
+  ?>
+
+  <?php if ($apk): ?>
+  <div class="text-center mb-5">
+    <div class="card-edu p-4 mx-auto" style="max-width:640px">
+      <div class="os-icon mb-2"><i class="bi bi-android2"></i></div>
+      <h3 class="h4 fw-bold mb-1">App oficial para Android</h3>
+      <p class="text-muted small mb-3">Descarga el instalador <strong>NovaTeam v<?= $apkVersion ?></strong> (<?= $apkTamano ?>) y ábrelo desde tu celular.</p>
+      <a href="<?= e('assets/downloads/' . $apk) ?>" class="btn btn-edu btn-lg" download>
+        <i class="bi bi-download"></i> Descargar APK
+      </a>
+      <p class="text-muted small mt-3 mb-0">Si Android muestra un aviso, toca <strong>«Más información» → «Instalar de todos modos»</strong> (por ser una app externa a Play Store).</p>
+    </div>
+  </div>
+  <?php endif; ?>
+
   <div class="row g-4 justify-content-center">
 
     <!-- Windows / PC -->
