@@ -47,7 +47,30 @@ if (!$intento) {
 
 $pdo = db();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && (int) $intento['completado'] !== 1) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['accion'] ?? '') === 'verificar') {
+    csrf_verify();
+    header('Content-Type: application/json; charset=utf-8');
+    $eid = (int) ($_POST['id_ejercicio'] ?? 0);
+    $sel = (int) ($_POST['opcion'] ?? 0);
+    $vstmt = $pdo->prepare(
+        'SELECT respuesta_correcta FROM ejercicios WHERE id_ejercicio = :e AND id_guia = :g LIMIT 1'
+    );
+    $vstmt->execute(['e' => $eid, 'g' => $idGuia]);
+    $correcta = $vstmt->fetchColumn();
+    if ($correcta === false) {
+        http_response_code(422);
+        echo json_encode(['ok' => false, 'error' => 'Ejercicio no encontrado']);
+        exit;
+    }
+    echo json_encode([
+        'ok' => true,
+        'correcto' => ((int) $correcta === $sel),
+        'correcta' => (int) $correcta,
+    ]);
+    exit;
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['accion'] ?? '') === 'enviar' && (int) $intento['completado'] !== 1) {
     csrf_verify();
     $opciones = $_POST['respuesta'] ?? [];
     if (!is_array($opciones) || count($opciones) !== count($ejercicios)) {
@@ -122,6 +145,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && (int) $intento['completado'] !== 1)
 }
 
 $respuestas = [];
+$aciertos = 0;
 if ((int) $intento['completado'] === 1) {
     $rstmt = $pdo->prepare(
         'SELECT r.*, e.pregunta, e.opcion_1, e.opcion_2, e.opcion_3, e.opcion_4, e.respuesta_correcta, e.numero_orden
@@ -131,77 +155,159 @@ if ((int) $intento['completado'] === 1) {
     );
     $rstmt->execute(['i' => $intento['id_intento']]);
     $respuestas = $rstmt->fetchAll();
+    foreach ($respuestas as $r) {
+        if ((int) $r['es_correcta'] === 1) {
+            $aciertos++;
+        }
+    }
+}
+
+$total = count($ejercicios);
+$maxPuntos = $total * 10;
+$pct = $maxPuntos > 0 ? (int) round(((int) $intento['puntaje'] / $maxPuntos) * 100) : 0;
+
+$checkUrl = 'guia.php?id=' . $idGuia;
+$tabNow = current_tab();
+if ($tabNow !== null) {
+    $checkUrl .= '&tab=' . urlencode($tabNow);
 }
 
 $pageTitle = $guia['titulo'];
 require __DIR__ . '/includes/header.php';
 ?>
-<div class="container py-5" style="max-width:720px">
+<div class="container py-4" style="max-width:760px">
   <?php render_alerts(); ?>
-  <p class="section-eyebrow mb-1"><?= e(categoria_label($guia['categoria'])) ?> · <?= e(dificultad_label($guia['dificultad'])) ?></p>
-  <h1 class="h3 fw-bold"><?= e($guia['titulo']) ?></h1>
-
-  <?php if (!empty($archivosList)): ?>
-    <div class="card-edu p-3 mb-4">
-      <h6 class="fw-bold"><i class="bi bi-paperclip"></i> Archivos adjuntos</h6>
-      <div class="d-flex flex-wrap gap-2">
-        <?php foreach ($archivosList as $ar): ?>
-          <a href="<?= e($ar['nombre_guardado']) ?>" target="_blank" class="badge-pill text-decoration-none">
-            <?= file_icon($ar['tipo_mime']) ?> <?= e($ar['nombre_original']) ?>
-            <small class="text-muted">(<?= format_bytes((int) $ar['tamanio']) ?>)</small>
-          </a>
-        <?php endforeach; ?>
-      </div>
-    </div>
-  <?php endif; ?>
 
   <?php if ((int) $intento['completado'] === 1): ?>
-    <div class="card-edu p-4 mb-4">
-      <h2 class="h5">Resultado</h2>
-      <p class="mb-0">Puntaje: <strong><?= (int) $intento['puntaje'] ?></strong> de <?= (int) $intento['total_ejercicios'] * 10 ?></p>
+    <div class="result-hero mb-4">
+      <div class="score-donut" style="--pct:<?= $pct ?>"><span><?= $pct ?>%</span></div>
+      <div class="result-info">
+        <span class="section-eyebrow"><?= e(categoria_label($guia['categoria'])) ?></span>
+        <h1 class="h4 fw-bold mb-1"><?= e($guia['titulo']) ?></h1>
+        <p class="result-line">
+          <strong><?= (int) $intento['puntaje'] ?></strong> / <?= $maxPuntos ?> puntos
+          · <strong><?= $aciertos ?></strong> / <?= $total ?> correctas
+        </p>
+        <p class="result-msg mb-0">
+          <?php if ($pct >= 90): ?>
+            ¡Excelente trabajo! Dominaste esta guía.
+          <?php elseif ($pct >= 60): ?>
+            ¡Buen trabajo! Puedes repasar las que fallaste.
+          <?php else: ?>
+            Sigue practicando, cada intento te acerca a la meta.
+          <?php endif; ?>
+        </p>
+      </div>
     </div>
+
+    <?php if (!empty($archivosList)): ?>
+      <div class="card-edu p-3 mb-4">
+        <h6 class="fw-bold"><i class="bi bi-paperclip"></i> Archivos de apoyo</h6>
+        <div class="d-flex flex-wrap gap-2">
+          <?php foreach ($archivosList as $ar): ?>
+            <a href="<?= e($ar['nombre_guardado']) ?>" target="_blank" class="badge-pill text-decoration-none">
+              <?= file_icon($ar['tipo_mime']) ?> <?= e($ar['nombre_original']) ?>
+              <small class="text-muted">(<?= format_bytes((int) $ar['tamanio']) ?>)</small>
+            </a>
+          <?php endforeach; ?>
+        </div>
+      </div>
+    <?php endif; ?>
+
+    <h2 class="h6 fw-bold mb-3">Revisión</h2>
     <?php foreach ($respuestas as $r): ?>
-      <div class="card-edu p-3 mb-3">
-        <p class="fw-bold mb-2"><?= (int) $r['numero_orden'] ?>. <?= e($r['pregunta']) ?></p>
+      <div class="card-edu p-3 mb-3 review-item <?= (int) $r['es_correcta'] === 1 ? 'review-ok' : 'review-bad' ?>">
+        <div class="d-flex justify-content-between align-items-start gap-2">
+          <p class="fw-bold mb-2"><?= (int) $r['numero_orden'] ?>. <?= e($r['pregunta']) ?></p>
+          <span class="review-badge"><?= (int) $r['es_correcta'] === 1 ? '<i class="bi bi-check-lg"></i> Correcta' : '<i class="bi bi-x-lg"></i> Incorrecta' ?></span>
+        </div>
         <?php for ($i = 1; $i <= 4; $i++):
             $opt = $r['opcion_' . $i] ?? null;
             if ($opt === null || $opt === '') {
                 continue;
             }
             $cls = '';
+            $tag = '';
             if ((int) $r['respuesta_correcta'] === $i) {
-                $cls = 'text-success';
+                $cls = 'text-success fw-bold';
+                $tag = ' <i class="bi bi-check-circle-fill"></i>';
             } elseif ((int) $r['opcion_seleccionada'] === $i) {
                 $cls = 'text-danger';
+                $tag = ' <i class="bi bi-x-circle-fill"></i>';
             }
             ?>
-          <div class="<?= $cls ?>"><?= $i ?>) <?= e($opt) ?></div>
+          <div class="<?= $cls ?>"><?= $i ?>) <?= e($opt) ?><?= $tag ?></div>
         <?php endfor; ?>
       </div>
     <?php endforeach; ?>
-    <a class="btn-edu-outline" href="estudiante.php">Volver</a>
+
+    <div class="d-flex gap-2 flex-wrap">
+      <a class="btn btn-edu" href="estudiante.php"><i class="bi bi-house-door"></i> Volver al inicio</a>
+      <a class="btn-edu-outline" href="progreso.php">Ver mi progreso</a>
+    </div>
+
   <?php else: ?>
-    <form method="post">
-      <?= csrf_field() ?>
-      <?php foreach ($ejercicios as $ex): ?>
-        <fieldset class="card-edu p-4 mb-3">
-          <legend class="h6 fw-bold"><?= (int) $ex['numero_orden'] ?>. <?= e($ex['pregunta']) ?></legend>
-          <?php for ($i = 1; $i <= 4; $i++):
-              $opt = $ex['opcion_' . $i] ?? null;
-              if ($opt === null || $opt === '') {
-                  continue;
-              }
-              $id = 'e' . $ex['id_ejercicio'] . 'o' . $i;
-              ?>
-            <div class="form-check mb-2">
-              <input class="form-check-input" type="radio" name="respuesta[<?= (int) $ex['id_ejercicio'] ?>]" id="<?= $id ?>" value="<?= $i ?>" required>
-              <label class="form-check-label" for="<?= $id ?>"><?= e($opt) ?></label>
+
+    <?php if (!empty($archivosList)): ?>
+      <details class="card-edu p-3 mb-3">
+        <summary class="fw-bold" style="cursor:pointer"><i class="bi bi-paperclip"></i> Archivos de apoyo</summary>
+        <div class="d-flex flex-wrap gap-2 mt-2">
+          <?php foreach ($archivosList as $ar): ?>
+            <a href="<?= e($ar['nombre_guardado']) ?>" target="_blank" class="badge-pill text-decoration-none">
+              <?= file_icon($ar['tipo_mime']) ?> <?= e($ar['nombre_original']) ?>
+            </a>
+          <?php endforeach; ?>
+        </div>
+      </details>
+    <?php endif; ?>
+
+    <div class="quiz" id="quiz"
+         data-check-url="<?= e($checkUrl) ?>"
+         data-total="<?= $total ?>">
+      <div class="quiz-top">
+        <a class="quiz-close" href="estudiante.php" aria-label="Salir del quiz"><i class="bi bi-x-lg"></i></a>
+        <div class="quiz-bar"><span class="quiz-bar-fill" id="quizBar" style="width:0%"></span></div>
+        <span class="quiz-count" id="quizCount">1/<?= $total ?></span>
+      </div>
+
+      <form method="post" id="quizForm" novalidate>
+        <?= csrf_field() ?>
+        <input type="hidden" name="accion" value="enviar">
+        <?php foreach ($ejercicios as $idx => $ex): ?>
+          <section class="quiz-step<?= $idx === 0 ? ' active' : '' ?>" data-index="<?= $idx ?>" data-eid="<?= (int) $ex['id_ejercicio'] ?>">
+            <p class="quiz-eyebrow">Pregunta <?= $idx + 1 ?> de <?= $total ?></p>
+            <h2 class="quiz-question"><?= e($ex['pregunta']) ?></h2>
+            <div class="quiz-options">
+              <?php for ($i = 1; $i <= 4; $i++):
+                  $opt = $ex['opcion_' . $i] ?? null;
+                  if ($opt === null || $opt === '') {
+                      continue;
+                  }
+                  $id = 'e' . $ex['id_ejercicio'] . 'o' . $i;
+                  ?>
+                <label class="quiz-option" for="<?= $id ?>">
+                  <input class="quiz-radio" type="radio"
+                         name="respuesta[<?= (int) $ex['id_ejercicio'] ?>]"
+                         id="<?= $id ?>" value="<?= $i ?>">
+                  <span class="quiz-opt-key"><?= chr(64 + $i) ?></span>
+                  <span class="quiz-opt-text"><?= e($opt) ?></span>
+                  <span class="quiz-opt-mark"><i class="bi bi-check-lg"></i></span>
+                </label>
+              <?php endfor; ?>
             </div>
-          <?php endfor; ?>
-        </fieldset>
-      <?php endforeach; ?>
-      <button class="btn btn-edu" type="submit">Enviar respuestas</button>
-    </form>
+          </section>
+        <?php endforeach; ?>
+      </form>
+
+      <div class="quiz-footer">
+        <div class="quiz-feedback" id="quizFeedback" hidden>
+          <span class="quiz-feedback-ico" id="quizFeedbackIco"></span>
+          <span class="quiz-feedback-text" id="quizFeedbackText"></span>
+        </div>
+        <button class="btn btn-edu btn-lg w-100" type="button" id="quizAction" disabled>Comprobar</button>
+      </div>
+    </div>
+
   <?php endif; ?>
 </div>
 <?php require __DIR__ . '/includes/footer.php'; ?>
