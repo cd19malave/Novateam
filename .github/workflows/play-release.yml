@@ -1,11 +1,4 @@
 name: Compilar APK / AAB (NovaTeam)
-
-# Cómo usarlo:
-#  1. Ve a la pestaña "Actions" de GitHub.
-#  2. Elige "Compilar APK / AAB (NovaTeam)" -> botón "Run workflow".
-#  3. Cuando termine, baja el artefacto "novateam-android" (contiene app-release-signed.apk y app-release-bundle.aab).
-#  4. El .aab es el que se sube a Google Play. El .apk sirve para instalar/probar en un celular.
-
 on:
   workflow_dispatch:
     inputs:
