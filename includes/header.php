@@ -12,27 +12,57 @@ $showBottomNav = (bool) $user;
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <script>
     (function(){
       var t = localStorage.getItem('novateam-theme');
       if (t !== 'light' && t !== 'dark') t = 'dark';
       document.documentElement.setAttribute('data-bs-theme', t);
+      var standalone = false;
+      try {
+        standalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
+      } catch (e) {}
+      var seen = false;
+      try { seen = sessionStorage.getItem('nt-splash') === '1'; } catch (e) {}
+      if (standalone && !seen) {
+        document.documentElement.classList.add('nt-splash-on');
+        try { sessionStorage.setItem('nt-splash', '1'); } catch (e) {}
+      }
+      window.addEventListener('load', function () {
+        var el = document.getElementById('nt-splash');
+        if (!el || !document.documentElement.classList.contains('nt-splash-on')) return;
+        setTimeout(function () {
+          el.classList.add('out');
+          setTimeout(function () {
+            if (el.parentNode) el.parentNode.removeChild(el);
+            document.documentElement.classList.remove('nt-splash-on');
+          }, 500);
+        }, 500);
+      });
     })();
   </script>
   <title><?= e($pageTitle) ?> | NovaTeam</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
   <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700;800&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/app.css?v=7">
-  <link rel="manifest" href="manifest.json?v=3">
+  <link rel="stylesheet" href="assets/css/app.css?v=8">
+  <link rel="manifest" href="manifest.json?v=4">
   <meta name="theme-color" content="#17181A">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="NovaTeam">
+  <meta name="application-name" content="NovaTeam">
   <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
 </head>
 <body class="<?= $showBottomNav ? 'has-bottom-nav' : '' ?>">
+<div id="nt-splash" aria-hidden="true">
+  <div class="nt-splash-inner">
+    <span class="nt-splash-logo">N</span>
+    <span class="nt-splash-name">NovaTeam</span>
+    <span class="nt-splash-spinner"></span>
+  </div>
+</div>
 <script>
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js').catch(() => {});
