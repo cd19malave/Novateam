@@ -14,30 +14,31 @@
   var source = null;
   var fallbackTimer = null;
 
-  function badgeEl() {
-    return document.getElementById('notif-badge');
-  }
-
-  function ensureBadge() {
-    var b = badgeEl();
-    if (!b) {
-      b = document.createElement('span');
-      b.id = 'notif-badge';
-      b.className = 'badge bg-danger rounded-pill ms-1';
-      b.style.cssText = 'font-size:.65rem;display:none;';
-      bell.appendChild(b);
-    }
-    return b;
+  function badges() {
+    return Array.prototype.slice.call(document.querySelectorAll('.js-notif-badge'));
   }
 
   function setBadge(n) {
-    var b = ensureBadge();
-    if (n > 0) {
-      b.textContent = n;
-      b.style.display = '';
-    } else {
-      b.style.display = 'none';
+    var list = badges();
+    if (!list.length) {
+      var bells = document.querySelectorAll('a[href="notificaciones.php"]');
+      Array.prototype.forEach.call(bells, function (a) {
+        var b = document.createElement('span');
+        b.className = 'badge bg-danger rounded-pill ms-1 js-notif-badge';
+        b.style.cssText = 'font-size:.65rem;';
+        a.appendChild(b);
+        list.push(b);
+      });
     }
+    list.forEach(function (b) {
+      if (n > 0) {
+        b.textContent = n;
+        b.style.display = '';
+        b.classList.remove('d-none');
+      } else {
+        b.style.display = 'none';
+      }
+    });
   }
 
   function pageUrl(path) {

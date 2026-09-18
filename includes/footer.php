@@ -2,6 +2,52 @@
 declare(strict_types=1);
 ?>
 </main>
+<?php if (!empty($user)): $cp = basename($_SERVER['SCRIPT_NAME'] ?? ''); ?>
+<?php
+  if ($user['rol'] === 'estudiante') {
+    $navItems = [
+      ['estudiante.php', 'house-door-fill', 'Inicio'],
+      ['leaderboard.php', 'trophy-fill', 'Ranking'],
+      ['progreso.php', 'graph-up-arrow', 'Progreso'],
+      ['mensajes.php', 'chat-dots-fill', 'Mensajes'],
+      ['perfil.php', 'person-fill', 'Perfil'],
+    ];
+  } elseif ($user['rol'] === 'profesor') {
+    $navItems = [
+      ['profesor.php', 'speedometer2', 'Panel'],
+      ['crear-guia.php', 'plus-square-fill', 'Crear'],
+      ['alumnos.php', 'people-fill', 'Alumnos'],
+      ['mensajes.php', 'chat-dots-fill', 'Mensajes'],
+      ['perfil.php', 'person-fill', 'Perfil'],
+    ];
+  } else {
+    $navItems = [
+      ['admin.php', 'shield-lock-fill', 'Admin'],
+      ['leaderboard.php', 'trophy-fill', 'Ranking'],
+      ['mensajes.php', 'chat-dots-fill', 'Mensajes'],
+      ['perfil.php', 'person-fill', 'Perfil'],
+    ];
+  }
+?>
+<nav class="bottom-nav d-lg-none" aria-label="Navegación principal">
+  <div class="bottom-nav-inner">
+    <?php foreach ($navItems as $item):
+      [$href, $icon, $label] = $item;
+      $active = ($cp === $href);
+    ?>
+      <a class="bn-item<?= $active ? ' active' : '' ?>" href="<?= e($href) ?>"<?= $active ? ' aria-current="page"' : '' ?>>
+        <span class="bn-icon">
+          <i class="bi bi-<?= e($icon) ?>"></i>
+          <?php if ($href === 'mensajes.php' && $unreadCount > 0): ?>
+            <span class="bn-badge"><?= (int) $unreadCount ?></span>
+          <?php endif; ?>
+        </span>
+        <span class="bn-label"><?= e($label) ?></span>
+      </a>
+    <?php endforeach; ?>
+  </div>
+</nav>
+<?php endif; ?>
 <footer class="edu-footer text-center py-4 mt-5">
   <div class="container">
     <span class="edu-logo" style="color:#fff"><span class="logo-mark">N</span> NovaTeam</span>
@@ -26,26 +72,27 @@ function togglePass(id, btn) {
 </script>
 <script>
 (function(){
-  const btn = document.getElementById('theme-toggle');
-  if (!btn) return;
-  let icon = btn.querySelector('i');
-  if (!icon) { btn.innerHTML = '<i class="bi bi-sun"></i>'; icon = btn.querySelector('i'); }
-  const updateIcon = (t) => {
-    if (icon) icon.className = t === 'dark' ? 'bi bi-sun' : 'bi bi-moon-stars';
-  };
+  const btns = document.querySelectorAll('[data-theme-toggle]');
+  if (!btns.length) return;
   const updateMeta = (t) => {
     const m = document.querySelector('meta[name="theme-color"]');
     if (m) m.setAttribute('content', t === 'dark' ? '#17181A' : '#4F8FF7');
   };
-  btn.addEventListener('click', () => {
+  const syncIcons = (t) => {
+    btns.forEach(b => {
+      const i = b.querySelector('i');
+      if (i) i.className = t === 'dark' ? 'bi bi-sun' : 'bi bi-moon-stars';
+    });
+  };
+  btns.forEach(btn => btn.addEventListener('click', () => {
     const cur = document.documentElement.getAttribute('data-bs-theme') === 'dark' ? 'dark' : 'light';
     const next = cur === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-bs-theme', next);
     localStorage.setItem('novateam-theme', next);
-    updateIcon(next);
+    syncIcons(next);
     updateMeta(next);
-  });
-  updateIcon(document.documentElement.getAttribute('data-bs-theme'));
+  }));
+  syncIcons(document.documentElement.getAttribute('data-bs-theme'));
   updateMeta(document.documentElement.getAttribute('data-bs-theme'));
 })();
 </script>
