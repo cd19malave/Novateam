@@ -107,24 +107,28 @@ main{padding-bottom:2rem}
 .hero .accent2{color:var(--edu-accent)}
 .hero .section-eyebrow{margin-bottom:.9rem}
 
-/* ── Botones ── */
+/* ── Botones (estilo 3D tipo Duolingo) ── */
 .btn-edu{
   background:linear-gradient(135deg,var(--edu-primary),var(--edu-violet),var(--edu-accent));
   color:#fff;border:0;border-radius:999px;
   padding:.78rem 1.8rem;font-weight:800;font-size:1rem;
-  transition:transform .2s ease,box-shadow .2s ease,filter .2s ease;
-  box-shadow:0 8px 20px rgba(79,143,247,.35);
+  transition:transform .12s ease,box-shadow .12s ease,filter .2s ease;
+  box-shadow:0 5px 0 rgba(0,0,0,.30),0 10px 22px rgba(79,143,247,.35);
   display:inline-flex;align-items:center;justify-content:center;gap:.45rem;
 }
-.btn-edu:hover{transform:translateY(-2px);color:#fff;filter:brightness(1.08);box-shadow:0 12px 26px rgba(79,143,247,.45)}
-.btn-edu:focus,.btn-edu:active{color:#fff}
+.btn-edu:hover{transform:translateY(-2px);color:#fff;filter:brightness(1.08);box-shadow:0 7px 0 rgba(0,0,0,.30),0 14px 26px rgba(79,143,247,.45)}
+.btn-edu:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(0,0,0,.30),0 5px 12px rgba(79,143,247,.30)}
+.btn-edu:focus-visible{color:#fff;outline:3px solid rgba(79,143,247,.45);outline-offset:3px}
+.btn-edu:disabled,.btn-edu.disabled{opacity:.5;transform:none;pointer-events:none;box-shadow:0 5px 0 rgba(0,0,0,.18)}
 .btn-edu-outline{
   border:2px solid var(--edu-primary);color:var(--edu-primary);
   border-radius:999px;padding:.68rem 1.6rem;font-weight:800;text-decoration:none;
-  transition:background .2s ease,color .2s ease;
+  transition:background .15s ease,color .15s ease,transform .12s ease,box-shadow .12s ease;
+  box-shadow:0 4px 0 var(--edu-border);
   display:inline-flex;align-items:center;justify-content:center;gap:.45rem;
 }
-.btn-edu-outline:hover{background:var(--edu-primary);color:#fff}
+.btn-edu-outline:hover{background:var(--edu-primary);color:#fff;transform:translateY(-2px);box-shadow:0 6px 0 rgba(0,0,0,.22)}
+.btn-edu-outline:active{transform:translateY(2px);box-shadow:0 1px 0 var(--edu-border)}
 
 /* ── Etiqueta azul pequeña ── */
 .section-eyebrow{
@@ -452,7 +456,7 @@ body.has-bottom-nav{padding-bottom:calc(58px + env(safe-area-inset-bottom))}
 .hero-actions{display:flex;align-items:center;gap:.9rem;flex-wrap:wrap}
 .hero-cta{
   border-radius:16px;font-weight:800;
-  box-shadow:0 10px 22px rgba(79,143,247,.35);
+  box-shadow:0 5px 0 rgba(0,0,0,.30),0 10px 22px rgba(79,143,247,.35);
   display:inline-flex;align-items:center;gap:.4rem;
 }
 .hero-cta:active{transform:translateY(2px)}
@@ -650,4 +654,54 @@ body.has-bottom-nav{padding-bottom:calc(58px + env(safe-area-inset-bottom))}
 .review-bad .review-badge{background:rgba(220,53,69,.14);color:#e4606d}
 @media (max-width:575.98px){
   .result-hero{flex-direction:column;text-align:center}
+}
+
+/* ══════════════════════════════════════════
+   Fase 4 — Pulido visual global
+   ══════════════════════════════════════════ */
+html{scroll-behavior:smooth}
+::selection{background:rgba(79,143,247,.35);color:var(--edu-text)}
+
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--edu-border);border-radius:999px;border:2px solid transparent;background-clip:padding-box}
+::-webkit-scrollbar-thumb:hover{background:var(--edu-muted);background-clip:padding-box}
+
+:focus-visible{outline:2px solid var(--edu-primary);outline-offset:2px}
+
+body{
+  background-image:
+    radial-gradient(60rem 60rem at 110% -10%, rgba(139,92,246,.10), transparent 60%),
+    radial-gradient(50rem 50rem at -10% 110%, rgba(79,143,247,.10), transparent 60%);
+  background-attachment:fixed;
+}
+[data-bs-theme="light"] body{
+  background-image:
+    radial-gradient(60rem 60rem at 110% -10%, rgba(139,92,246,.07), transparent 60%),
+    radial-gradient(50rem 50rem at -10% 110%, rgba(79,143,247,.07), transparent 60%);
+}
+
+.card-edu{border-radius:20px}
+.card-edu:hover{border-color:rgba(79,143,247,.5)}
+
+.badge-pill{
+  display:inline-flex;align-items:center;gap:.3rem;
+  border:1px solid var(--edu-border);
+}
+
+.form-control,.form-select{transition:border-color .15s ease,box-shadow .15s ease,background .15s ease}
+
+.table{--bs-table-bg:transparent}
+.table-hover>tbody>tr:hover>*{--bs-table-accent-bg:var(--edu-hover);color:var(--edu-text)}
+
+details.card-edu summary{list-style:none;cursor:pointer}
+details.card-edu summary::-webkit-details-marker{display:none}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{
+    animation-duration:.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.001ms !important;
+  }
 }
