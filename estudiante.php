@@ -51,26 +51,120 @@ if (!empty($materias)) {
 }
 $list = $guias->fetchAll();
 
+$xp = (int) $user['puntos'];
+$level = user_level($xp);
+$levelProgress = $xp % 100;
+$streak = user_streak((int) $user['id_usuario']);
+
+$grupos = [];
+foreach ($materias as $m) {
+    $grupos[$m] = [];
+}
+foreach ($list as $g) {
+    if (!isset($grupos[$g['categoria']])) {
+        $grupos[$g['categoria']] = [];
+    }
+    $grupos[$g['categoria']][] = $g;
+}
+
+$nextGuide = null;
+$doneCount = 0;
+foreach ($list as $g) {
+    if ((int) $g['completado'] === 1) {
+        $doneCount++;
+    } elseif ($nextGuide === null) {
+        $nextGuide = $g;
+    }
+}
+$totalCount = count($list);
+
+$ringCirc = 201.06;
+$ringOffset = $ringCirc * (1 - ($levelProgress / 100));
+$catIcon = static fn(string $c): string => $c === 'ingles' ? 'translate' : 'calculator';
+
 $pageTitle = 'Mis guías';
 require __DIR__ . '/includes/header.php';
 ?>
-<div class="container py-5">
-  <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
-    <div>
-      <span class="section-eyebrow">Hola, <?= e($user['nombre']) ?></span>
-      <h1 class="h3 fw-bold mb-0">Tus retos de hoy</h1>
+<div class="container py-4 py-lg-5">
+
+  <!-- Hero -->
+  <section class="dash-hero mb-4">
+    <div class="dash-hero-main">
+      <span class="section-eyebrow">Hola, <?= e($user['nombre']) ?> 👋</span>
+      <h1 class="hero-title"><?= $nextGuide ? 'Tu siguiente reto te espera' : '¡Todo completado!' ?></h1>
+      <p class="hero-sub">
+        <?php if ($nextGuide): ?>
+          Continúa donde lo dejaste y sigue sumando puntos.
+        <?php else: ?>
+          Vuelve pronto para nuevos retos de tus materias.
+        <?php endif; ?>
+      </p>
+      <div class="hero-actions">
+        <?php if ($nextGuide): ?>
+          <a class="btn btn-edu btn-lg hero-cta" href="guia.php?id=<?= (int) $nextGuide['id_guia'] ?>">
+            <i class="bi bi-play-fill"></i>
+            <?= ((int) $nextGuide['puntaje'] > 0) ? 'Continuar' : 'Empezar' ?>
+          </a>
+          <span class="hero-next"><i class="bi bi-bookmark-star"></i> <?= e($nextGuide['titulo']) ?></span>
+        <?php else: ?>
+          <a class="btn btn-edu btn-lg hero-cta" href="progreso.php">
+            <i class="bi bi-graph-up-arrow"></i> Ver mi progreso
+          </a>
+        <?php endif; ?>
+      </div>
     </div>
-    <div class="card-edu px-4 py-3">
-      <strong><?= (int) $user['puntos'] ?></strong> puntos · <?= (int) $user['ejercicios_resueltos'] ?> ejercicios
+
+    <div class="dash-hero-side">
+      <div class="level-ring" role="img" aria-label="Nivel <?= $level ?>">
+        <svg viewBox="0 0 80 80" width="116" height="116">
+          <defs>
+            <linearGradient id="lvlGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#4F8FF7"/>
+              <stop offset="55%" stop-color="#8B5CF6"/>
+              <stop offset="100%" stop-color="#EC6BB2"/>
+            </linearGradient>
+          </defs>
+          <circle cx="40" cy="40" r="32" fill="none" stroke="var(--edu-border)" stroke-width="7"/>
+          <circle cx="40" cy="40" r="32" fill="none" stroke="url(#lvlGrad)" stroke-width="7"
+                  stroke-linecap="round" stroke-dasharray="<?= $ringCirc ?>"
+                  stroke-dashoffset="<?= $ringOffset ?>" transform="rotate(-90 40 40)"/>
+        </svg>
+        <div class="level-ring-label">
+          <span class="level-num"><?= $level ?></span>
+          <span class="level-cap">Nivel</span>
+        </div>
+      </div>
+      <span class="level-xp"><?= $levelProgress ?> / 100 XP</span>
     </div>
-  </div>
+  </section>
+
+  <!-- Estadísticas -->
+  <section class="dash-stats mb-4">
+    <div class="stat-card">
+      <span class="stat-ico" style="--sc:#FFB84D"><i class="bi bi-lightning-charge-fill"></i></span>
+      <div><span class="stat-val"><?= $xp ?></span><span class="stat-lbl">XP total</span></div>
+    </div>
+    <div class="stat-card">
+      <span class="stat-ico" style="--sc:#FF7A45"><i class="bi bi-fire"></i></span>
+      <div><span class="stat-val"><?= $streak ?></span><span class="stat-lbl"><?= $streak === 1 ? 'día de racha' : 'días de racha' ?></span></div>
+    </div>
+    <div class="stat-card">
+      <span class="stat-ico" style="--sc:#56D39F"><i class="bi bi-check2-circle"></i></span>
+      <div><span class="stat-val"><?= $doneCount ?>/<?= $totalCount ?></span><span class="stat-lbl">guías completadas</span></div>
+    </div>
+    <div class="stat-card">
+      <span class="stat-ico" style="--sc:#4F8FF7"><i class="bi bi-journal-check"></i></span>
+      <div><span class="stat-val"><?= (int) $user['ejercicios_resueltos'] ?></span><span class="stat-lbl">ejercicios</span></div>
+    </div>
+  </section>
+
   <?php render_alerts(); ?>
 
   <?php if ($notifs): ?>
     <div class="card-edu p-3 mb-4">
       <div class="d-flex justify-content-between align-items-center mb-1">
-        <h2 class="h6 fw-bold mb-0"><i class="bi bi-bell-fill"></i> Notificaciones</h2>
-        <a class="small" href="notificaciones.php"><i class="bi bi-chevron-right"></i> Ver todas</a>
+        <h2 class="h6 fw-bold mb-0"><i class="bi bi-bell-fill"></i> Avisos recientes</h2>
+        <a class="small text-decoration-none" href="notificaciones.php"><i class="bi bi-chevron-right"></i> Ver todas</a>
       </div>
       <?php foreach ($notifs as $nf): ?>
         <div class="d-flex justify-content-between align-items-start border-top pt-2 mt-2">
@@ -90,36 +184,55 @@ require __DIR__ . '/includes/header.php';
     <div class="card-edu p-4 text-center">
       <i class="bi bi-bookmark-plus" style="font-size:3rem;color:var(--edu-primary);opacity:.4;"></i>
       <h5 class="mt-2">Aún no estás inscrito en ninguna materia</h5>
-      <p class="text-muted">Contacta a tu profesor para que te registre en matemáticas o inglés.</p>
+      <p class="text-muted mb-0">Contacta a tu profesor para que te registre en matemáticas o inglés.</p>
     </div>
   <?php else: ?>
-    <div class="d-flex gap-2 mb-3 flex-wrap">
-      <?php foreach ($materias as $m): ?>
-        <span class="badge-pill"><?= e(categoria_label($m)) ?></span>
-      <?php endforeach; ?>
-    </div>
-    <div class="row g-4">
-      <?php foreach ($list as $g): ?>
-        <div class="col-md-6">
-          <div class="card-edu p-4 h-100">
-            <span class="badge-pill"><?= e(categoria_label($g['categoria'])) ?></span>
-            <span class="badge-pill"><?= e(dificultad_label($g['dificultad'])) ?></span>
-            <span class="badge-pill"><?= e($g['modo_creacion'] === 'ia' ? '🤖 IA' : '✏️ Manual') ?></span>
-            <h2 class="h5 fw-bold mt-3"><?= e($g['titulo']) ?></h2>
-            <p class="text-muted small"><?= (int) $g['n_ejercicios'] ?> ejercicios · vence <?= e(date('d/m/Y', strtotime((string) $g['fecha_expiracion']))) ?></p>
-            <?php if ((int) $g['completado'] === 1): ?>
-              <p class="mb-2 text-success fw-bold">Completada · <?= (int) $g['puntaje'] ?> / <?= (int) $g['total_ejercicios'] * 10 ?> pts</p>
-              <a class="btn-edu-outline" href="guia.php?id=<?= (int) $g['id_guia'] ?>">Ver resultados</a>
-            <?php else: ?>
-              <a class="btn btn-edu" href="guia.php?id=<?= (int) $g['id_guia'] ?>">Jugar ahora</a>
-            <?php endif; ?>
+    <section class="mb-4">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="h5 fw-bold mb-0">Tu ruta de aprendizaje</h2>
+        <a class="small text-decoration-none" href="progreso.php">Ver progreso <i class="bi bi-chevron-right"></i></a>
+      </div>
+
+      <?php foreach ($grupos as $cat => $items): if (!$items) continue; ?>
+        <div class="path-group">
+          <div class="path-group-head">
+            <span class="path-cat-ico"><i class="bi bi-<?= $catIcon($cat) ?>"></i></span>
+            <?= e(categoria_label($cat)) ?>
+            <span class="path-cat-count"><?= count($items) ?></span>
           </div>
+          <ol class="path">
+            <?php foreach ($items as $g):
+              $done = (int) $g['completado'] === 1;
+              $isNext = $nextGuide && (int) $nextGuide['id_guia'] === (int) $g['id_guia'];
+              $n = (int) $g['n_ejercicios'];
+              $state = $done ? 'done' : ($isNext ? 'current' : 'pending');
+            ?>
+              <li class="path-node <?= $state ?>">
+                <a class="path-link" href="guia.php?id=<?= (int) $g['id_guia'] ?>">
+                  <span class="path-marker">
+                    <i class="bi bi-<?= $done ? 'check-lg' : ($isNext ? 'play-fill' : 'star-fill') ?>"></i>
+                  </span>
+                  <span class="path-body">
+                    <span class="path-title"><?= e($g['titulo']) ?></span>
+                    <span class="path-meta">
+                      <?= $n ?> ejercicio<?= $n === 1 ? '' : 's' ?> · <?= e(dificultad_label($g['dificultad'])) ?>
+                      <?php if ($done): ?> · <strong class="text-success"><?= (int) $g['puntaje'] ?> pts</strong><?php endif; ?>
+                    </span>
+                  </span>
+                  <?php if ($isNext): ?><span class="path-cta">EMPEZAR</span><?php endif; ?>
+                </a>
+              </li>
+            <?php endforeach; ?>
+          </ol>
         </div>
       <?php endforeach; ?>
+
       <?php if (!$list): ?>
-        <p class="text-muted">Aún no hay guías publicadas para tus materias.</p>
+        <div class="card-edu p-4 text-center text-muted">
+          Aún no hay guías publicadas para tus materias.
+        </div>
       <?php endif; ?>
-    </div>
+    </section>
   <?php endif; ?>
 </div>
 <?php require __DIR__ . '/includes/footer.php'; ?>

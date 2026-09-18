@@ -294,6 +294,47 @@ function unread_notifications_count(int $userId): int
     return (int) $stmt->fetchColumn();
 }
 
+/* ── Progreso / gamificación ── */
+
+function user_level(int $points): int
+{
+    return (int) floor($points / 100) + 1;
+}
+
+function user_streak(int $userId): int
+{
+    try {
+        $stmt = db()->prepare(
+            'SELECT DISTINCT DATE(r.fecha_respuesta) AS d
+             FROM respuestas r
+             JOIN intentos i ON i.id_intento = r.id_intento
+             WHERE i.id_usuario = :u
+             ORDER BY d DESC'
+        );
+        $stmt->execute(['u' => $userId]);
+        $days = $stmt->fetchAll(PDO::FETCH_COLUMN);
+    } catch (Throwable $e) {
+        return 0;
+    }
+    if (!$days) {
+        return 0;
+    }
+    $set = array_flip($days);
+    $cursor = new DateTimeImmutable('today');
+    if (!isset($set[$cursor->format('Y-m-d')])) {
+        $cursor = $cursor->modify('-1 day');
+        if (!isset($set[$cursor->format('Y-m-d')])) {
+            return 0;
+        }
+    }
+    $streak = 0;
+    while (isset($set[$cursor->format('Y-m-d')])) {
+        $streak++;
+        $cursor = $cursor->modify('-1 day');
+    }
+    return $streak;
+}
+
 function notify_guide_published(array $guia, int $profesorId): void
 {
     $pdo = db();
