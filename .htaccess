@@ -5,13 +5,9 @@ Options -Indexes
   Require all denied
 </FilesMatch>
 
-<FilesMatch "\.(keystore|jks|p12|aab)$">
-  Require all denied
-</FilesMatch>
-
 # Bloquear acceso a carpetas internas
 RewriteEngine On
-RewriteRule ^(dist|database|includes|config)/ - [F,L]
+RewriteRule ^(database|includes|config)/ - [F,L]
 
 # PHP 7.4+ / 8.x
 <IfModule mod_rewrite.c>

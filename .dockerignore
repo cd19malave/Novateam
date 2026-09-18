@@ -2,8 +2,4 @@
 .github/
 .env
 .env.example
-android.keystore
-dist/
-*.aab
-*.idsig
 node_modules/

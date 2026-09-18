@@ -9,15 +9,5 @@ database/*.sql.bak
 .DS_Store
 Thumbs.db
 
-# Android: clave de firma y artefactos de compilación
-android.keystore
-dist/
-*.aab
-*.idsig
-
-# APKs de compilación (pero sí publicar el APK descargable)
-*.apk
-!assets/downloads/*.apk
-
 # Subidas de usuarios
 uploads/perfiles/2026/
