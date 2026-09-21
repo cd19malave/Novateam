@@ -3,6 +3,7 @@
   "short_name": "NovaTeam",
   "description": "Aprende matemáticas e inglés de forma interactiva con guías, ejercicios y retos.",
   "start_url": "/index.php",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#EAF4FF",
   "theme_color": "#4F8FF7",
