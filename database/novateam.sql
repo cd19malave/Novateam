@@ -7,7 +7,7 @@
 --    2. Abre http://localhost/phpmyadmin
 --    3. Importar > elegir este archivo > Continuar
 --
---  Usuarios de prueba (contraseña de todos: EduNova2026!)
+--  Cuentas de prueba (mismo hash bcrypt; usa "Recuperar contraseña" para entrar)
 --    admin@novateam.edu.co          administrador
 --    jenniffer.yepes@colegio.edu.co profesor (matemáticas)
 --    carlos.malave@colegio.edu.co   profesor (inglés)
@@ -254,13 +254,13 @@ LEFT JOIN usuario_insignias ui ON ui.id_usuario = u.id_usuario
 WHERE u.rol = 'estudiante' AND u.activo = 1
 GROUP BY u.id_usuario, u.nombre, u.grado, u.puntos, u.ejercicios_resueltos, u.foto_perfil, u.marco_perfil;
 
--- Hash bcrypt de EduNova2026!  (PASSWORD_DEFAULT de PHP)
-INSERT INTO usuarios (nombre, correo, contrasena_hash, rol, grado, materia) VALUES
-    ('Administrador NovaTeam', 'admin@novateam.edu.co',          '$2y$10$DBKPP9me3lfvh94H2b7NU.S5UXdqtIDKewEIzSgsb9v7MR5ZFpwOm', 'administrador', NULL, NULL),
-    ('Jenniffer Yepes',        'jenniffer.yepes@colegio.edu.co', '$2y$10$DBKPP9me3lfvh94H2b7NU.S5UXdqtIDKewEIzSgsb9v7MR5ZFpwOm', 'profesor', NULL, 'matematicas'),
-    ('Carlos Malave',          'carlos.malave@colegio.edu.co',   '$2y$10$DBKPP9me3lfvh94H2b7NU.S5UXdqtIDKewEIzSgsb9v7MR5ZFpwOm', 'profesor', NULL, 'ingles'),
-    ('Ana Torres',             'ana.torres@colegio.edu.co',      '$2y$10$DBKPP9me3lfvh94H2b7NU.S5UXdqtIDKewEIzSgsb9v7MR5ZFpwOm', 'estudiante', 4, NULL),
-    ('Luis Rodriguez',         'luis.rodriguez@colegio.edu.co',  '$2y$10$DBKPP9me3lfvh94H2b7NU.S5UXdqtIDKewEIzSgsb9v7MR5ZFpwOm', 'estudiante', 4, NULL);
+-- Hash bcrypt generado con password_hash() de PHP (PASSWORD_DEFAULT)
+INSERT INTO usuarios (id_usuario, nombre, correo, contrasena_hash, rol, grado, materia, puntos, ejercicios_resueltos, activo, ultimo_acceso, fecha_registro, tema_color) VALUES
+    (1, 'Administrador NovaTeam', 'admin@novateam.edu.co',          '$2y$10$DBKPP9me3lfvh94H2b7NU.S5UXdqtIDKewEIzSgsb9v7MR5ZFpwOm', 'administrador', NULL, NULL, 0, 0, 1, NULL, '2026-09-15 07:31:59', 'default'),
+    (2, 'Jenniffer Yepes',        'jenniffer.yepes@colegio.edu.co', '$2y$10$DBKPP9me3lfvh94H2b7NU.S5UXdqtIDKewEIzSgsb9v7MR5ZFpwOm', 'profesor', NULL, 'matematicas', 0, 0, 1, NULL, '2026-09-15 07:31:59', 'default'),
+    (3, 'Carlos Malave',          'carlos.malave@colegio.edu.co',   '$2y$10$DBKPP9me3lfvh94H2b7NU.S5UXdqtIDKewEIzSgsb9v7MR5ZFpwOm', 'profesor', NULL, 'ingles', 0, 0, 1, NULL, '2026-09-15 07:31:59', 'default'),
+    (4, 'Ana Torres',             'ana.torres@colegio.edu.co',      '$2y$10$DBKPP9me3lfvh94H2b7NU.S5UXdqtIDKewEIzSgsb9v7MR5ZFpwOm', 'estudiante', 4, NULL, 0, 0, 1, '2026-09-18 07:36:46', '2026-09-15 07:31:59', 'default'),
+    (5, 'Luis Rodriguez',         'luis.rodriguez@colegio.edu.co',  '$2y$10$DBKPP9me3lfvh94H2b7NU.S5UXdqtIDKewEIzSgsb9v7MR5ZFpwOm', 'estudiante', 4, NULL, 0, 0, 1, NULL, '2026-09-15 07:31:59', 'default');
 
 INSERT INTO matriculas (id_usuario, materia) VALUES
     (4, 'matematicas'),
@@ -281,6 +281,9 @@ VALUES
     (2, 1, '¿Como se dice "perro" en ingles?', 'Cat', 'Dog', 'Bird', 'Fish', 2),
     (2, 2, '¿Como se dice "gato" en ingles?', 'Dog', 'Bird', 'Cat', 'Cow', 3),
     (2, 3, 'What color is the sky on a sunny day?', 'Green', 'Blue', 'Red', 'Yellow', 2);
+
+INSERT INTO intentos (id_intento, id_usuario, id_guia, completado, puntaje, total_ejercicios, fecha_inicio, fecha_completado) VALUES
+    (1, 4, 1, 0, 0, 3, '2026-09-14 07:19:03', NULL);
 
 INSERT INTO notificaciones (titulo, mensaje, id_profesor, id_guia, id_destinatario, leida) VALUES
     ('¡Bienvenidos a NovaTeam!', 'Ya puedes resolver las primeras guias de matematicas e ingles. Gana puntos e insignias.', 2, NULL, 4, 0),
