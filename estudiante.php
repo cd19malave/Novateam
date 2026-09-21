@@ -115,6 +115,7 @@ require __DIR__ . '/includes/header.php';
     </div>
 
     <div class="dash-hero-side">
+      <span class="mascot mascot-sm" aria-hidden="true">🦉</span>
       <div class="level-ring" role="img" aria-label="Nivel <?= $level ?>">
         <svg viewBox="0 0 80 80" width="116" height="116">
           <defs>

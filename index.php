@@ -46,6 +46,7 @@ require __DIR__ . '/includes/header.php';
 ?>
 <section class="hero" id="inicio">
   <div class="container text-center">
+    <div class="mascot-wrap mb-3"><span class="mascot" aria-hidden="true">🦉</span></div>
     <span class="section-eyebrow">NovaTeam presenta</span>
     <h1 class="mt-2">Aprende <span class="accent">Matemáticas</span> e <span class="accent2">Inglés</span><br>jugando con NovaTeam 🚀</h1>
     <p class="lead mt-3 mx-auto" style="max-width:640px">

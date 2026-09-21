@@ -4,7 +4,7 @@
   "description": "Aprende matemáticas e inglés de forma interactiva con guías, ejercicios y retos.",
   "start_url": "/index.php",
   "display": "standalone",
-  "background_color": "#17181A",
+  "background_color": "#EAF4FF",
   "theme_color": "#4F8FF7",
   "orientation": "any",
   "categories": ["education", "productivity"],

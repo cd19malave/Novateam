@@ -594,6 +594,10 @@ body.has-bottom-nav{padding-bottom:calc(58px + env(safe-area-inset-bottom))}
   display:grid;place-items:center;font-weight:900;
   background:var(--edu-pill);border:1px solid var(--edu-border);color:var(--edu-muted);
 }
+.quiz-options .quiz-option:nth-child(1) .quiz-opt-key{background:#4F8FF7;border-color:#4F8FF7;color:#fff}
+.quiz-options .quiz-option:nth-child(2) .quiz-opt-key{background:#FFB020;border-color:#FFB020;color:#5A3D00}
+.quiz-options .quiz-option:nth-child(3) .quiz-opt-key{background:#FF6FB5;border-color:#FF6FB5;color:#fff}
+.quiz-options .quiz-option:nth-child(4) .quiz-opt-key{background:#2FD08A;border-color:#2FD08A;color:#fff}
 .quiz-opt-text{flex:1;font-weight:700}
 .quiz-opt-mark{display:none;font-size:1.2rem}
 .quiz-option:has(.quiz-radio:checked){border-color:var(--edu-primary);background:rgba(79,143,247,.12)}
@@ -734,3 +738,183 @@ html.nt-splash-on #nt-splash{display:grid}
 }
 @keyframes nts-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 @keyframes nts-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+/* ══════════════════════════════════════════
+   Fase 6 — Tema infantil (colorido y luminoso)
+   Tema claro por defecto: colores tipo caramelo,
+   formas redondeadas, fondo alegre y mascota.
+   ══════════════════════════════════════════ */
+[data-bs-theme="light"]{
+  color-scheme:light;
+  --edu-primary:#4F8FF7;
+  --edu-secondary:#FFC247;
+  --edu-accent:#FF6FB5;
+  --edu-violet:#8B5CF6;
+  --edu-success:#2FD08A;
+  --edu-bg:#EAF4FF;
+  --edu-surface:#FFFFFF;
+  --edu-surface-2:rgba(255,255,255,.92);
+  --edu-navbar-bg:#FFFFFF;
+  --edu-text:#2B2E4A;
+  --edu-muted:#6B7390;
+  --edu-border:#DCE7FA;
+  --edu-hover:#EFF5FF;
+  --edu-pill:#EFF4FF;
+  --edu-footer-bg:#2B2E4A;
+  --edu-footer-text:#E9F0FF;
+  --edu-input-bg:#FFFFFF;
+  --edu-shadow:0 6px 0 rgba(214,227,248,.7),0 16px 32px rgba(79,143,247,.14);
+  --edu-shadow-hover:0 9px 0 rgba(214,227,248,.8),0 22px 44px rgba(79,143,247,.22);
+  --edu-navbar-shadow:0 4px 16px rgba(79,143,247,.12);
+  --edu-messages-bg:#F4F8FF;
+  --edu-tint-a:#EAF4FF;
+  --edu-tint-b:#FFF0F7;
+  --edu-hero-bg:transparent;
+}
+
+/* Tipografía redondeada y juguetona en títulos */
+h1,h2,h3,h4,h5,h6,.hero h1,.hero-title,.edu-logo,
+.quiz-question,.section-eyebrow,.path-group-head,.bn-label{
+  font-family:'Fredoka','Quicksand',system-ui,sans-serif;
+}
+
+/* Fondo luminoso con nubes de color */
+[data-bs-theme="light"] body{
+  background-color:#EAF4FF;
+  background-image:
+    radial-gradient(38rem 38rem at 112% -10%, rgba(255,194,71,.45), transparent 62%),
+    radial-gradient(34rem 34rem at -12% 4%, rgba(255,111,181,.28), transparent 62%),
+    radial-gradient(46rem 46rem at 50% 118%, rgba(79,143,247,.22), transparent 62%),
+    linear-gradient(180deg,#EAF4FF 0%,#F4F9FF 45%,#FFF6FB 100%);
+  background-attachment:fixed;
+}
+/* Confeti de puntitos */
+[data-bs-theme="light"] body::before{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.55;
+  background-image:
+    radial-gradient(rgba(139,92,246,.16) 2.5px, transparent 2.5px),
+    radial-gradient(rgba(255,111,181,.16) 2.5px, transparent 2.5px),
+    radial-gradient(rgba(79,143,247,.14) 2.5px, transparent 2.5px);
+  background-size:120px 120px,160px 160px,200px 200px;
+  background-position:0 0,40px 60px,90px 20px;
+}
+[data-bs-theme="light"] .hero{background:transparent}
+
+/* Logo saltarín */
+.edu-logo .logo-mark{
+  box-shadow:0 5px 0 rgba(139,92,246,.55),0 12px 22px rgba(79,143,247,.35);
+}
+.edu-logo:hover .logo-mark{animation:logo-pop .55s ease}
+@keyframes logo-pop{
+  0%,100%{transform:translateY(0) rotate(0)}
+  30%{transform:translateY(-5px) rotate(-7deg)}
+  60%{transform:translateY(-2px) rotate(6deg)}
+}
+
+/* Mascota Nova */
+.mascot{
+  --mascot-size:104px;
+  width:var(--mascot-size);height:var(--mascot-size);border-radius:50%;
+  display:grid;place-items:center;font-size:calc(var(--mascot-size) * .5);line-height:1;
+  background:radial-gradient(circle at 32% 26%, #FFFFFF, #FFE9B8);
+  border:4px solid #fff;
+  box-shadow:0 8px 0 rgba(255,194,71,.55),0 16px 32px rgba(255,143,61,.35);
+  animation:mascot-float 3.2s ease-in-out infinite;
+}
+.mascot-sm{--mascot-size:66px}
+.mascot-wrap{display:flex;justify-content:center}
+@keyframes mascot-float{
+  0%,100%{transform:translateY(0) rotate(-3deg)}
+  50%{transform:translateY(-10px) rotate(3deg)}
+}
+
+/* Aves y adornos flotando en el hero */
+[data-bs-theme="light"] .hero{position:relative;overflow:hidden}
+[data-bs-theme="light"] .hero::before{
+  content:"📚";position:absolute;left:6%;top:20%;font-size:2.4rem;
+  transform:rotate(-12deg);animation:floaty 3s ease-in-out infinite;opacity:.9;
+}
+[data-bs-theme="light"] .hero::after{
+  content:"🧮";position:absolute;right:7%;top:24%;font-size:2.4rem;
+  transform:rotate(12deg);animation:floaty 3.6s ease-in-out infinite;opacity:.9;
+}
+
+/* Tarjetas tipo sticker */
+[data-bs-theme="light"] .card-edu{border-width:2px}
+[data-bs-theme="light"] .card-edu:hover{transform:translateY(-6px) rotate(-.6deg)}
+[data-bs-theme="light"] .card-icon{
+  border-radius:20px;
+  box-shadow:0 5px 0 rgba(139,92,246,.4),0 12px 22px rgba(79,143,247,.3);
+}
+
+/* Botones con relieve de caramelo */
+[data-bs-theme="light"] .btn-edu{
+  background:linear-gradient(135deg,#5B9BFF,#8B5CF6 55%,#FF6FB5);
+  box-shadow:0 5px 0 #B2417F,0 12px 24px rgba(139,92,246,.35);
+}
+[data-bs-theme="light"] .btn-edu:hover{box-shadow:0 7px 0 #B2417F,0 16px 30px rgba(139,92,246,.45)}
+[data-bs-theme="light"] .btn-edu:active{box-shadow:0 2px 0 #B2417F,0 6px 14px rgba(139,92,246,.3)}
+[data-bs-theme="light"] .btn-edu-outline{
+  border-color:var(--edu-primary);color:var(--edu-primary);
+  box-shadow:0 4px 0 rgba(79,143,247,.35);
+}
+[data-bs-theme="light"] .btn-edu-outline:hover{box-shadow:0 6px 0 rgba(79,143,247,.4)}
+
+/* Etiqueta de sección tipo gomita */
+[data-bs-theme="light"] .section-eyebrow{
+  background:#FFF3D6;border-color:#FFD98A;color:#A85F00;
+}
+
+/* Barra superior con borde de colores */
+[data-bs-theme="light"] .navbar-edu{
+  border-bottom:3px solid transparent;
+  border-image:linear-gradient(90deg,#4F8FF7,#8B5CF6,#FF6FB5,#FFC247) 1;
+}
+
+/* Tarjetas de estadísticas en colores pastel */
+[data-bs-theme="light"] .dash-stats .stat-card{border-width:2px}
+[data-bs-theme="light"] .dash-stats .stat-card:nth-child(1){background:linear-gradient(160deg,#FFF6DA,#FFFDF7)}
+[data-bs-theme="light"] .dash-stats .stat-card:nth-child(2){background:linear-gradient(160deg,#FFEDE1,#FFFAF6)}
+[data-bs-theme="light"] .dash-stats .stat-card:nth-child(3){background:linear-gradient(160deg,#E2FBEF,#F7FFFB)}
+[data-bs-theme="light"] .dash-stats .stat-card:nth-child(4){background:linear-gradient(160deg,#E7F1FF,#F8FBFF)}
+
+/* Nodos de la ruta más vivos */
+[data-bs-theme="light"] .path-link{border-width:2px}
+[data-bs-theme="light"] .path-node.current .path-marker{
+  animation:path-pulse 1.8s infinite, mascot-float 2.6s ease-in-out infinite;
+}
+
+/* Barra de progreso del quiz con brillo */
+.quiz-bar-fill{
+  background-image:
+    linear-gradient(90deg,var(--edu-primary),var(--edu-violet),var(--edu-accent)),
+    linear-gradient(90deg,rgba(255,255,255,.35),transparent 60%);
+  background-blend-mode:overlay;
+}
+
+/* Opciones del quiz con rebote al pasar */
+[data-bs-theme="light"] .quiz-option:hover{transform:translateY(-2px) scale(1.01)}
+[data-bs-theme="light"] .quiz-option{border-width:2.5px}
+
+/* Barra inferior más alegre */
+[data-bs-theme="light"] .bottom-nav{border-top-width:2px}
+[data-bs-theme="light"] .bn-item.active .bn-icon{
+  transform:translateY(-2px);transition:transform .2s ease;
+}
+[data-bs-theme="light"] .xp-pill{
+  background:linear-gradient(135deg,#FFE9B0,#FFD27A);
+  color:#8A5A00;border-color:#FFC247;
+}
+
+/* Enlaces y detalles */
+[data-bs-theme="light"] .badge-pill{background:#F1F6FF}
+[data-bs-theme="light"] details.card-edu summary{padding:.15rem 0}
+
+/* Formularios con bordes más amables */
+[data-bs-theme="light"] .form-control,
+[data-bs-theme="light"] .form-select{border-width:2px;border-radius:16px}
+
+/* Equipo con avatares coloridos */
+[data-bs-theme="light"] .equipo-avatar{
+  box-shadow:0 6px 0 rgba(139,92,246,.35),0 12px 22px rgba(79,143,247,.3);
+}
