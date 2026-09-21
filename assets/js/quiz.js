@@ -198,6 +198,7 @@
     }
     action.disabled = true;
     action.textContent = 'Enviando…';
+    form.querySelectorAll('.quiz-radio').forEach(function (r) { r.disabled = false; });
     form.submit();
   }
 

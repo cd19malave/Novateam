@@ -45,7 +45,7 @@ $showBottomNav = (bool) $user;
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Quicksand:wght@500;700;800&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/app.css?v=10">
+  <link rel="stylesheet" href="assets/css/app.css?v=11">
   <link rel="manifest" href="manifest.json?v=5">
   <meta name="theme-color" content="#4F8FF7">
   <meta name="mobile-web-app-capable" content="yes">

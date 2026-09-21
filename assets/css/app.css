@@ -881,7 +881,7 @@ h1,h2,h3,h4,h5,h6,.hero h1,.hero-title,.edu-logo,
 /* Nodos de la ruta más vivos */
 [data-bs-theme="light"] .path-link{border-width:2px}
 [data-bs-theme="light"] .path-node.current .path-marker{
-  animation:path-pulse 1.8s infinite, mascot-float 2.6s ease-in-out infinite;
+  animation:path-pulse 1.8s infinite;
 }
 
 /* Barra de progreso del quiz con brillo */
@@ -1014,3 +1014,21 @@ h1,h2,h3,h4,h5,h6,.hero h1,.hero-title,.edu-logo,
 }
 .shop-history-row:first-child{border-top:none}
 .shop-empty .mascot{font-size:3rem}
+
+/* Móvil: sin "hover" pegado al tocar y sin saltos de animación */
+.path-link,.path-marker,.quiz-option,.quiz-power,.shop-item,.btn-edu,.btn-edu-outline{
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+}
+@media (hover:none){
+  .path-link:hover,
+  .card-edu:hover,
+  .download-os:hover,
+  .btn-edu:hover,
+  .btn-edu-outline:hover,
+  .quiz-option:hover,
+  .quiz-power:hover,
+  .shop-item:hover{
+    transform:none !important;
+  }
+}
