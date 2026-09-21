@@ -37,6 +37,8 @@ DROP TABLE IF EXISTS ejercicios;
 DROP TABLE IF EXISTS guias;
 DROP TABLE IF EXISTS usuario_insignias;
 DROP TABLE IF EXISTS insignias;
+DROP TABLE IF EXISTS compras;
+DROP TABLE IF EXISTS racha_escudos;
 DROP TABLE IF EXISTS notificaciones;
 DROP TABLE IF EXISTS usuarios;
 
@@ -60,6 +62,12 @@ CREATE TABLE usuarios (
     bio                  TEXT                NULL COMMENT 'Biografia del usuario',
     fondo_perfil         VARCHAR(255)        NULL COMMENT 'Ruta imagen de fondo de perfil',
     tema_color           VARCHAR(20)         NOT NULL DEFAULT 'default' COMMENT 'Tema de color: default,oscuro,verde,rosa,purpura',
+    vidas                TINYINT             NOT NULL DEFAULT 5 COMMENT 'Vidas actuales (se recargan cada 4 h)',
+    vidas_max            TINYINT             NOT NULL DEFAULT 5 COMMENT 'Maximo de vidas',
+    vidas_actualizadas   DATETIME            NULL COMMENT 'Desde cuando se cuenta la recarga de vidas (NULL = lleno)',
+    escudos_racha        TINYINT             NOT NULL DEFAULT 0 COMMENT 'Protectores de racha (max 3)',
+    comodines_50         TINYINT             NOT NULL DEFAULT 0 COMMENT 'Comodines 50/50 para el quiz (max 3)',
+    doble_puntos         TINYINT             NOT NULL DEFAULT 0 COMMENT 'Doble puntos para el proximo quiz (max 2)',
     remember_token       VARCHAR(64)         NULL COMMENT 'Token para recuperación de contraseña',
     token_expires        DATETIME            NULL COMMENT 'Expiración del token de recuperación',
     CONSTRAINT chk_grado   CHECK (rol <> 'estudiante' OR grado = 4),
@@ -87,6 +95,23 @@ CREATE TABLE usuario_insignias (
     PRIMARY KEY (id_usuario, id_insignia),
     CONSTRAINT fk_ui_usuario  FOREIGN KEY (id_usuario)  REFERENCES usuarios(id_usuario)  ON DELETE CASCADE,
     CONSTRAINT fk_ui_insignia FOREIGN KEY (id_insignia) REFERENCES insignias(id_insignia) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE racha_escudos (
+    id_usuario INT  NOT NULL,
+    fecha      DATE NOT NULL,
+    PRIMARY KEY (id_usuario, fecha),
+    CONSTRAINT fk_racha_usuario FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE compras (
+    id_compra  INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    item       VARCHAR(30) NOT NULL,
+    costo      INT NOT NULL,
+    fecha      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_compra_usuario FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE CASCADE,
+    KEY idx_compra_usuario (id_usuario, fecha)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE matriculas (

@@ -54,7 +54,10 @@ $list = $guias->fetchAll();
 $xp = (int) $user['puntos'];
 $level = user_level($xp);
 $levelProgress = $xp % 100;
+apply_streak_shields((int) $user['id_usuario']);
 $streak = user_streak((int) $user['id_usuario']);
+$lives = user_lives((int) $user['id_usuario']);
+$powerups = user_powerups((int) $user['id_usuario']);
 
 $grupos = [];
 foreach ($materias as $m) {
@@ -157,6 +160,18 @@ require __DIR__ . '/includes/header.php';
       <span class="stat-ico" style="--sc:#4F8FF7"><i class="bi bi-journal-check"></i></span>
       <div><span class="stat-val"><?= (int) $user['ejercicios_resueltos'] ?></span><span class="stat-lbl">ejercicios</span></div>
     </div>
+    <div class="stat-card">
+      <span class="stat-ico" style="--sc:#FF5C8A"><i class="bi bi-heart-fill"></i></span>
+      <div><span class="stat-val"><?= $lives['vidas'] ?>/<?= $lives['max'] ?></span><span class="stat-lbl">vidas</span></div>
+    </div>
+  </section>
+
+  <section class="power-strip mb-4">
+    <span class="power-strip-title"><i class="bi bi-stars"></i> Mis poderes</span>
+    <a href="tienda.php" class="power-chip"><i class="bi bi-shield-fill-check"></i> Escudos <strong><?= $powerups['escudos'] ?></strong></a>
+    <a href="tienda.php" class="power-chip"><i class="bi bi-patch-question-fill"></i> Comodines <strong><?= $powerups['comodines'] ?></strong></a>
+    <a href="tienda.php" class="power-chip"><i class="bi bi-lightning-charge-fill"></i> Doble puntos <strong><?= $powerups['doble'] ?></strong></a>
+    <a href="tienda.php" class="power-chip power-chip--cta"><i class="bi bi-bag-heart-fill"></i> Tienda</a>
   </section>
 
   <?php render_alerts(); ?>

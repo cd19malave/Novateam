@@ -47,9 +47,18 @@ if (!$intento) {
 
 $pdo = db();
 
+$poderes = user_powerups((int) $user['id_usuario']);
+$lives = user_lives((int) $user['id_usuario']);
+$sinVidas = (int) $intento['completado'] !== 1 && (int) $lives['vidas'] < 1;
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['accion'] ?? '') === 'verificar') {
     csrf_verify();
     header('Content-Type: application/json; charset=utf-8');
+    if ($sinVidas || (int) $intento['completado'] === 1) {
+        http_response_code(409);
+        echo json_encode(['ok' => false, 'error' => 'La guía ya no está disponible.']);
+        exit;
+    }
     $eid = (int) ($_POST['id_ejercicio'] ?? 0);
     $sel = (int) ($_POST['opcion'] ?? 0);
     $vstmt = $pdo->prepare(
@@ -70,8 +79,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['accion'] ?? '') === 'verif
     exit;
 }
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['accion'] ?? '') === 'comodin') {
+    csrf_verify();
+    header('Content-Type: application/json; charset=utf-8');
+    if ($sinVidas || (int) $intento['completado'] === 1) {
+        http_response_code(409);
+        echo json_encode(['ok' => false, 'error' => 'No disponible']);
+        exit;
+    }
+    if ($poderes['comodines'] < 1) {
+        echo json_encode(['ok' => false, 'error' => 'No tienes comodines']);
+        exit;
+    }
+    $eid = (int) ($_POST['id_ejercicio'] ?? 0);
+    $est = $pdo->prepare(
+        'SELECT respuesta_correcta, opcion_1, opcion_2, opcion_3, opcion_4
+         FROM ejercicios WHERE id_ejercicio = :e AND id_guia = :g LIMIT 1'
+    );
+    $est->execute(['e' => $eid, 'g' => $idGuia]);
+    $ex = $est->fetch();
+    if (!$ex) {
+        http_response_code(422);
+        echo json_encode(['ok' => false, 'error' => 'Ejercicio no encontrado']);
+        exit;
+    }
+    $correcta = (int) $ex['respuesta_correcta'];
+    $existentes = [];
+    for ($i = 1; $i <= 4; $i++) {
+        if (($ex['opcion_' . $i] ?? '') !== null && $ex['opcion_' . $i] !== '') {
+            $existentes[] = $i;
+        }
+    }
+    $malas = array_values(array_filter($existentes, static fn(int $i): bool => $i !== $correcta));
+    shuffle($malas);
+    $ocultar = array_slice($malas, 0, 2);
+    $pdo->prepare('UPDATE usuarios SET comodines_50 = comodines_50 - 1 WHERE id_usuario = :id AND comodines_50 > 0')
+        ->execute(['id' => $user['id_usuario']]);
+    echo json_encode(['ok' => true, 'ocultar' => $ocultar, 'restantes' => max(0, $poderes['comodines'] - 1)]);
+    exit;
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['accion'] ?? '') === 'enviar' && (int) $intento['completado'] !== 1) {
     csrf_verify();
+    if ($sinVidas) {
+        flash('error', 'Te quedaste sin vidas. Compra o espera a que se recarguen.');
+        redirect('tienda.php');
+    }
     $opciones = $_POST['respuesta'] ?? [];
     if (!is_array($opciones) || count($opciones) !== count($ejercicios)) {
         flash('error', 'Responde todas las preguntas antes de enviar.');
@@ -86,6 +139,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['accion'] ?? '') === 'envia
     foreach ($correctStmt->fetchAll() as $row) {
         $claves[(int) $row['id_ejercicio']] = (int) $row['respuesta_correcta'];
     }
+
+    $usarDoble = isset($_POST['usar_doble']) && $poderes['doble'] > 0;
 
     $pdo->beginTransaction();
     try {
@@ -118,6 +173,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['accion'] ?? '') === 'envia
             ]);
         }
 
+        if ($usarDoble) {
+            $puntaje *= 2;
+            $pdo->prepare('UPDATE usuarios SET doble_puntos = doble_puntos - 1 WHERE id_usuario = :id')
+                ->execute(['id' => $user['id_usuario']]);
+        }
+
         $updI = $pdo->prepare(
             'UPDATE intentos SET completado = 1, puntaje = :p, total_ejercicios = :t, fecha_completado = NOW()
              WHERE id_intento = :id'
@@ -135,7 +196,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['accion'] ?? '') === 'envia
         award_badges((int) $user['id_usuario'], (int) $ptsNow->fetchColumn());
 
         $pdo->commit();
-        flash('ok', 'Guía enviada. Ganaste ' . $puntaje . ' puntos.');
+
+        $fallos = count($ejercicios) - $aciertos;
+        if ($fallos > 0) {
+            consume_lives((int) $user['id_usuario'], $fallos);
+        }
+
+        $extra = $usarDoble ? ' ¡Doble puntos aplicado! (x2)' : '';
+        flash('ok', 'Guía enviada. Ganaste ' . $puntaje . ' puntos.' . $extra);
         redirect('guia.php?id=' . $idGuia);
     } catch (Throwable $e) {
         $pdo->rollBack();
@@ -248,6 +316,23 @@ require __DIR__ . '/includes/header.php';
 
   <?php else: ?>
 
+    <?php if ($sinVidas): ?>
+      <div class="card-edu p-4 text-center shop-empty">
+        <span class="mascot" aria-hidden="true">💔</span>
+        <h2 class="h5 fw-bold mt-2">Te quedaste sin vidas</h2>
+        <p class="text-muted mb-2">
+          Las vidas se recargan solas: 1 cada <?= lives_regen_hours() ?> horas.
+          <?php if ($lives['segundos'] > 0): ?>
+            Próxima vida en <strong id="livesCountdown"><?= e(gmdate('H:i:s', $lives['segundos'])) ?></strong>.
+          <?php endif; ?>
+        </p>
+        <div class="d-flex gap-2 justify-content-center flex-wrap">
+          <a class="btn btn-edu" href="tienda.php"><i class="bi bi-bag-heart-fill"></i> Ir a la tienda</a>
+          <a class="btn-edu-outline" href="estudiante.php">Volver</a>
+        </div>
+      </div>
+    <?php else: ?>
+
     <?php if (!empty($archivosList)): ?>
       <details class="card-edu p-3 mb-3">
         <summary class="fw-bold" style="cursor:pointer"><i class="bi bi-paperclip"></i> Archivos de apoyo</summary>
@@ -263,11 +348,33 @@ require __DIR__ . '/includes/header.php';
 
     <div class="quiz" id="quiz"
          data-check-url="<?= e($checkUrl) ?>"
-         data-total="<?= $total ?>">
+         data-total="<?= $total ?>"
+         data-lives="<?= (int) $lives['vidas'] ?>"
+         data-lives-max="<?= (int) $lives['max'] ?>"
+         data-comodines="<?= (int) $poderes['comodines'] ?>">
       <div class="quiz-top">
         <a class="quiz-close" href="estudiante.php" aria-label="Salir del quiz"><i class="bi bi-x-lg"></i></a>
         <div class="quiz-bar"><span class="quiz-bar-fill" id="quizBar" style="width:0%"></span></div>
         <span class="quiz-count" id="quizCount">1/<?= $total ?></span>
+      </div>
+
+      <div class="quiz-hud">
+        <span class="quiz-lives" id="quizLives" aria-label="Vidas"></span>
+        <div class="quiz-powers">
+          <?php if ($poderes['comodines'] > 0): ?>
+            <button type="button" class="quiz-power" id="quizComodin" title="Comodín 50/50: elimina 2 respuestas incorrectas">
+              <i class="bi bi-patch-question-fill"></i> 50/50
+              <span class="qp-count" id="quizComodinCount"><?= (int) $poderes['comodines'] ?></span>
+            </button>
+          <?php endif; ?>
+          <?php if ($poderes['doble'] > 0): ?>
+            <label class="quiz-power quiz-power--toggle" title="Duplica los puntos de este quiz">
+              <input type="checkbox" name="usar_doble" value="1" id="quizDoble" form="quizForm" hidden>
+              <i class="bi bi-lightning-charge-fill"></i> x2
+              <span class="qp-count"><?= (int) $poderes['doble'] ?></span>
+            </label>
+          <?php endif; ?>
+        </div>
       </div>
 
       <form method="post" id="quizForm" novalidate>
@@ -307,6 +414,7 @@ require __DIR__ . '/includes/header.php';
         <button class="btn btn-edu btn-lg w-100" type="button" id="quizAction" disabled>Comprobar</button>
       </div>
     </div>
+    <?php endif; ?>
 
   <?php endif; ?>
 </div>

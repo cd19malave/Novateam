@@ -21,6 +21,54 @@
   var locked = false;
   var busy = false;
 
+  var livesEl = document.getElementById('quizLives');
+  var comodinBtn = document.getElementById('quizComodin');
+  var comodinCountEl = document.getElementById('quizComodinCount');
+  var lives = parseInt(quiz.getAttribute('data-lives') || '0', 10);
+  var livesMax = parseInt(quiz.getAttribute('data-lives-max') || '5', 10);
+  var comodines = parseInt(quiz.getAttribute('data-comodines') || '0', 10);
+  var comodinUsedThisStep = false;
+
+  function renderLives() {
+    if (!livesEl) return;
+    var html = '';
+    for (var i = 0; i < livesMax; i++) {
+      html += '<i class="bi bi-heart-fill' + (i < lives ? ' on' : '') + '"></i>';
+    }
+    livesEl.innerHTML = html;
+  }
+
+  function loseLife() {
+    if (lives > 0) {
+      lives--;
+      renderLives();
+    }
+  }
+
+  function syncComodin() {
+    if (!comodinBtn) return;
+    var usable = comodines > 0 && !comodinUsedThisStep;
+    comodinBtn.disabled = !usable;
+    if (comodines < 1) comodinBtn.style.display = 'none';
+  }
+
+  function hideOptions(stepEl, indexes) {
+    var labels = stepEl.querySelectorAll('.quiz-option');
+    indexes.forEach(function (v) {
+      var label = labels[v - 1];
+      if (!label) return;
+      label.classList.add('faded');
+      var r = label.querySelector('.quiz-radio');
+      if (r) {
+        if (r.checked) r.checked = false;
+        r.disabled = true;
+      }
+    });
+  }
+
+  renderLives();
+  syncComodin();
+
   function step(i) { return steps[i]; }
 
   function updateBar(checked) {
@@ -56,6 +104,8 @@
     });
     locked = false;
     busy = false;
+    comodinUsedThisStep = false;
+    syncComodin();
     action.disabled = !selected(step(i));
     action.textContent = 'Comprobar';
     action.classList.remove('next');
@@ -114,7 +164,8 @@
         if (data.correcto) {
           showFeedback(true, '¡Correcto! +10 XP');
         } else {
-          showFeedback(false, 'Casi. La respuesta correcta está marcada.');
+          loseLife();
+          showFeedback(false, 'Casi. Pierdes 1 vida. La respuesta correcta está marcada.');
         }
         updateBar(true);
         action.disabled = false;
@@ -168,6 +219,50 @@
       verify();
     }
   });
+
+  if (comodinBtn) {
+    comodinBtn.addEventListener('click', function () {
+      if (comodines < 1 || busy || locked || comodinUsedThisStep) return;
+      busy = true;
+      comodinBtn.disabled = true;
+      var stepEl = step(current);
+      var body = new URLSearchParams();
+      body.append('accion', 'comodin');
+      body.append('csrf_token', csrf ? csrf.value : '');
+      body.append('id_ejercicio', stepEl.getAttribute('data-eid'));
+      fetch(quiz.getAttribute('data-check-url'), {
+        method: 'POST',
+        headers: { 'X-Requested-With': 'fetch' },
+        body: body,
+        credentials: 'same-origin'
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          busy = false;
+          if (!data || !data.ok) {
+            comodinBtn.disabled = false;
+            return;
+          }
+          hideOptions(stepEl, data.ocultar || []);
+          comodines = (typeof data.restantes === 'number') ? data.restantes : Math.max(0, comodines - 1);
+          if (comodinCountEl) comodinCountEl.textContent = comodines;
+          comodinUsedThisStep = true;
+          syncComodin();
+        })
+        .catch(function () {
+          busy = false;
+          comodinBtn.disabled = false;
+        });
+    });
+  }
+
+  var doble = document.getElementById('quizDoble');
+  if (doble) {
+    doble.addEventListener('change', function () {
+      var label = doble.closest('.quiz-power--toggle');
+      if (label) label.classList.toggle('armed', doble.checked);
+    });
+  }
 
   activate(0, false);
 })();

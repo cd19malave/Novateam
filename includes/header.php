@@ -45,7 +45,7 @@ $showBottomNav = (bool) $user;
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Quicksand:wght@500;700;800&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/app.css?v=9">
+  <link rel="stylesheet" href="assets/css/app.css?v=10">
   <link rel="manifest" href="manifest.json?v=5">
   <meta name="theme-color" content="#4F8FF7">
   <meta name="mobile-web-app-capable" content="yes">
@@ -79,6 +79,10 @@ if ('serviceWorker' in navigator) {
     <div class="topbar-actions d-flex d-lg-none align-items-center gap-2 ms-auto">
         <?php if ($user['rol'] === 'estudiante'): ?>
           <span class="xp-pill" title="Puntos"><i class="bi bi-lightning-charge-fill"></i> <?= (int) $user['puntos'] ?></span>
+          <?php $navLives = $user ? user_lives((int) $user['id_usuario']) : null; ?>
+          <?php if ($navLives): ?>
+            <span class="xp-pill hearts" title="Vidas"><i class="bi bi-heart-fill"></i> <?= $navLives['vidas'] ?>/<?= $navLives['max'] ?></span>
+          <?php endif; ?>
         <?php endif; ?>
         <?php if ($user['rol'] === 'estudiante'): ?>
           <a class="topbar-btn" href="notificaciones.php" title="Notificaciones" aria-label="Notificaciones">
@@ -95,6 +99,7 @@ if ('serviceWorker' in navigator) {
               <li><a class="dropdown-item" href="estudiante.php"><i class="bi bi-house-door me-2"></i>Mis guías</a></li>
               <li><a class="dropdown-item" href="leaderboard.php"><i class="bi bi-trophy me-2"></i>Ranking</a></li>
               <li><a class="dropdown-item" href="progreso.php"><i class="bi bi-graph-up-arrow me-2"></i>Mi progreso</a></li>
+              <li><a class="dropdown-item" href="tienda.php"><i class="bi bi-bag-heart me-2"></i>Tienda</a></li>
               <li><a class="dropdown-item" href="mensajes.php"><i class="bi bi-chat-dots me-2"></i>Mensajes<?php if ($unreadCount > 0): ?> <span class="badge bg-danger rounded-pill ms-1" id="msg-badge"><?= (int) $unreadCount ?></span><?php endif; ?></a></li>
               <li><a class="dropdown-item" href="notificaciones.php"><i class="bi bi-bell me-2"></i>Notificaciones</a></li>
               <li><a class="dropdown-item" href="perfil.php"><i class="bi bi-person me-2"></i>Mi perfil</a></li>
@@ -135,6 +140,7 @@ if ('serviceWorker' in navigator) {
         <li class="nav-item"><a class="nav-link" href="estudiante.php">Mis guías</a></li>
         <li class="nav-item"><a class="nav-link" href="leaderboard.php">Ranking</a></li>
         <li class="nav-item"><a class="nav-link" href="progreso.php">Mi progreso</a></li>
+        <li class="nav-item"><a class="nav-link" href="tienda.php">Tienda</a></li>
         <li class="nav-item"><a class="nav-link" href="notificaciones.php" title="Notificaciones">
           <i class="bi bi-bell"></i>
           <?php if ($notifCount > 0): ?>

@@ -918,3 +918,99 @@ h1,h2,h3,h4,h5,h6,.hero h1,.hero-title,.edu-logo,
 [data-bs-theme="light"] .equipo-avatar{
   box-shadow:0 6px 0 rgba(139,92,246,.35),0 12px 22px rgba(79,143,247,.3);
 }
+
+/* ============================================================
+   Fase 7 — Vidas, potenciadores, tienda
+   ============================================================ */
+
+.xp-pill.hearts{background:linear-gradient(135deg,#FFD9E6,#FFB3CE);color:#B00047;border-color:#FF7AA8}
+[data-bs-theme="light"] .xp-pill.hearts{background:linear-gradient(135deg,#FFD9E6,#FFB3CE);color:#B00047}
+
+/* HUD del quiz: corazones y poderes */
+.quiz-hud{
+  display:flex;align-items:center;justify-content:space-between;gap:.6rem;
+  margin:.2rem 0 .9rem;flex-wrap:wrap;
+}
+.quiz-lives{display:inline-flex;gap:.15rem;font-size:1.25rem;line-height:1}
+.quiz-lives i{color:#E6E9F2;transition:transform .2s ease,color .2s ease}
+.quiz-lives i.on{color:#FF5C8A;filter:drop-shadow(0 2px 0 rgba(0,0,0,.08))}
+.quiz-powers{display:inline-flex;gap:.4rem;flex-wrap:wrap}
+.quiz-power{
+  display:inline-flex;align-items:center;gap:.3rem;cursor:pointer;
+  border:2.5px solid var(--edu-primary);background:#fff;color:var(--edu-primary);
+  border-radius:999px;padding:.3rem .7rem;font-weight:800;font-size:.85rem;
+  box-shadow:0 4px 0 rgba(79,143,247,.35);transition:transform .15s ease,box-shadow .15s ease;
+}
+.quiz-power:hover{transform:translateY(-2px)}
+.quiz-power:disabled{opacity:.5;cursor:not-allowed;box-shadow:none;transform:none}
+.quiz-power .qp-count{
+  background:var(--edu-primary);color:#fff;border-radius:999px;
+  min-width:1.3rem;text-align:center;font-size:.72rem;padding:.05rem .3rem;
+}
+.quiz-power--toggle{border-color:#FFB84D;color:#A85F00;box-shadow:0 4px 0 rgba(255,184,77,.45)}
+.quiz-power--toggle .qp-count{background:#FFB84D;color:#5c3a00}
+.quiz-power--toggle.armed{background:linear-gradient(135deg,#FFE9B0,#FFC247);transform:translateY(-1px)}
+.quiz-option.faded{opacity:.32;pointer-events:none;filter:grayscale(.6)}
+
+/* Tira de poderes en el panel */
+.power-strip{
+  display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;
+  background:var(--edu-card);border:2px solid var(--edu-border);
+  border-radius:20px;padding:.7rem .9rem;
+}
+.power-strip-title{font-weight:800;color:var(--edu-muted);font-size:.85rem;margin-right:.2rem}
+.power-chip{
+  display:inline-flex;align-items:center;gap:.35rem;text-decoration:none;
+  background:#F1F6FF;color:var(--edu-text);border:2px solid var(--edu-border);
+  border-radius:999px;padding:.3rem .75rem;font-weight:700;font-size:.85rem;
+}
+.power-chip strong{color:var(--edu-primary)}
+.power-chip--cta{
+  background:linear-gradient(135deg,#5B9BFF,#8B5CF6);color:#fff;border-color:transparent;
+  box-shadow:0 4px 0 rgba(139,92,246,.4);
+}
+.power-chip--cta strong{color:#fff}
+
+/* Tienda */
+.shop-hero{
+  display:flex;align-items:center;gap:1rem;flex-wrap:wrap;
+  background:linear-gradient(135deg,#E7F1FF,#F7ECFF 60%,#FFEFF6);
+  border:2px solid var(--edu-border);border-radius:24px;padding:1.1rem 1.3rem;
+}
+[data-bs-theme="light"] .shop-hero{
+  background:linear-gradient(135deg,#E7F1FF,#F7ECFF 55%,#FFEFF6);
+  box-shadow:0 8px 0 rgba(139,92,246,.12),0 18px 34px rgba(79,143,247,.16);
+}
+.shop-hero .mascot{margin:0}
+.shop-wallet{margin-left:auto;display:flex;gap:.5rem;flex-wrap:wrap}
+.shop-grid{
+  display:grid;gap:1rem;
+  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+}
+.shop-item{
+  background:var(--edu-card);border:2.5px solid var(--edu-border);border-radius:22px;
+  padding:1.1rem;display:flex;flex-direction:column;gap:.4rem;
+  transition:transform .18s ease,box-shadow .18s ease;
+}
+[data-bs-theme="light"] .shop-item{box-shadow:0 6px 0 rgba(79,143,247,.12)}
+.shop-item:hover{transform:translateY(-5px);box-shadow:0 14px 26px rgba(79,143,247,.22)}
+.shop-item--full{opacity:.72}
+.shop-ico{
+  width:52px;height:52px;border-radius:16px;display:grid;place-items:center;
+  font-size:1.5rem;color:#fff;background:linear-gradient(135deg,var(--sc,#4F8FF7),#8B5CF6);
+  box-shadow:0 5px 0 rgba(0,0,0,.14);
+}
+.shop-name{font-size:1.05rem;font-weight:800;margin:.2rem 0 0}
+.shop-desc{color:var(--edu-muted);font-size:.88rem;margin:0;flex:1}
+.shop-meta{display:flex;align-items:center;justify-content:space-between;margin:.5rem 0}
+.shop-stock{font-size:.82rem;color:var(--edu-muted)}
+.shop-price{font-weight:800;color:#A85F00}
+[data-bs-theme="light"] .shop-price{color:#A85F00}
+.shop-price i{color:#FFB84D}
+.shop-history{display:flex;flex-direction:column}
+.shop-history-row{
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  padding:.45rem 0;border-top:1px solid var(--edu-border);font-size:.9rem;
+}
+.shop-history-row:first-child{border-top:none}
+.shop-empty .mascot{font-size:3rem}

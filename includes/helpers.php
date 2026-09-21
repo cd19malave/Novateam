@@ -301,21 +301,32 @@ function user_level(int $points): int
     return (int) floor($points / 100) + 1;
 }
 
-function user_streak(int $userId): int
+function streak_days(int $userId): array
 {
+    $days = [];
     try {
         $stmt = db()->prepare(
             'SELECT DISTINCT DATE(r.fecha_respuesta) AS d
              FROM respuestas r
              JOIN intentos i ON i.id_intento = r.id_intento
-             WHERE i.id_usuario = :u
-             ORDER BY d DESC'
+             WHERE i.id_usuario = :u'
         );
         $stmt->execute(['u' => $userId]);
         $days = $stmt->fetchAll(PDO::FETCH_COLUMN);
+        $stmt = db()->prepare('SELECT fecha FROM racha_escudos WHERE id_usuario = :u');
+        $stmt->execute(['u' => $userId]);
+        foreach ($stmt->fetchAll(PDO::FETCH_COLUMN) as $d) {
+            $days[] = $d;
+        }
     } catch (Throwable $e) {
-        return 0;
+        return [];
     }
+    return array_values(array_unique(array_filter($days)));
+}
+
+function user_streak(int $userId): int
+{
+    $days = streak_days($userId);
     if (!$days) {
         return 0;
     }
@@ -382,4 +393,261 @@ function is_enrolled(int $userId, string $materia): bool
     $stmt = db()->prepare('SELECT 1 FROM matriculas WHERE id_usuario = :id AND materia = :m LIMIT 1');
     $stmt->execute(['id' => $userId, 'm' => $materia]);
     return (bool) $stmt->fetch();
+}
+
+/* ── Vidas, tienda y potenciadores ── */
+
+function lives_regen_hours(): int
+{
+    return 4;
+}
+
+function user_lives(int $userId): array
+{
+    $stmt = db()->prepare('SELECT vidas, vidas_max, vidas_actualizadas FROM usuarios WHERE id_usuario = :id');
+    $stmt->execute(['id' => $userId]);
+    $row = $stmt->fetch();
+    if (!$row) {
+        return ['vidas' => 0, 'max' => 0, 'next' => null, 'segundos' => 0];
+    }
+    $vidas = (int) $row['vidas'];
+    $max   = max(1, (int) $row['vidas_max']);
+    $stamp = $row['vidas_actualizadas'];
+
+    if ($vidas >= $max) {
+        if ($stamp !== null) {
+            db()->prepare('UPDATE usuarios SET vidas_actualizadas = NULL WHERE id_usuario = :id')->execute(['id' => $userId]);
+        }
+        return ['vidas' => $max, 'max' => $max, 'next' => null, 'segundos' => 0];
+    }
+
+    $regen = lives_regen_hours();
+    if ($stamp === null) {
+        $stamp = date('Y-m-d H:i:s');
+        db()->prepare('UPDATE usuarios SET vidas_actualizadas = :t WHERE id_usuario = :id')
+            ->execute(['t' => $stamp, 'id' => $userId]);
+    }
+    $base = new DateTimeImmutable($stamp);
+    $now  = new DateTimeImmutable();
+    $gain = intdiv(max(0, $now->getTimestamp() - $base->getTimestamp()), $regen * 3600);
+    if ($gain > 0) {
+        $nuevas = min($max, $vidas + $gain);
+        if ($nuevas >= $max) {
+            db()->prepare('UPDATE usuarios SET vidas = :v, vidas_actualizadas = NULL WHERE id_usuario = :id')
+                ->execute(['v' => $max, 'id' => $userId]);
+            return ['vidas' => $max, 'max' => $max, 'next' => null, 'segundos' => 0];
+        }
+        $base = $base->modify('+' . ($gain * $regen) . ' hours');
+        db()->prepare('UPDATE usuarios SET vidas = :v, vidas_actualizadas = :t WHERE id_usuario = :id')
+            ->execute(['v' => $nuevas, 't' => $base->format('Y-m-d H:i:s'), 'id' => $userId]);
+        $vidas = $nuevas;
+    }
+    $next = $base->modify('+' . $regen . ' hours');
+    return [
+        'vidas'    => $vidas,
+        'max'      => $max,
+        'next'     => $next->format('Y-m-d H:i:s'),
+        'segundos' => max(0, $next->getTimestamp() - $now->getTimestamp()),
+    ];
+}
+
+function consume_lives(int $userId, int $n): void
+{
+    if ($n <= 0) {
+        return;
+    }
+    $cur = user_lives($userId);
+    $vidas = max(0, $cur['vidas'] - $n);
+    if ($cur['vidas'] >= $cur['max']) {
+        db()->prepare('UPDATE usuarios SET vidas = :v, vidas_actualizadas = :t WHERE id_usuario = :id')
+            ->execute(['v' => $vidas, 't' => date('Y-m-d H:i:s'), 'id' => $userId]);
+    } else {
+        db()->prepare('UPDATE usuarios SET vidas = :v WHERE id_usuario = :id')
+            ->execute(['v' => $vidas, 'id' => $userId]);
+    }
+}
+
+function shop_items(): array
+{
+    return [
+        'vida_extra' => [
+            'nombre' => 'Vida extra', 'icono' => 'heart-fill', 'precio' => 15,
+            'desc' => 'Recupera 1 vida al instante (hasta tu máximo).', 'color' => '#FF5C8A',
+        ],
+        'vidas_full' => [
+            'nombre' => 'Recarga total', 'icono' => 'heart', 'precio' => 40,
+            'desc' => 'Llena todas tus vidas de una vez.', 'color' => '#FF7A45',
+        ],
+        'vidas_max' => [
+            'nombre' => '+1 vida máxima', 'icono' => 'plus-circle', 'precio' => 80,
+            'desc' => 'Amplía tu máximo de vidas en 1 (permanente).', 'color' => '#8B5CF6',
+        ],
+        'escudo_racha' => [
+            'nombre' => 'Escudo de racha', 'icono' => 'shield-fill-check', 'precio' => 30,
+            'desc' => 'Protege tu racha si un día no juegas. Acumula hasta 3.', 'color' => '#4F8FF7',
+        ],
+        'comodin_50' => [
+            'nombre' => 'Comodín 50/50', 'icono' => 'patch-question', 'precio' => 25,
+            'desc' => 'En el quiz elimina 2 respuestas incorrectas.', 'color' => '#FFB84D',
+        ],
+        'doble_puntos' => [
+            'nombre' => 'Doble puntos', 'icono' => 'lightning-charge-fill', 'precio' => 45,
+            'desc' => 'Duplica los puntos del próximo quiz que completes.', 'color' => '#56D39F',
+        ],
+    ];
+}
+
+function user_powerups(int $userId): array
+{
+    $stmt = db()->prepare('SELECT escudos_racha, comodines_50, doble_puntos, vidas_max FROM usuarios WHERE id_usuario = :id');
+    $stmt->execute(['id' => $userId]);
+    $row = $stmt->fetch() ?: [];
+    return [
+        'escudos'   => (int) ($row['escudos_racha'] ?? 0),
+        'comodines' => (int) ($row['comodines_50'] ?? 0),
+        'doble'     => (int) ($row['doble_puntos'] ?? 0),
+        'vidas_max' => (int) ($row['vidas_max'] ?? 5),
+    ];
+}
+
+function buy_item(int $userId, string $code): array
+{
+    $items = shop_items();
+    if (!isset($items[$code])) {
+        return ['ok' => false, 'msg' => 'Artículo no válido.'];
+    }
+    $item = $items[$code];
+    $pdo = db();
+    $pdo->beginTransaction();
+    try {
+        $stmt = $pdo->prepare(
+            'SELECT puntos, vidas, vidas_max, escudos_racha, comodines_50, doble_puntos
+             FROM usuarios WHERE id_usuario = :id FOR UPDATE'
+        );
+        $stmt->execute(['id' => $userId]);
+        $u = $stmt->fetch();
+        if (!$u) {
+            throw new RuntimeException('Usuario no encontrado.');
+        }
+        if ((int) $u['puntos'] < (int) $item['precio']) {
+            throw new RuntimeException('Te faltan puntos: tienes ' . (int) $u['puntos'] . ' y cuesta ' . $item['precio'] . '.');
+        }
+        $lleno = (int) $u['vidas'] >= (int) $u['vidas_max'];
+        switch ($code) {
+            case 'vida_extra':
+                if ($lleno) { throw new RuntimeException('Ya tienes todas tus vidas llenas.'); }
+                break;
+            case 'vidas_full':
+                if ($lleno) { throw new RuntimeException('Ya tienes todas tus vidas llenas.'); }
+                break;
+            case 'vidas_max':
+                if ((int) $u['vidas_max'] >= 9) { throw new RuntimeException('Ya alcanzaste el máximo de vidas.'); }
+                break;
+            case 'escudo_racha':
+                if ((int) $u['escudos_racha'] >= 3) { throw new RuntimeException('Ya tienes 3 escudos de racha.'); }
+                break;
+            case 'comodin_50':
+                if ((int) $u['comodines_50'] >= 3) { throw new RuntimeException('Ya tienes 3 comodines.'); }
+                break;
+            case 'doble_puntos':
+                if ((int) $u['doble_puntos'] >= 2) { throw new RuntimeException('Ya tienes 2 dobles puntos.'); }
+                break;
+        }
+
+        $pdo->prepare('UPDATE usuarios SET puntos = puntos - :p WHERE id_usuario = :id')
+            ->execute(['p' => $item['precio'], 'id' => $userId]);
+
+        switch ($code) {
+            case 'vida_extra':
+                $nv = min((int) $u['vidas_max'], (int) $u['vidas'] + 1);
+                if ($nv >= (int) $u['vidas_max']) {
+                    $pdo->prepare('UPDATE usuarios SET vidas = :v, vidas_actualizadas = NULL WHERE id_usuario = :id')
+                        ->execute(['v' => $nv, 'id' => $userId]);
+                } else {
+                    $pdo->prepare('UPDATE usuarios SET vidas = :v WHERE id_usuario = :id')
+                        ->execute(['v' => $nv, 'id' => $userId]);
+                }
+                break;
+            case 'vidas_full':
+                $pdo->prepare('UPDATE usuarios SET vidas = vidas_max, vidas_actualizadas = NULL WHERE id_usuario = :id')
+                    ->execute(['id' => $userId]);
+                break;
+            case 'vidas_max':
+                $pdo->prepare('UPDATE usuarios SET vidas_max = vidas_max + 1, vidas = vidas + 1, vidas_actualizadas = NULL WHERE id_usuario = :id')
+                    ->execute(['id' => $userId]);
+                break;
+            case 'escudo_racha':
+                $pdo->prepare('UPDATE usuarios SET escudos_racha = escudos_racha + 1 WHERE id_usuario = :id')
+                    ->execute(['id' => $userId]);
+                break;
+            case 'comodin_50':
+                $pdo->prepare('UPDATE usuarios SET comodines_50 = comodines_50 + 1 WHERE id_usuario = :id')
+                    ->execute(['id' => $userId]);
+                break;
+            case 'doble_puntos':
+                $pdo->prepare('UPDATE usuarios SET doble_puntos = doble_puntos + 1 WHERE id_usuario = :id')
+                    ->execute(['id' => $userId]);
+                break;
+        }
+
+        $pdo->prepare('INSERT INTO compras (id_usuario, item, costo) VALUES (:u, :i, :c)')
+            ->execute(['u' => $userId, 'i' => $code, 'c' => $item['precio']]);
+        $pdo->commit();
+        return ['ok' => true, 'msg' => '¡Compraste «' . $item['nombre'] . '»!'];
+    } catch (Throwable $e) {
+        if ($pdo->inTransaction()) {
+            $pdo->rollBack();
+        }
+        return ['ok' => false, 'msg' => $e->getMessage()];
+    }
+}
+
+function apply_streak_shields(int $userId): void
+{
+    try {
+        $stmt = db()->prepare(
+            'SELECT DISTINCT DATE(r.fecha_respuesta) AS d
+             FROM respuestas r
+             JOIN intentos i ON i.id_intento = r.id_intento
+             WHERE i.id_usuario = :u'
+        );
+        $stmt->execute(['u' => $userId]);
+        $actRaw = $stmt->fetchAll(PDO::FETCH_COLUMN);
+        if (!$actRaw) {
+            return;
+        }
+        $stmt = db()->prepare('SELECT escudos_racha FROM usuarios WHERE id_usuario = :u');
+        $stmt->execute(['u' => $userId]);
+        $escudos = (int) $stmt->fetchColumn();
+        if ($escudos <= 0) {
+            return;
+        }
+        $stmt = db()->prepare('SELECT fecha FROM racha_escudos WHERE id_usuario = :u');
+        $stmt->execute(['u' => $userId]);
+        $bridged = array_flip($stmt->fetchAll(PDO::FETCH_COLUMN));
+        $last = new DateTimeImmutable(max($actRaw));
+        $act = array_flip($actRaw);
+
+        $today = new DateTimeImmutable('today');
+        $cursor = $today->modify('-1 day');
+        $insert = [];
+        while ($cursor > $last && $escudos > 0) {
+            $d = $cursor->format('Y-m-d');
+            if (!isset($act[$d]) && !isset($bridged[$d])) {
+                $insert[] = $d;
+                $escudos--;
+            }
+            $cursor = $cursor->modify('-1 day');
+        }
+        if ($insert) {
+            $ins = db()->prepare('INSERT IGNORE INTO racha_escudos (id_usuario, fecha) VALUES (:u, :f)');
+            foreach ($insert as $f) {
+                $ins->execute(['u' => $userId, 'f' => $f]);
+            }
+            db()->prepare('UPDATE usuarios SET escudos_racha = :e WHERE id_usuario = :u')
+                ->execute(['e' => $escudos, 'u' => $userId]);
+        }
+    } catch (Throwable $e) {
+        // silencioso: la racha no debe romper la página
+    }
 }
