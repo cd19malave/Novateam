@@ -41,6 +41,10 @@ $user = null;
 if (is_string($tabIn) && preg_match('/^[A-Za-z0-9_-]{16,64}$/', $tabIn)) {
     $user = $_SESSION['tabs'][$tabIn]['user'] ?? null;
 }
+if (!$user) {
+    // Respaldo: sesión global (por si la pestaña aún no tiene slot propio).
+    $user = $_SESSION['user'] ?? null;
+}
 
 // Liberar la sesión para no bloquear las demás peticiones de la pestaña.
 session_write_close();

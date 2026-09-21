@@ -33,10 +33,14 @@ require_once __DIR__ . '/auth.php';
 require_once __DIR__ . '/mailer.php';
 
 $tabIn = $_REQUEST['tab'] ?? '';
-if (is_string($tabIn) && preg_match('/^[A-Za-z0-9_-]{16,64}$/', $tabIn)) {
+$hasTab = is_string($tabIn) && preg_match('/^[A-Za-z0-9_-]{16,64}$/', $tabIn);
+
+if ($hasTab) {
     $_SESSION['active_tab'] = $tabIn;
     if (!isset($_SESSION['tabs'][$tabIn]) || !is_array($_SESSION['tabs'][$tabIn])) {
-        $_SESSION['tabs'][$tabIn] = ['user' => null];
+        // Pestaña nueva: hereda la sesión global en vez de quedar vacía (evita que
+        // reabrir la app o abrir una pestaña nueva cierre la sesión).
+        $_SESSION['tabs'][$tabIn] = ['user' => $_SESSION['user'] ?? null];
         if (count($_SESSION['tabs']) > 24) {
             foreach ($_SESSION['tabs'] as $k => $slot) {
                 if ($k === $tabIn || !empty($slot['user'])) {
@@ -50,16 +54,21 @@ if (is_string($tabIn) && preg_match('/^[A-Za-z0-9_-]{16,64}$/', $tabIn)) {
         }
     }
 } else {
+    // Sin token de pestaña NO se destruye la sesión: se mantiene la global.
     unset($_SESSION['active_tab']);
 }
 
 $activeTab = current_tab();
 if ($activeTab !== null) {
-    $_SESSION['user'] = isset($_SESSION['tabs'][$activeTab]['user'])
-        ? $_SESSION['tabs'][$activeTab]['user']
-        : null;
-} else {
-    unset($_SESSION['user']);
+    $slotUser = $_SESSION['tabs'][$activeTab]['user'] ?? null;
+    if (is_array($slotUser) && !empty($slotUser['id_usuario'])) {
+        $_SESSION['user'] = $slotUser;
+    } elseif (is_array($_SESSION['user'] ?? null) && !empty($_SESSION['user']['id_usuario'])) {
+        // La pestaña no tiene usuario explícito pero hay sesión global: heredarla.
+        $_SESSION['tabs'][$activeTab]['user'] = $_SESSION['user'];
+    } else {
+        $_SESSION['user'] = null;
+    }
 }
 
 if (!empty($_SESSION['user']['id_usuario'])) {
