@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             flash('error', 'Datos inválidos.');
             redirect('admin.php');
         }
-        if ($grado < 1 || $grado > 5) $grado = 0;
+        if ($grado !== 4) $grado = 0;
         if (!in_array($materia, ['matematicas', 'ingles'], true)) $materia = null;
 
         $sets = ['nombre = :n', 'correo = :c'];
@@ -262,11 +262,10 @@ require __DIR__ . '/includes/header.php';
           </div>
           <div class="row g-2 mb-3">
             <div class="col-6">
-              <label class="form-label">Grado <small class="text-muted">(1-5)</small></label>
+              <label class="form-label">Grado <small class="text-muted">(4°)</small></label>
               <select class="form-select" name="grado" id="eu_grado">
                 <option value="0">—</option>
-                <option value="1">1°</option><option value="2">2°</option>
-                <option value="3">3°</option><option value="4">4°</option><option value="5">5°</option>
+                <option value="4">4°</option>
               </select>
             </div>
             <div class="col-6">

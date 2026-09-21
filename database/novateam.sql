@@ -48,7 +48,7 @@ CREATE TABLE usuarios (
     correo               VARCHAR(150)        NOT NULL UNIQUE,
     contrasena_hash      VARCHAR(255)        NOT NULL,
     rol                  ENUM('estudiante','profesor','administrador') NOT NULL DEFAULT 'estudiante',
-    grado                TINYINT             NULL COMMENT 'Solo estudiantes (1 a 5)',
+    grado                TINYINT             NULL COMMENT 'Solo estudiantes (4° grado)',
     materia              ENUM('matematicas','ingles') NULL COMMENT 'Solo profesores',
     puntos               INT                 NOT NULL DEFAULT 0,
     ejercicios_resueltos INT                 NOT NULL DEFAULT 0,
@@ -61,7 +61,9 @@ CREATE TABLE usuarios (
     fondo_perfil         VARCHAR(255)        NULL COMMENT 'Ruta imagen de fondo de perfil',
     tema_color           VARCHAR(20)         NOT NULL DEFAULT 'default' COMMENT 'Tema de color: default,oscuro,verde,rosa,purpura',
     remember_token       VARCHAR(64)         NULL COMMENT 'Token para recuperación de contraseña',
-    token_expires        DATETIME            NULL COMMENT 'Expiración del token de recuperación'
+    token_expires        DATETIME            NULL COMMENT 'Expiración del token de recuperación',
+    CONSTRAINT chk_grado   CHECK (rol <> 'estudiante' OR grado = 4),
+    CONSTRAINT chk_materia CHECK (rol <> 'profesor'   OR materia IS NOT NULL)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE insignias (

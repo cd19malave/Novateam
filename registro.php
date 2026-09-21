@@ -26,8 +26,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         flash('error', 'La contraseña debe tener al menos 8 caracteres.');
         redirect('registro.php');
     }
-    if ($grado < 1 || $grado > 5) {
-        flash('error', 'Selecciona un grado válido (1-5).');
+    if ($grado !== 4) {
+        flash('error', 'El registro está disponible solo para 4° grado.');
         redirect('registro.php');
     }
     if (!is_array($materias) || count($materias) < 1) {
@@ -70,12 +70,7 @@ require __DIR__ . '/includes/header.php';
       <div class="mb-3">
         <label class="form-label" for="grado">Grado</label>
         <select class="form-select" id="grado" name="grado" required>
-          <option value="">Selecciona...</option>
-          <option value="1">1° Primaria</option>
-          <option value="2">2° Primaria</option>
-          <option value="3">3° Primaria</option>
           <option value="4" selected>4° Primaria</option>
-          <option value="5">5° Primaria</option>
         </select>
       </div>
       <div class="mb-3">
