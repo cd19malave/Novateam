@@ -1,4 +1,4 @@
-const CACHE_NAME = 'novateam-v15';
+const CACHE_NAME = 'novateam-v16';
 const ASSETS = [
   '/',
   '/index.php',
@@ -21,7 +21,7 @@ const ASSETS = [
   '/guia.php',
   '/crear-guia.php',
   '/editar-guia.php',
-  '/assets/css/app.css?v=11',
+  '/assets/css/app.css?v=12',
   '/assets/js/tab.js?v=3',
   '/assets/js/notificaciones.js?v=2',
   '/assets/js/quiz.js?v=3',

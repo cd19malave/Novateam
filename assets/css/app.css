@@ -7,6 +7,7 @@
   --edu-success:#56D39F;
   --edu-bg:#17181A;
   --edu-surface:#1F2126;
+  --edu-card:#1F2126;
   --edu-surface-2:rgba(31,33,38,.92);
   --edu-navbar-bg:#121315;
   --edu-text:#F4F5F7;
@@ -34,6 +35,7 @@
   --edu-success:#2FBF88;
   --edu-bg:#F5F7FB;
   --edu-surface:#FFFFFF;
+  --edu-card:#FFFFFF;
   --edu-surface-2:rgba(255,255,255,.88);
   --edu-navbar-bg:#FFFFFF;
   --edu-text:#1F2430;
@@ -753,6 +755,7 @@ html.nt-splash-on #nt-splash{display:grid}
   --edu-success:#2FD08A;
   --edu-bg:#EAF4FF;
   --edu-surface:#FFFFFF;
+  --edu-card:#FFFFFF;
   --edu-surface-2:rgba(255,255,255,.92);
   --edu-navbar-bg:#FFFFFF;
   --edu-text:#2B2E4A;
@@ -932,7 +935,7 @@ h1,h2,h3,h4,h5,h6,.hero h1,.hero-title,.edu-logo,
   margin:.2rem 0 .9rem;flex-wrap:wrap;
 }
 .quiz-lives{display:inline-flex;gap:.15rem;font-size:1.25rem;line-height:1}
-.quiz-lives i{color:#E6E9F2;transition:transform .2s ease,color .2s ease}
+.quiz-lives i{color:var(--edu-muted);transition:transform .2s ease,color .2s ease}
 .quiz-lives i.on{color:#FF5C8A;filter:drop-shadow(0 2px 0 rgba(0,0,0,.08))}
 .quiz-powers{display:inline-flex;gap:.4rem;flex-wrap:wrap}
 .quiz-power{
@@ -961,7 +964,7 @@ h1,h2,h3,h4,h5,h6,.hero h1,.hero-title,.edu-logo,
 .power-strip-title{font-weight:800;color:var(--edu-muted);font-size:.85rem;margin-right:.2rem}
 .power-chip{
   display:inline-flex;align-items:center;gap:.35rem;text-decoration:none;
-  background:#F1F6FF;color:var(--edu-text);border:2px solid var(--edu-border);
+  background:var(--edu-pill);color:var(--edu-text);border:2px solid var(--edu-border);
   border-radius:999px;padding:.3rem .75rem;font-weight:700;font-size:.85rem;
 }
 .power-chip strong{color:var(--edu-primary)}
@@ -974,7 +977,7 @@ h1,h2,h3,h4,h5,h6,.hero h1,.hero-title,.edu-logo,
 /* Tienda */
 .shop-hero{
   display:flex;align-items:center;gap:1rem;flex-wrap:wrap;
-  background:linear-gradient(135deg,#E7F1FF,#F7ECFF 60%,#FFEFF6);
+  background:linear-gradient(135deg,var(--edu-tint-a),var(--edu-tint-b) 60%,var(--edu-pill));
   border:2px solid var(--edu-border);border-radius:24px;padding:1.1rem 1.3rem;
 }
 [data-bs-theme="light"] .shop-hero{
@@ -1004,7 +1007,7 @@ h1,h2,h3,h4,h5,h6,.hero h1,.hero-title,.edu-logo,
 .shop-desc{color:var(--edu-muted);font-size:.88rem;margin:0;flex:1}
 .shop-meta{display:flex;align-items:center;justify-content:space-between;margin:.5rem 0}
 .shop-stock{font-size:.82rem;color:var(--edu-muted)}
-.shop-price{font-weight:800;color:#A85F00}
+.shop-price{font-weight:800;color:var(--edu-secondary)}
 [data-bs-theme="light"] .shop-price{color:#A85F00}
 .shop-price i{color:#FFB84D}
 .shop-history{display:flex;flex-direction:column}
