@@ -1,4 +1,4 @@
-const CACHE_NAME = 'novateam-v18';
+const CACHE_NAME = 'novateam-v19';
 const ASSETS = [
   '/',
   '/index.php',

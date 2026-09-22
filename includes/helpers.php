@@ -242,10 +242,12 @@ function tema_colors(string $tema): array
 function user_avatar_html(array $user, int $size = 40): string
 {
     $sizeStyle = 'width:' . $size . 'px;height:' . $size . 'px;';
-    if (!empty($user['foto_perfil'])) {
-        return '<img src="' . e($user['foto_perfil']) . '" alt="' . e($user['nombre']) . '" class="avatar-frame" style="' . $sizeStyle . '">';
-    }
     $initials = mb_strtoupper(mb_substr($user['nombre'], 0, 1));
+    if (!empty($user['foto_perfil'])) {
+        $fallback = '<div style="width:' . $size . 'px;height:' . $size . 'px;border-radius:50%;background:linear-gradient(135deg,var(--edu-primary),var(--edu-accent));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:' . ($size * 0.4) . 'px;">' . e($initials) . '</div>';
+        $onerror = 'this.outerHTML=' . json_encode($fallback);
+        return '<img src="' . e($user['foto_perfil']) . '" alt="' . e($user['nombre']) . '" class="avatar-frame" style="' . $sizeStyle . 'object-fit:cover;border-radius:50%;" onerror="' . e($onerror) . '">';
+    }
     return '<div class="avatar-frame" style="' . $sizeStyle . 'background:linear-gradient(135deg,var(--edu-primary),var(--edu-accent));display:grid;place-items:center;color:#fff;font-weight:800;font-size:' . ($size * 0.4) . 'px;">' . e($initials) . '</div>';
 }
 

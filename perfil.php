@@ -161,12 +161,12 @@ document.getElementById('form-perfil').addEventListener('submit', async function
   const btn = this.querySelector('button[type="submit"]');
   const foto = this.querySelector('input[name="foto_perfil"]');
   const fondo = this.querySelector('input[name="fondo_perfil"]');
-  if (foto.files[0] && foto.files[0].size > 2 * 1024 * 1024) {
-    alert('La foto de perfil no puede superar 2 MB. Elige una imagen más pequeña.');
+  if (foto.files[0] && foto.files[0].size > 50 * 1024 * 1024) {
+    alert('La foto de perfil no puede superar 50 MB. Elige una imagen más pequeña.');
     return;
   }
-  if (fondo.files[0] && fondo.files[0].size > 3 * 1024 * 1024) {
-    alert('El fondo de perfil no puede superar 3 MB. Elige una imagen más pequeña.');
+  if (fondo.files[0] && fondo.files[0].size > 50 * 1024 * 1024) {
+    alert('El fondo de perfil no puede superar 50 MB. Elige una imagen más pequeña.');
     return;
   }
   btn.disabled = true;

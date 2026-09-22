@@ -11,7 +11,7 @@ $pdo = db();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($_POST)) {
         http_response_code(413);
-        echo json_encode(['ok' => false, 'error' => 'Los archivos superan el límite: la foto de perfil debe pesar máximo 2 MB y el fondo 3 MB.']);
+        echo json_encode(['ok' => false, 'error' => 'Los archivos superan el límite: la foto de perfil y el fondo deben pesar máximo 50 MB.']);
         exit;
     }
     csrf_verify();
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($_FILES['foto_perfil'])) {
         $arch = $_FILES['foto_perfil'];
         if ($arch['error'] === UPLOAD_ERR_OK) {
-            if ($arch['size'] <= 2 * 1024 * 1024) {
+            if ($arch['size'] <= 50 * 1024 * 1024) {
                 $finfo = finfo_open(FILEINFO_MIME_TYPE);
                 $mime = finfo_file($finfo, $arch['tmp_name']);
                 finfo_close($finfo);
@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($_FILES['fondo_perfil'])) {
         $arch = $_FILES['fondo_perfil'];
         if ($arch['error'] === UPLOAD_ERR_OK) {
-            if ($arch['size'] <= 3 * 1024 * 1024) {
+            if ($arch['size'] <= 50 * 1024 * 1024) {
                 $finfo = finfo_open(FILEINFO_MIME_TYPE);
                 $mime = finfo_file($finfo, $arch['tmp_name']);
                 finfo_close($finfo);
