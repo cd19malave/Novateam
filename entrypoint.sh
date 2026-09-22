@@ -82,5 +82,10 @@ ln -s ../mods-available/mpm_prefork.conf /etc/apache2/mods-enabled/mpm_prefork.c
 
 apache2ctl configtest 2>&1 || true
 
+# Permisos del volumen de uploads (Railway lo monta como root:root)
+mkdir -p /var/www/html/uploads
+chown -R www-data:www-data /var/www/html/uploads 2>/dev/null || true
+chmod -R 775 /var/www/html/uploads 2>/dev/null || true
+
 echo "== Iniciando Apache =="
 exec apache2-foreground
