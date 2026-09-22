@@ -17,6 +17,9 @@ RUN mkdir -p uploads/archivos uploads/perfiles && \
     chmod -R 755 uploads && \
     chmod +x entrypoint.sh
 
+# Limites de subida y errores: sin HTML de warnings que rompan las respuestas JSON
+RUN printf 'display_errors=Off\nlog_errors=On\nexpose_php=Off\nupload_max_filesize=20M\npost_max_size=24M\nmemory_limit=256M\nmax_file_uploads=5\n' > /usr/local/etc/php/conf.d/zz-novateam.ini
+
 ENV PORT=80
 
 EXPOSE 80

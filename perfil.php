@@ -159,10 +159,21 @@ document.getElementById('form-perfil').addEventListener('submit', async function
   e.preventDefault();
   const fd = new FormData(this);
   const btn = this.querySelector('button[type="submit"]');
+  const foto = this.querySelector('input[name="foto_perfil"]');
+  const fondo = this.querySelector('input[name="fondo_perfil"]');
+  if (foto.files[0] && foto.files[0].size > 2 * 1024 * 1024) {
+    alert('La foto de perfil no puede superar 2 MB. Elige una imagen más pequeña.');
+    return;
+  }
+  if (fondo.files[0] && fondo.files[0].size > 3 * 1024 * 1024) {
+    alert('El fondo de perfil no puede superar 3 MB. Elige una imagen más pequeña.');
+    return;
+  }
   btn.disabled = true;
   btn.textContent = 'Guardando...';
+  let resp;
   try {
-    const resp = await fetch('api/perfil.php', { method: 'POST', body: fd });
+    resp = await fetch('api/perfil.php', { method: 'POST', body: fd });
     const data = await resp.json();
     if (data.ok) {
       location.reload();
@@ -170,7 +181,14 @@ document.getElementById('form-perfil').addEventListener('submit', async function
       alert(data.error || 'Error al guardar.');
     }
   } catch(err) {
-    alert('Error de conexión.');
+    let msg = 'Error de conexión. Verifica tu internet y que los archivos no superen el tamaño permitido.';
+    try {
+      if (resp) {
+        const text = await resp.text();
+        if (text && !text.includes('<')) msg = text.trim().slice(0, 200);
+      }
+    } catch(e2) {}
+    alert(msg);
   }
   btn.disabled = false;
   btn.textContent = 'Guardar cambios';

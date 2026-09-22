@@ -224,6 +224,10 @@ require __DIR__ . '/includes/header.php';
     const ta = this.querySelector('textarea');
     const contenido = ta ? ta.value.trim() : '';
     const hasFile = fileInput && fileInput.files.length > 0;
+    if (hasFile && fileInput.files[0].size > 5 * 1024 * 1024) {
+      alert('El archivo adjunto no puede superar 5 MB.');
+      return;
+    }
     if (!contenido && !hasFile) return;
     const btn = this.querySelector('button[type="submit"]');
     btn.disabled = true;

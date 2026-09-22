@@ -9,6 +9,11 @@ $user = current_user();
 $pdo = db();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (empty($_POST)) {
+        http_response_code(413);
+        echo json_encode(['ok' => false, 'error' => 'Los archivos superan el límite: la foto de perfil debe pesar máximo 2 MB y el fondo 3 MB.']);
+        exit;
+    }
     csrf_verify();
 
     $bio = trim((string) ($_POST['bio'] ?? ''));

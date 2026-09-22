@@ -67,6 +67,11 @@ if ($method === 'GET') {
 }
 
 if ($method === 'POST') {
+    if (empty($_POST)) {
+        http_response_code(413);
+        echo json_encode(['ok' => false, 'error' => 'El archivo adjunto supera el límite de 5 MB.']);
+        exit;
+    }
     csrf_verify();
 
     $idReceptor = (int) ($_POST['id_receptor'] ?? 0);
