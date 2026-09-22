@@ -58,7 +58,6 @@ CREATE TABLE usuarios (
     ultimo_acceso        DATETIME            NULL,
     fecha_registro       DATETIME            NOT NULL DEFAULT CURRENT_TIMESTAMP,
     foto_perfil          VARCHAR(255)        NULL COMMENT 'Ruta imagen de perfil',
-    marco_perfil         VARCHAR(50)         NULL COMMENT 'Estilo de marco: dorado,plateado,arcoiris,fuego,estrella,ninguno',
     bio                  TEXT                NULL COMMENT 'Biografia del usuario',
     fondo_perfil         VARCHAR(255)        NULL COMMENT 'Ruta imagen de fondo de perfil',
     tema_color           VARCHAR(20)         NOT NULL DEFAULT 'default' COMMENT 'Tema de color: default,oscuro,verde,rosa,purpura',
@@ -271,15 +270,15 @@ SELECT
     u.id_usuario,
     u.nombre,
     u.grado,
-    u.puntos,
+    COALESCE(SUM(CASE WHEN i.completado = 1 THEN i.puntaje ELSE NULL END), 0) AS puntos,
     u.ejercicios_resueltos,
     u.foto_perfil,
-    u.marco_perfil,
     COUNT(ui.id_insignia) AS total_insignias
 FROM usuarios u
+LEFT JOIN intentos i ON i.id_usuario = u.id_usuario
 LEFT JOIN usuario_insignias ui ON ui.id_usuario = u.id_usuario
 WHERE u.rol = 'estudiante' AND u.activo = 1
-GROUP BY u.id_usuario, u.nombre, u.grado, u.puntos, u.ejercicios_resueltos, u.foto_perfil, u.marco_perfil;
+GROUP BY u.id_usuario, u.nombre, u.grado, u.ejercicios_resueltos, u.foto_perfil;
 
 -- Hash bcrypt generado con password_hash() de PHP (PASSWORD_DEFAULT)
 INSERT INTO usuarios (id_usuario, nombre, correo, contrasena_hash, rol, grado, materia, puntos, ejercicios_resueltos, activo, ultimo_acceso, fecha_registro, tema_color) VALUES

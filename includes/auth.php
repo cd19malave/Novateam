@@ -14,7 +14,7 @@ function refresh_user(int $id): void
 {
     $stmt = db()->prepare(
         'SELECT id_usuario, nombre, correo, rol, grado, materia, puntos, ejercicios_resueltos, activo,
-                foto_perfil, marco_perfil, bio, fondo_perfil, tema_color
+                foto_perfil, bio, fondo_perfil, tema_color
          FROM usuarios WHERE id_usuario = :id LIMIT 1'
     );
     $stmt->execute(['id' => $id]);

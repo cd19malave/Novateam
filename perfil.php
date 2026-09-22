@@ -16,10 +16,22 @@ $badges = $pdo->prepare(
 $badges->execute(['id' => $user['id_usuario']]);
 $allBadges = $badges->fetchAll();
 
-$rank = $pdo->prepare(
-    'SELECT COUNT(*) + 1 FROM usuarios WHERE rol = :r AND puntos > :p AND activo = 1'
+$ptsStmt = $pdo->prepare(
+    'SELECT COALESCE(SUM(puntaje),0) FROM intentos WHERE id_usuario = :id AND completado = 1'
 );
-$rank->execute(['r' => $user['rol'], 'p' => $user['puntos']]);
+$ptsStmt->execute(['id' => $user['id_usuario']]);
+$pts = (int) $ptsStmt->fetchColumn();
+
+$rank = $pdo->prepare(
+    'SELECT COUNT(*) + 1 FROM (
+        SELECT u.id_usuario FROM usuarios u
+        LEFT JOIN intentos i ON i.id_usuario = u.id_usuario AND i.completado = 1
+        WHERE u.rol = :r AND u.activo = 1
+        GROUP BY u.id_usuario
+        HAVING COALESCE(SUM(i.puntaje),0) > :p
+    ) x'
+);
+$rank->execute(['r' => $user['rol'], 'p' => $pts]);
 $ranking = (int) $rank->fetchColumn();
 
 $materias = user_materias($user['id_usuario']);
@@ -56,10 +68,9 @@ require __DIR__ . '/includes/header.php';
       <?php endif; ?>
 
       <div class="d-flex justify-content-center gap-3 mt-3 flex-wrap">
-        <div class="badge-pill"><i class="bi bi-trophy"></i> <?= (int) $user['puntos'] ?> pts</div>
+        <div class="badge-pill"><i class="bi bi-trophy"></i> <?= $pts ?> pts</div>
         <div class="badge-pill"><i class="bi bi-check-circle"></i> <?= (int) $user['ejercicios_resueltos'] ?> ejercicios</div>
         <div class="badge-pill"><i class="bi bi-bar-chart"></i> #<?= $ranking ?> en ranking</div>
-        <div class="badge-pill"><i class="bi bi-palette"></i> <?= marco_label($user['marco_perfil'] ?? null) ?></div>
       </div>
 
       <?php if (!empty($materias)): ?>
@@ -88,17 +99,6 @@ require __DIR__ . '/includes/header.php';
         <div class="col-12">
           <label class="form-label">Biografía <small class="text-muted">(máx. 300)</small></label>
           <textarea class="form-control" name="bio" rows="3" maxlength="300"><?= e($user['bio'] ?? '') ?></textarea>
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">Marco de perfil</label>
-          <select class="form-select" name="marco_perfil">
-            <?php
-            $marcos = ['ninguno','dorado','plateado','arcoiris','fuego','estrella'];
-            $current = $user['marco_perfil'] ?? 'ninguno';
-            foreach ($marcos as $m): ?>
-              <option value="<?= $m ?>" <?= $m === $current ? 'selected' : '' ?>><?= marco_label($m) ?></option>
-            <?php endforeach; ?>
-          </select>
         </div>
         <div class="col-md-6">
           <label class="form-label">Tema de color</label>

@@ -4,6 +4,11 @@ require_once __DIR__ . '/includes/bootstrap.php';
 require_role('estudiante');
 
 $user = current_user();
+$ptsStmt = db()->prepare(
+    'SELECT COALESCE(SUM(puntaje),0) FROM intentos WHERE id_usuario = :id AND completado = 1'
+);
+$ptsStmt->execute(['id' => $user['id_usuario']]);
+$pts = (int) $ptsStmt->fetchColumn();
 $earned = db()->prepare(
     'SELECT i.codigo FROM usuario_insignias ui
      JOIN insignias i ON i.id_insignia = ui.id_insignia
@@ -32,7 +37,7 @@ require __DIR__ . '/includes/header.php';
     <?= user_avatar_html($user, 72) ?>
     <div>
       <h1 class="h3 fw-bold mb-0">Tu progreso</h1>
-      <p class="text-muted mb-0"><?= (int) $user['puntos'] ?> puntos · <?= (int) $user['ejercicios_resueltos'] ?> aciertos</p>
+      <p class="text-muted mb-0"><?= $pts ?> puntos · <?= (int) $user['ejercicios_resueltos'] ?> aciertos</p>
       <?php if (!empty($materias)): ?>
         <div class="d-flex gap-2 mt-1">
           <?php foreach ($materias as $m): ?>

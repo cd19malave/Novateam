@@ -194,17 +194,6 @@ table{color:var(--edu-text)}
 
 /* ── Avatar frames ── */
 .avatar-frame{border-radius:50%;object-fit:cover;flex-shrink:0}
-.marco-dorado{border:3px solid #FFD700;box-shadow:0 0 0 2px #b8860b,0 0 12px rgba(255,215,0,.5)}
-.marco-plateado{border:3px solid #C0C0C0;box-shadow:0 0 0 2px #808080,0 0 12px rgba(192,192,192,.5)}
-.marco-arcoiris{border:3px solid #ff0;box-shadow:0 0 0 2px #0f0,0 0 8px #f0f,0 0 16px #0ff;animation:arcoiris-glow 2s ease-in-out infinite alternate}
-@keyframes arcoiris-glow{
-  0%{border-color:#ff0;box-shadow:0 0 0 2px #f0f,0 0 12px #f0f}
-  33%{border-color:#0ff;box-shadow:0 0 0 2px #0ff,0 0 12px #0ff}
-  66%{border-color:#f0f;box-shadow:0 0 0 2px #ff0,0 0 12px #ff0}
-  100%{border-color:#0f0;box-shadow:0 0 0 2px #0f0,0 0 12px #0f0}
-}
-.marco-fuego{border:3px solid #FF4500;box-shadow:0 0 0 2px #8B0000,0 0 14px rgba(255,69,0,.6)}
-.marco-estrella{border:3px solid #1E90FF;box-shadow:0 0 0 2px #00008B,0 0 12px rgba(30,144,255,.5)}
 
 /* ── Chat ── */
 #chat-box .rounded-3{animation:msgIn .3s ease}
@@ -861,7 +850,11 @@ h1,h2,h3,h4,h5,h6,.hero h1,.hero-title,.edu-logo,
   border-color:var(--edu-primary);color:var(--edu-primary);
   box-shadow:0 4px 0 rgba(79,143,247,.35);
 }
-[data-bs-theme="light"] .btn-edu-outline:hover{box-shadow:0 6px 0 rgba(79,143,247,.4)}
+[data-bs-theme="light"] .btn-edu-outline:hover,
+[data-bs-theme="light"] .btn-edu-outline:focus-visible{
+  background:var(--edu-primary);color:#fff;border-color:var(--edu-primary);
+  box-shadow:0 6px 0 rgba(79,143,247,.4);
+}
 
 /* Etiqueta de sección tipo gomita */
 [data-bs-theme="light"] .section-eyebrow{

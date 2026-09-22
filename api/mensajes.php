@@ -14,7 +14,7 @@ if ($method === 'GET') {
 
     if ($accion === 'lista') {
         $stmt = $pdo->prepare(
-            'SELECT m.*, u.nombre AS nombre_emisor, u.foto_perfil, u.marco_perfil,
+            'SELECT m.*, u.nombre AS nombre_emisor, u.foto_perfil,
                     (SELECT COUNT(*) FROM mensajes WHERE id_receptor = :uid AND id_emisor = m.id_emisor AND leido = 0) AS no_leidos,
                     (SELECT contenido FROM mensajes WHERE id_emisor = m.id_emisor AND id_receptor = :uid2 ORDER BY fecha_envio DESC LIMIT 1) AS ultimo_mensaje
              FROM mensajes m

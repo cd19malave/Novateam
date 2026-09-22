@@ -7,11 +7,12 @@ $user = current_user();
 $materia = (string) $user['materia'];
 
 $alumnos = db()->prepare(
-    'SELECT u.id_usuario, u.nombre, u.correo, u.puntos, u.ejercicios_resueltos,
-            u.foto_perfil, u.marco_perfil, u.ultimo_acceso,
+    'SELECT u.id_usuario, u.nombre, u.correo, u.ejercicios_resueltos,
+            u.foto_perfil, u.ultimo_acceso,
+            COALESCE(SUM(CASE WHEN i.completado = 1 AND g.id_guia IS NOT NULL THEN i.puntaje ELSE NULL END),0) AS puntos,
             COUNT(DISTINCT i.id_intento) AS intentos,
-            SUM(CASE WHEN i.completado = 1 THEN 1 ELSE 0 END) AS completados,
-            AVG(CASE WHEN i.completado = 1 THEN i.puntaje ELSE NULL END) AS promedio_puntaje,
+            SUM(CASE WHEN i.completado = 1 AND g.id_guia IS NOT NULL THEN 1 ELSE 0 END) AS completados,
+            AVG(CASE WHEN i.completado = 1 AND g.id_guia IS NOT NULL THEN i.puntaje ELSE NULL END) AS promedio_puntaje,
             COUNT(DISTINCT ui2.id_insignia) AS insignias
      FROM usuarios u
      INNER JOIN matriculas m ON m.id_usuario = u.id_usuario AND m.materia = :mat
@@ -19,9 +20,9 @@ $alumnos = db()->prepare(
      LEFT JOIN guias g ON g.id_guia = i.id_guia AND g.categoria = :mat2
      LEFT JOIN usuario_insignias ui2 ON ui2.id_usuario = u.id_usuario
      WHERE u.rol = \'estudiante\' AND u.activo = 1
-     GROUP BY u.id_usuario, u.nombre, u.correo, u.puntos, u.ejercicios_resueltos,
-              u.foto_perfil, u.marco_perfil, u.ultimo_acceso
-     ORDER BY u.puntos DESC'
+     GROUP BY u.id_usuario, u.nombre, u.correo, u.ejercicios_resueltos,
+              u.foto_perfil, u.ultimo_acceso
+     ORDER BY puntos DESC'
 );
 $alumnos->execute(['mat' => $materia, 'mat2' => $materia]);
 $list = $alumnos->fetchAll();
@@ -30,8 +31,11 @@ $detId = (int) ($_GET['ver'] ?? 0);
 $detalle = null;
 if ($detId) {
     $dst = db()->prepare(
-        'SELECT u.*, COUNT(DISTINCT i.id_intento) AS total_intentos,
-                SUM(CASE WHEN i.completado = 1 THEN 1 ELSE 0 END) AS completados
+        'SELECT u.id_usuario, u.nombre, u.correo, u.bio, u.ejercicios_resueltos,
+                u.foto_perfil, u.ultimo_acceso,
+                COALESCE(SUM(CASE WHEN i.completado = 1 AND g.id_guia IS NOT NULL THEN i.puntaje ELSE NULL END),0) AS puntos,
+                COUNT(DISTINCT i.id_intento) AS total_intentos,
+                SUM(CASE WHEN i.completado = 1 AND g.id_guia IS NOT NULL THEN 1 ELSE 0 END) AS completados
          FROM usuarios u
          LEFT JOIN intentos i ON i.id_usuario = u.id_usuario
          LEFT JOIN guias g ON g.id_guia = i.id_guia AND g.categoria = :mat

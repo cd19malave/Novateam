@@ -27,7 +27,7 @@ require __DIR__ . '/includes/header.php';
             <td>
               <div class="d-flex align-items-center gap-2">
                 <?php
-                $avatarUser = ['nombre' => $r['nombre'], 'foto_perfil' => $r['foto_perfil'] ?? null, 'marco_perfil' => $r['marco_perfil'] ?? null];
+                $avatarUser = ['nombre' => $r['nombre'], 'foto_perfil' => $r['foto_perfil'] ?? null];
                 echo user_avatar_html($avatarUser, 32);
                 ?>
                 <span class="fw-bold"><?= e($r['nombre']) ?></span>

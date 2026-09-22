@@ -228,30 +228,6 @@ function upload_file(array $file, ?int $idUser, ?int $idGuia = null, ?int $idEje
 
 /* ── Perfil ── */
 
-function marco_css_class(?string $marco): string
-{
-    return match ($marco) {
-        'dorado'   => 'marco-dorado',
-        'plateado' => 'marco-plateado',
-        'arcoiris' => 'marco-arcoiris',
-        'fuego'    => 'marco-fuego',
-        'estrella' => 'marco-estrella',
-        default    => '',
-    };
-}
-
-function marco_label(?string $marco): string
-{
-    return match ($marco) {
-        'dorado'   => 'Dorado',
-        'plateado' => 'Plateado',
-        'arcoiris' => 'Arcoíris',
-        'fuego'    => 'Fuego',
-        'estrella' => 'Estrella',
-        default    => 'Ninguno',
-    };
-}
-
 function tema_colors(string $tema): array
 {
     return match ($tema) {
@@ -265,13 +241,12 @@ function tema_colors(string $tema): array
 
 function user_avatar_html(array $user, int $size = 40): string
 {
-    $cls = marco_css_class($user['marco_perfil'] ?? null);
     $sizeStyle = 'width:' . $size . 'px;height:' . $size . 'px;';
     if (!empty($user['foto_perfil'])) {
-        return '<img src="' . e($user['foto_perfil']) . '" alt="' . e($user['nombre']) . '" class="avatar-frame ' . $cls . '" style="' . $sizeStyle . '">';
+        return '<img src="' . e($user['foto_perfil']) . '" alt="' . e($user['nombre']) . '" class="avatar-frame" style="' . $sizeStyle . '">';
     }
     $initials = mb_strtoupper(mb_substr($user['nombre'], 0, 1));
-    return '<div class="avatar-frame ' . $cls . '" style="' . $sizeStyle . 'background:linear-gradient(135deg,var(--edu-primary),var(--edu-accent));display:grid;place-items:center;color:#fff;font-weight:800;font-size:' . ($size * 0.4) . 'px;">' . e($initials) . '</div>';
+    return '<div class="avatar-frame" style="' . $sizeStyle . 'background:linear-gradient(135deg,var(--edu-primary),var(--edu-accent));display:grid;place-items:center;color:#fff;font-weight:800;font-size:' . ($size * 0.4) . 'px;">' . e($initials) . '</div>';
 }
 
 /* ── Mensajes ── */

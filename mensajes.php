@@ -9,7 +9,7 @@ $pdo = db();
 $contacts = [];
 if ($user['rol'] === 'profesor') {
     $stmt = $pdo->prepare(
-        'SELECT DISTINCT u.id_usuario, u.nombre, u.foto_perfil, u.marco_perfil
+        'SELECT DISTINCT u.id_usuario, u.nombre, u.foto_perfil
          FROM usuarios u
          INNER JOIN matriculas m ON m.id_usuario = u.id_usuario AND m.materia = :mat
          WHERE u.rol = \'estudiante\' AND u.activo = 1
@@ -19,7 +19,7 @@ if ($user['rol'] === 'profesor') {
     $contacts = $stmt->fetchAll();
 } elseif ($user['rol'] === 'estudiante') {
     $stmt = $pdo->prepare(
-        'SELECT DISTINCT u.id_usuario, u.nombre, u.foto_perfil, u.marco_perfil
+        'SELECT DISTINCT u.id_usuario, u.nombre, u.foto_perfil
          FROM usuarios u
          INNER JOIN guias g ON g.id_profesor = u.id_usuario
          INNER JOIN matriculas m ON m.id_usuario = :uid AND m.materia = g.categoria
@@ -30,7 +30,7 @@ if ($user['rol'] === 'profesor') {
     $contacts = $stmt->fetchAll();
 } else {
     $stmt = $pdo->prepare(
-        'SELECT id_usuario, nombre, foto_perfil, marco_perfil
+        'SELECT id_usuario, nombre, foto_perfil
          FROM usuarios WHERE rol <> :r AND activo = 1 ORDER BY nombre'
     );
     $stmt->execute(['r' => $user['rol']]);
@@ -41,7 +41,7 @@ $paraId = (int) ($_GET['para'] ?? 0);
 $chatMensajes = [];
 $contacto = null;
 if ($paraId) {
-    $cst = $pdo->prepare('SELECT id_usuario, nombre, foto_perfil, marco_perfil FROM usuarios WHERE id_usuario = :id LIMIT 1');
+    $cst = $pdo->prepare('SELECT id_usuario, nombre, foto_perfil FROM usuarios WHERE id_usuario = :id LIMIT 1');
     $cst->execute(['id' => $paraId]);
     $contacto = $cst->fetch();
 

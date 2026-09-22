@@ -12,7 +12,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     csrf_verify();
 
     $bio = trim((string) ($_POST['bio'] ?? ''));
-    $marco = (string) ($_POST['marco_perfil'] ?? '');
     $tema = (string) ($_POST['tema_color'] ?? 'default');
 
     if (mb_strlen($bio) > 300) {
@@ -20,13 +19,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    $marcos = ['dorado', 'plateado', 'arcoiris', 'fuego', 'estrella', 'ninguno'];
-    if (!in_array($marco, $marcos, true)) $marco = null;
-
     $temas = ['default', 'oscuro', 'verde', 'rosa', 'purpura'];
     if (!in_array($tema, $temas, true)) $tema = 'default';
 
-    $params = ['bio' => $bio !== '' ? $bio : null, 'marco' => $marco, 'tema' => $tema, 'id' => $user['id_usuario']];
+    $params = ['bio' => $bio !== '' ? $bio : null, 'tema' => $tema, 'id' => $user['id_usuario']];
 
     if (!empty($_FILES['foto_perfil'])) {
         $arch = $_FILES['foto_perfil'];
@@ -68,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    $sets = ['bio = :bio', 'marco_perfil = :marco', 'tema_color = :tema'];
+    $sets = ['bio = :bio', 'tema_color = :tema'];
     if (isset($params['foto'])) $sets[] = 'foto_perfil = :foto';
     if (isset($params['fondo'])) $sets[] = 'fondo_perfil = :fondo';
 
