@@ -2,6 +2,10 @@
 declare(strict_types=1);
 /** @var string $pageTitle */
 $pageTitle = $pageTitle ?? 'NovaTeam';
+$extraHead = $extraHead ?? '';
+$bodyClass = $bodyClass ?? '';
+$themeColor = $themeColor ?? '#4F8FF7';
+$metaDescription = $metaDescription ?? '';
 $user = current_user();
 $unreadCount = $user ? unread_messages_count((int) $user['id_usuario']) : 0;
 $notifCount = $user ? unread_notifications_count((int) $user['id_usuario']) : 0;
@@ -42,20 +46,22 @@ $showBottomNav = (bool) $user;
     })();
   </script>
   <title><?= e($pageTitle) ?> | NovaTeam</title>
+  <?php if ($metaDescription !== ''): ?><meta name="description" content="<?= e($metaDescription) ?>"><?php endif; ?>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Quicksand:wght@500;700;800&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/app.css?v=13">
   <link rel="manifest" href="manifest.json?v=5">
-  <meta name="theme-color" content="#4F8FF7">
+  <meta name="theme-color" content="<?= e($themeColor) ?>">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="NovaTeam">
   <meta name="application-name" content="NovaTeam">
   <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+  <?= $extraHead ?>
 </head>
-<body class="<?= $showBottomNav ? 'has-bottom-nav' : '' ?>">
+<body class="<?= e(trim(($showBottomNav ? 'has-bottom-nav' : '') . ' ' . $bodyClass)) ?>">
 <div id="nt-splash" aria-hidden="true">
   <div class="nt-splash-inner">
     <span class="nt-splash-logo">N</span>
@@ -130,9 +136,9 @@ if ('serviceWorker' in navigator) {
     <!-- Menú completo (escritorio; en móvil se oculta si hay sesión) -->
     <ul class="navbar-nav align-items-lg-center gap-lg-2 ms-auto <?= $showBottomNav ? 'd-none d-lg-flex' : 'w-100 justify-content-end' ?>">
       <?php if (!$user): ?>
-        <li class="nav-item"><a class="nav-link" href="index.php#problema">El reto</a></li>
-        <li class="nav-item"><a class="nav-link" href="index.php#features">Características</a></li>
-        <li class="nav-item"><a class="nav-link" href="index.php#materias">Materias</a></li>
+        <li class="nav-item d-none d-lg-block"><a class="nav-link" href="index.php#problema">El reto</a></li>
+        <li class="nav-item d-none d-lg-block"><a class="nav-link" href="index.php#como-funciona">Cómo funciona</a></li>
+        <li class="nav-item d-none d-lg-block"><a class="nav-link" href="index.php#materias">Materias</a></li>
         <li class="nav-item"><a class="nav-link" href="login.php">Entrar</a></li>
         <li class="nav-item"><a class="btn btn-edu" href="registro.php">Registrarme</a></li>
         <li class="nav-item ms-lg-2"><button class="theme-toggle" type="button" data-theme-toggle title="Cambiar tema claro/oscuro" aria-label="Cambiar tema"><i class="bi bi-sun"></i></button></li>

@@ -41,186 +41,368 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     redirect('index.php#contacto');
 }
 
-$pageTitle = 'Aprende jugando';
+$pageTitle = 'Aprender practicando';
+$bodyClass = 'landing-page';
+$themeColor = '#F5EFE4';
+$metaDescription = 'NovaTeam convierte las guías de matemáticas e inglés de 4.º en retos con puntos, vidas e insignias. El docente ve el avance del grupo sin planillas.';
+$extraHead = '<link rel="preconnect" href="https://fonts.googleapis.com">'
+    . '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
+    . '<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,600&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">'
+    . '<link rel="stylesheet" href="assets/css/landing.css?v=1">';
 require __DIR__ . '/includes/header.php';
 ?>
-<section class="hero" id="inicio">
-  <div class="container text-center">
-    <div class="mascot-wrap mb-3"><span class="mascot" aria-hidden="true">🦉</span></div>
-    <span class="section-eyebrow">NovaTeam presenta</span>
-    <h1 class="mt-2">Aprende <span class="accent">Matemáticas</span> e <span class="accent2">Inglés</span><br>jugando con NovaTeam 🚀</h1>
-    <p class="lead mt-3 mx-auto" style="max-width:640px">
-      Recurso didáctico multimedia para estudiantes de cuarto de primaria: actividades,
-      juegos y retos interactivos que se adaptan al ritmo de cada niño.
-    </p>
-    <div class="d-flex justify-content-center gap-3 mt-4 flex-wrap">
-      <a href="descargar.php" class="btn btn-edu btn-lg"><i class="bi bi-download"></i> Descargar app</a>
-      <a href="registro.php" class="btn-edu-outline"><i class="bi bi-person-plus"></i> Empezar el piloto</a>
-      <a href="#como-funciona" class="btn-edu-outline">Ver cómo funciona</a>
+<script>document.documentElement.classList.add('has-reveal');</script>
+
+<section class="l-hero" id="inicio" aria-labelledby="l-hero-title">
+  <div class="l-wrap l-hero__grid">
+    <div class="l-hero__copy">
+      <p class="l-eyebrow"><span class="l-dot" aria-hidden="true"></span>Piloto 2026 · 4.º de primaria · SENA ADSO</p>
+      <h1 id="l-hero-title">Se aprende mejor cuando el <em>reto</em> se siente como un <span class="l-mark">juego</span>.</h1>
+      <p class="l-lead">
+        NovaTeam convierte las guías de matemáticas e inglés en retos con puntos, vidas e insignias.
+        El estudiante practica a su ritmo; el docente ve el avance el mismo día, sin planillas.
+      </p>
+      <div class="l-actions">
+        <a class="l-btn l-btn--ink" href="registro.php">Entrar al piloto <span aria-hidden="true">→</span></a>
+        <a class="l-btn l-btn--ghost" href="#como-funciona">Ver cómo funciona</a>
+      </div>
+      <p class="l-note">Se instala como app <i>·</i> Corre en el navegador del colegio</p>
+    </div>
+
+    <div class="l-hero__visual">
+      <div class="l-score" role="img" aria-label="Ejemplo de hoja de puntaje: Sara Méndez, 4.º, guía 03 de secuencias, 240 puntos, sexto lugar del ranking, racha de 6 días y 4 de 5 vidas.">
+        <div class="l-score__top">
+          <span class="l-score__label">Hoja de puntaje</span>
+          <span class="l-stamp" aria-hidden="true">Publicada</span>
+        </div>
+        <div class="l-score__who">
+          <span class="l-avatar" aria-hidden="true">SM</span>
+          <div>
+            <strong>Sara Méndez</strong>
+            <span>4.º · Guía 03 · Secuencias</span>
+          </div>
+        </div>
+        <div class="l-score__pts">
+          <strong>240</strong>
+          <span>puntos<br>6.º en el ranking</span>
+        </div>
+        <div class="l-score__chips">
+          <span>Racha 6 días</span>
+          <span>Vidas 4/5</span>
+        </div>
+        <div class="l-quiz">
+          <p class="l-quiz__q">¿Qué número sigue?</p>
+          <p class="l-quiz__seq">2 · 4 · 8 · 16 · ___</p>
+          <div class="l-quiz__opts">
+            <span>24</span><span class="is-on">32</span><span>20</span>
+          </div>
+        </div>
+        <p class="l-score__foot">Vista de ejemplo del reto</p>
+      </div>
+      <span class="l-tag" aria-hidden="true">Insignia: Genio lógico</span>
     </div>
   </div>
 </section>
 
-<section id="problema" class="container py-5">
-  <div class="row align-items-center g-4">
-    <div class="col-lg-6">
-      <span class="section-eyebrow">¿Por qué NovaTeam?</span>
-      <h2 class="fw-bold mt-2">Un apoyo para el aula, pensado desde el aula</h2>
-      <p class="text-muted">
-        Muchos estudiantes de cuarto de primaria tienen dificultades para comprender
-        lógica matemática e inglés cuando solo se usan métodos tradicionales.
+<div class="l-ticker" aria-hidden="true">
+  <div class="l-ticker__track">
+    <span>Guías con opción múltiple</span>
+    <span>Puntos y ranking</span>
+    <span>Insignias por logros</span>
+    <span>Vidas que se recargan</span>
+    <span>Comodín 50/50</span>
+    <span>Mensajes con archivos</span>
+    <span>Notificaciones</span>
+    <span>Panel docente</span>
+    <span>App instalable</span>
+    <span>Guías con opción múltiple</span>
+    <span>Puntos y ranking</span>
+    <span>Insignias por logros</span>
+    <span>Vidas que se recargan</span>
+    <span>Comodín 50/50</span>
+    <span>Mensajes con archivos</span>
+    <span>Notificaciones</span>
+    <span>Panel docente</span>
+    <span>App instalable</span>
+  </div>
+</div>
+
+<section class="l-section" id="problema" aria-labelledby="l-prob-title">
+  <div class="l-wrap l-prob">
+    <div class="reveal">
+      <p class="l-kicker"><span>01</span> El reto</p>
+      <h2 id="l-prob-title">La teoría sola no alcanza.</h2>
+      <p class="l-lead">
+        En 4.º se acumulan las bases. Si la práctica en casa es poca o siempre igual,
+        la brecha crece antes de que el docente pueda verla.
       </p>
-      <ul class="list-unstyled problem-list">
-        <li><i class="bi bi-check-circle-fill"></i>Pocos materiales interactivos para reforzar en casa.</li>
-        <li><i class="bi bi-check-circle-fill"></i>Ritmos de aprendizaje distintos en cada estudiante.</li>
-        <li><i class="bi bi-check-circle-fill"></i>Niños acostumbrados a pantallas, sonidos e imágenes.</li>
-        <li><i class="bi bi-check-circle-fill"></i>Lógica matemática e inglés: bases difíciles de enseñar solo con teoría.</li>
+    </div>
+    <ol class="l-facts">
+      <li class="reveal" style="--d:1">
+        <span class="l-facts__n">01</span>
+        <div>
+          <h3>Ritmos distintos</h3>
+          <p>Un grupo avanza parejo en el tablero, no en la práctica. Quien necesita repetir, repite menos.</p>
+        </div>
+      </li>
+      <li class="reveal" style="--d:2">
+        <span class="l-facts__n">02</span>
+        <div>
+          <h3>Práctica desigual</h3>
+          <p>Sin acompañamiento en casa, la ejercitación se vuelve esporádica y las dudas se quedan para el día siguiente.</p>
+        </div>
+      </li>
+      <li class="reveal" style="--d:3">
+        <span class="l-facts__n">03</span>
+        <div>
+          <h3>Corrección manual</h3>
+          <p>El tiempo de clase se va revisando lo que un panel podría mostrar en segundos.</p>
+        </div>
+      </li>
+    </ol>
+  </div>
+  <div class="l-wrap">
+    <p class="l-pull reveal">
+      NovaTeam no reemplaza la clase: extiende la práctica y devuelve al docente
+      datos concretos para decidir qué reforzar.
+    </p>
+  </div>
+</section>
+
+<section class="l-section l-section--ink" id="como-funciona" aria-labelledby="l-loop-title">
+  <div class="l-wrap">
+    <div class="reveal">
+      <p class="l-kicker"><span>02</span> El circuito</p>
+      <h2 id="l-loop-title">Publicar, practicar, medir.</h2>
+      <p class="l-lead">Cuatro pasos, sin instalar nada en los equipos del colegio.</p>
+    </div>
+    <div class="l-loop">
+      <div class="l-loop__step reveal" style="--d:1">
+        <span class="l-loop__n">01</span>
+        <h3>El docente publica la guía</h3>
+        <p>Elige materia, escribe preguntas de opción múltiple y decide cuándo se abre.</p>
+      </div>
+      <div class="l-loop__step reveal" style="--d:2">
+        <span class="l-loop__n">02</span>
+        <h3>El estudiante resuelve</h3>
+        <p>Cada intento consume una vida. Puede gastar un comodín 50/50; las respuestas se revelan al enviar.</p>
+      </div>
+      <div class="l-loop__step reveal" style="--d:3">
+        <span class="l-loop__n">03</span>
+        <h3>Sube puntos y ranking</h3>
+        <p>Los aciertos suman puntos. Las insignias y la racha premian la constancia, no solo la prisa.</p>
+      </div>
+      <div class="l-loop__step reveal" style="--d:4">
+        <span class="l-loop__n">04</span>
+        <h3>El docente revisa</h3>
+        <p>Puntos, intentos, guías completadas e insignias por estudiante, sin hojas de cálculo.</p>
+      </div>
+    </div>
+    <div class="reveal">
+      <a class="l-btn l-btn--ink" href="registro.php">Crear una cuenta <span aria-hidden="true">→</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="l-section l-section--tint" id="docente" aria-labelledby="l-teach-title">
+  <div class="l-wrap l-teach">
+    <div class="reveal">
+      <p class="l-kicker"><span>03</span> Para el docente</p>
+      <h2 id="l-teach-title">Menos planilla, más clase.</h2>
+      <p class="l-lead">
+        Al abrir una guía, el panel reúne el avance del grupo: quién la completó,
+        cuántos intentos hizo, su promedio y las insignias que ganó.
+      </p>
+      <ul class="l-check">
+        <li>Crear, editar y publicar guías por materia.</li>
+        <li>Ver el avance de cada estudiante en su materia.</li>
+        <li>Recibir notificaciones cuando una guía se publica.</li>
+        <li>Escribir mensajes con archivos adjuntos.</li>
       </ul>
     </div>
-    <div class="col-lg-6">
-      <div class="card-edu p-4">
-        <div class="row g-3 text-center">
-          <div class="col-6 stat-box"><h2>2</h2><p class="mb-0 text-muted">Áreas de aprendizaje</p></div>
-          <div class="col-6 stat-box"><h2>4°</h2><p class="mb-0 text-muted">Grado objetivo</p></div>
-          <div class="col-6 stat-box"><h2>100%</h2><p class="mb-0 text-muted">Software libre</p></div>
-          <div class="col-6 stat-box"><h2>1</h2><p class="mb-0 text-muted">Piloto por institución</p></div>
+    <div class="reveal" style="--d:1">
+      <div class="l-table">
+        <div class="l-table__head">
+          <span>Alumnos · Guía 03</span>
+          <span>Matemáticas</span>
+        </div>
+        <div class="l-table__row is-top">
+          <span>Sara Méndez</span>
+          <span>240 pts</span>
+          <span>3/3</span>
+        </div>
+        <div class="l-table__row">
+          <span>Diego Salas</span>
+          <span>220 pts</span>
+          <span>3/3</span>
+        </div>
+        <div class="l-table__row">
+          <span>Tomás Ríos</span>
+          <span>180 pts</span>
+          <span>2/3</span>
+        </div>
+        <div class="l-table__row">
+          <span>Valeria Paz</span>
+          <span>100 pts</span>
+          <span>1/3</span>
+        </div>
+        <div class="l-table__foot">Vista de ejemplo · puntos, guías completadas</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="l-section" id="materias" aria-labelledby="l-subj-title">
+  <div class="l-wrap">
+    <div class="reveal">
+      <p class="l-kicker"><span>04</span> Contenido</p>
+      <h2 id="l-subj-title">Dos materias, una misma mecánica.</h2>
+    </div>
+    <div class="l-subj">
+      <div class="l-subj__row reveal" style="--d:1">
+        <div class="l-subj__name"><small>Materia 01</small>Matemáticas</div>
+        <div class="l-subj__body">
+          <p>Retos de lógica y cálculo con dificultad progresiva: primero reconocer el patrón, después resolverlo con fluidez.</p>
+          <div class="l-tags">
+            <span>Lógica</span><span>Secuencias</span><span>Operaciones básicas</span><span>Porcentajes</span><span>Comparaciones</span>
+          </div>
+        </div>
+      </div>
+      <div class="l-subj__row reveal" style="--d:2">
+        <div class="l-subj__name"><small>Materia 02</small>Inglés</div>
+        <div class="l-subj__body">
+          <p>Vocabulario y estructuras de uso diario. Cada guía mezcla reconocimiento, lectura corta y respuesta rápida.</p>
+          <div class="l-tags">
+            <span>Vocabulario</span><span>Colores</span><span>Animales</span><span>Saludos</span><span>Gramática básica</span>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<section id="features" class="container py-5">
-  <div class="text-center mb-4">
-    <span class="section-eyebrow">Lo que incluye</span>
-    <h2 class="fw-bold mt-2">¿Por qué NovaTeam?</h2>
-  </div>
-  <div class="row g-4">
-    <div class="col-md-4">
-      <div class="card-edu p-4 h-100">
-        <div class="card-icon"><i class="bi bi-controller"></i></div>
-        <h5>Aprendizaje gamificado</h5>
-        <p class="text-muted mb-0">Puntos, niveles e insignias por resolver retos de lógica matemática e inglés.</p>
+<section class="l-section l-section--tint" id="piloto" aria-labelledby="l-pilot-title">
+  <div class="l-wrap">
+    <div class="reveal">
+      <p class="l-kicker"><span>05</span> Puesta en marcha</p>
+      <h2 id="l-pilot-title">Se coordina en una reunión.</h2>
+      <p class="l-lead">
+        El piloto puede correr con un grupo o con toda la institución. No requiere infraestructura nueva:
+        funciona en el navegador y se puede instalar como app.
+      </p>
+    </div>
+    <div class="l-steps">
+      <div class="l-steps__item reveal" style="--d:1">
+        <span class="l-steps__n">01</span>
+        <div>
+          <h3>Presentación</h3>
+          <p>Reunión con directivos para revisar alcance, condiciones y fecha de inicio del piloto.</p>
+        </div>
+      </div>
+      <div class="l-steps__item reveal" style="--d:2">
+        <span class="l-steps__n">02</span>
+        <div>
+          <h3>Modalidad</h3>
+          <p>Piloto con un grupo o implementación institucional completa.</p>
+        </div>
+      </div>
+      <div class="l-steps__item reveal" style="--d:3">
+        <span class="l-steps__n">03</span>
+        <div>
+          <h3>Orientación docente</h3>
+          <p>Jornada básica de uso: crear guías, publicar y leer el panel.</p>
+        </div>
+      </div>
+      <div class="l-steps__item reveal" style="--d:4">
+        <span class="l-steps__n">04</span>
+        <div>
+          <h3>Evaluación</h3>
+          <p>Medición del impacto y ajustes con la retroalimentación del equipo docente.</p>
+        </div>
       </div>
     </div>
-    <div class="col-md-4">
-      <div class="card-edu p-4 h-100">
-        <div class="card-icon"><i class="bi bi-mortarboard"></i></div>
-        <h5>Profesores empoderados</h5>
-        <p class="text-muted mb-0">Crean guías, las publican cuando quieran y ven el avance de cada estudiante.</p>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card-edu p-4 h-100">
-        <div class="card-icon"><i class="bi bi-graph-up-arrow"></i></div>
-        <h5>Progreso visible</h5>
-        <p class="text-muted mb-0">Cada estudiante y su docente consultan puntajes, aciertos y avance en tiempo real.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="materias" class="container py-5">
-  <div class="text-center mb-4">
-    <span class="section-eyebrow">Contenido</span>
-    <h2 class="fw-bold mt-2">Materias disponibles</h2>
-  </div>
-  <div class="row g-4 justify-content-center">
-    <div class="col-md-5">
-      <div class="card-edu p-4 text-center">
-        <h3>🧮 Matemáticas</h3>
-        <p class="text-muted mb-0">Lógica, secuencias, operaciones básicas, porcentajes y comparaciones.</p>
-      </div>
-    </div>
-    <div class="col-md-5">
-      <div class="card-edu p-4 text-center">
-        <h3>🗣️ Inglés</h3>
-        <p class="text-muted mb-0">Vocabulario, colores, animales, saludos y gramática básica.</p>
-      </div>
+    <div class="reveal" style="margin-top:2rem">
+      <a class="l-btn l-btn--ghost" href="descargar.php">Descargar la app <span aria-hidden="true">↓</span></a>
     </div>
   </div>
 </section>
 
-<section id="como-funciona" class="container py-5">
-  <div class="text-center mb-4">
-    <span class="section-eyebrow">Implementación</span>
-    <h2 class="fw-bold mt-2">Así se pone en marcha en tu institución</h2>
+<section class="l-section" id="equipo" aria-labelledby="l-team-title">
+  <div class="l-wrap">
+    <div class="reveal">
+      <p class="l-kicker"><span>06</span> Quién lo construye</p>
+      <h2 id="l-team-title">Un equipo de ADSO, no una agencia.</h2>
+    </div>
+    <div class="l-team reveal" style="--d:1">
+      <span>Carlos Damian Malave Diaz</span>
+      <span>Danna Alexandra Ortega Saavedra</span>
+      <span>Giselle Nayeli Jaimes Galvis</span>
+      <span>Jhoan Andres Ortiz Galvis</span>
+      <span>Carlos Andrey Delgado Castañeda</span>
+    </div>
+    <p class="l-team__meta reveal" style="--d:2">SENA · Análisis y Desarrollo de Software · Ficha 3235781 · Cúcuta</p>
   </div>
-  <div class="row g-4">
-    <div class="col-md-3">
-      <div class="d-flex align-items-start gap-3">
-        <div class="step-num">1</div>
-        <div><h6 class="fw-bold mb-1">Presentación</h6><p class="text-muted small mb-0">Reunión con directivos para revisar alcance y condiciones.</p></div>
-      </div>
+</section>
+
+<section class="l-section l-section--tint" id="contacto" aria-labelledby="l-contact-title">
+  <div class="l-wrap l-contact">
+    <div class="reveal">
+      <p class="l-kicker"><span>07</span> Contacto</p>
+      <h2 id="l-contact-title">Coordina el piloto en tu institución.</h2>
+      <p class="l-lead">
+        Escríbenos con el nombre de la institución y el grado. Respondemos con la propuesta
+        técnica, los requisitos del piloto y una fecha para la reunión.
+      </p>
+      <p class="l-note">También puedes <a class="l-link" href="login.php">iniciar sesión</a> si ya tienes cuenta.</p>
     </div>
-    <div class="col-md-3">
-      <div class="d-flex align-items-start gap-3">
-        <div class="step-num">2</div>
-        <div><h6 class="fw-bold mb-1">Modalidad</h6><p class="text-muted small mb-0">Piloto con un grupo o implementación institucional completa.</p></div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="d-flex align-items-start gap-3">
-        <div class="step-num">3</div>
-        <div><h6 class="fw-bold mb-1">Orientación docente</h6><p class="text-muted small mb-0">Jornada básica de uso del recurso para el personal docente.</p></div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="d-flex align-items-start gap-3">
-        <div class="step-num">4</div>
-        <div><h6 class="fw-bold mb-1">Evaluación</h6><p class="text-muted small mb-0">Medición del impacto y ajustes según retroalimentación.</p></div>
-      </div>
+    <div class="reveal" style="--d:1">
+      <?php render_alerts(); ?>
+      <form method="post" class="l-form" action="index.php#contacto">
+        <?= csrf_field() ?>
+        <div class="l-form__row">
+          <div class="l-field">
+            <label for="nombre">Nombre</label>
+            <input class="l-input" id="nombre" name="nombre" type="text" required maxlength="120" autocomplete="name">
+          </div>
+          <div class="l-field">
+            <label for="correo">Correo</label>
+            <input class="l-input" id="correo" name="correo" type="email" required maxlength="150" autocomplete="email">
+          </div>
+        </div>
+        <div class="l-field">
+          <label for="institucion">Institución</label>
+          <input class="l-input" id="institucion" name="institucion" type="text" maxlength="150" autocomplete="organization">
+        </div>
+        <div class="l-field">
+          <label for="mensaje">Mensaje</label>
+          <textarea class="l-input" id="mensaje" name="mensaje" rows="4" required maxlength="2000"></textarea>
+        </div>
+        <button class="l-btn l-btn--ink" type="submit">Enviar solicitud <span aria-hidden="true">→</span></button>
+        <p class="l-form__note">Usamos tus datos solo para responder esta solicitud. No los publicamos ni los vendemos. <a class="l-link" href="politica-privacidad.html">Política de privacidad</a>.</p>
+      </form>
     </div>
   </div>
 </section>
 
-<section id="equipo" class="container py-5">
-  <div class="text-center mb-4">
-    <span class="section-eyebrow">NovaTeam</span>
-    <h2 class="fw-bold mt-2">Equipo de desarrollo</h2>
-  </div>
-  <div class="equipo-grid">
-    <div class="card-edu p-4 text-center"><div class="equipo-avatar"><i class="bi bi-person-fill"></i></div><p class="fw-bold mb-0 small">Carlos Damian Malave Diaz</p></div>
-    <div class="card-edu p-4 text-center"><div class="equipo-avatar"><i class="bi bi-person-fill"></i></div><p class="fw-bold mb-0 small">Danna Alexandra Ortega Saavedra</p></div>
-    <div class="card-edu p-4 text-center"><div class="equipo-avatar"><i class="bi bi-person-fill"></i></div><p class="fw-bold mb-0 small">Giselle Nayeli Jaimes Galvis</p></div>
-    <div class="card-edu p-4 text-center"><div class="equipo-avatar"><i class="bi bi-person-fill"></i></div><p class="fw-bold mb-0 small">Jhoan Andres Ortiz Galvis</p></div>
-    <div class="card-edu p-4 text-center"><div class="equipo-avatar"><i class="bi bi-person-fill"></i></div><p class="fw-bold mb-0 small">Carlos Andrey Delgado Castañeda</p></div>
-  </div>
-</section>
+<script>
+(function () {
+  var els = document.querySelectorAll('.reveal');
+  if (!els.length) return;
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce || !('IntersectionObserver' in window)) {
+    els.forEach(function (el) { el.classList.add('is-in'); });
+    return;
+  }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-in');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+  els.forEach(function (el) { io.observe(el); });
+})();
+</script>
 
-<section id="contacto" class="container py-5">
-  <div class="card-edu contacto-grad p-4 p-md-5">
-    <div class="row g-4 align-items-center">
-      <div class="col-lg-5">
-        <h2 class="fw-bold">¿Listo para llevar NovaTeam a tu institución?</h2>
-        <p class="mb-0">Déjanos tus datos y coordinamos una reunión para la propuesta técnica.</p>
-      </div>
-      <div class="col-lg-7">
-        <?php render_alerts(); ?>
-        <form method="post" class="row g-3">
-          <?= csrf_field() ?>
-          <div class="col-md-6">
-            <label class="form-label" for="nombre">Nombre</label>
-            <input class="form-control" id="nombre" name="nombre" required maxlength="120">
-          </div>
-          <div class="col-md-6">
-            <label class="form-label" for="correo">Correo</label>
-            <input class="form-control" id="correo" name="correo" type="email" required maxlength="150">
-          </div>
-          <div class="col-12">
-            <label class="form-label" for="institucion">Institución</label>
-            <input class="form-control" id="institucion" name="institucion" maxlength="150">
-          </div>
-          <div class="col-12">
-            <label class="form-label" for="mensaje">Mensaje</label>
-            <textarea class="form-control" id="mensaje" name="mensaje" rows="3" required maxlength="2000"></textarea>
-          </div>
-          <div class="col-12">
-            <button class="btn btn-light fw-bold rounded-pill px-4" type="submit">Enviar solicitud</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-</section>
 <?php require __DIR__ . '/includes/footer.php'; ?>
