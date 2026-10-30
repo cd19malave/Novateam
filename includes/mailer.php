@@ -52,6 +52,28 @@ function send_email_brevo(string $to, string $subject, string $bodyHtml): bool
         }
     }
 
+    // Algunos hostings desactivan allow_url_fopen: reintenta con cURL.
+    if ($resp === false && function_exists('curl_init')) {
+        $ch = curl_init('https://api.brevo.com/v3/smtp/email');
+        curl_setopt_array($ch, [
+            CURLOPT_POST           => true,
+            CURLOPT_POSTFIELDS     => json_encode($payload),
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT        => 20,
+            CURLOPT_HTTPHEADER     => [
+                'Content-Type: application/json',
+                'api-key: ' . $apiKey,
+                'Accept: application/json',
+            ],
+        ]);
+        $resp = curl_exec($ch);
+        $code = (int) curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
+        if ($resp === false) {
+            error_log('NovaTeam: Brevo cURL error -> ' . curl_error($ch));
+        }
+        curl_close($ch);
+    }
+
     if ($code >= 200 && $code < 300) {
         return true;
     }

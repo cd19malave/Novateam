@@ -121,15 +121,8 @@ require __DIR__ . '/includes/header.php';
       <span class="mascot mascot-sm" aria-hidden="true">🦉</span>
       <div class="level-ring" role="img" aria-label="Nivel <?= $level ?>">
         <svg viewBox="0 0 80 80" width="116" height="116">
-          <defs>
-            <linearGradient id="lvlGrad" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#4F8FF7"/>
-              <stop offset="55%" stop-color="#8B5CF6"/>
-              <stop offset="100%" stop-color="#EC6BB2"/>
-            </linearGradient>
-          </defs>
           <circle cx="40" cy="40" r="32" fill="none" stroke="var(--edu-border)" stroke-width="7"/>
-          <circle cx="40" cy="40" r="32" fill="none" stroke="url(#lvlGrad)" stroke-width="7"
+          <circle cx="40" cy="40" r="32" fill="none" stroke="var(--edu-primary)" stroke-width="7"
                   stroke-linecap="round" stroke-dasharray="<?= $ringCirc ?>"
                   stroke-dashoffset="<?= $ringOffset ?>" transform="rotate(-90 40 40)"/>
         </svg>
@@ -145,23 +138,23 @@ require __DIR__ . '/includes/header.php';
   <!-- Estadísticas -->
   <section class="dash-stats mb-4">
     <div class="stat-card">
-      <span class="stat-ico" style="--sc:#FFB84D"><i class="bi bi-lightning-charge-fill"></i></span>
+      <span class="stat-ico stat-ico--xp"><i class="bi bi-lightning-charge-fill"></i></span>
       <div><span class="stat-val"><?= $xp ?></span><span class="stat-lbl">XP total</span></div>
     </div>
     <div class="stat-card">
-      <span class="stat-ico" style="--sc:#FF7A45"><i class="bi bi-fire"></i></span>
+      <span class="stat-ico stat-ico--streak"><i class="bi bi-fire"></i></span>
       <div><span class="stat-val"><?= $streak ?></span><span class="stat-lbl"><?= $streak === 1 ? 'día de racha' : 'días de racha' ?></span></div>
     </div>
     <div class="stat-card">
-      <span class="stat-ico" style="--sc:#56D39F"><i class="bi bi-check2-circle"></i></span>
+      <span class="stat-ico stat-ico--done"><i class="bi bi-check2-circle"></i></span>
       <div><span class="stat-val"><?= $doneCount ?>/<?= $totalCount ?></span><span class="stat-lbl">guías completadas</span></div>
     </div>
     <div class="stat-card">
-      <span class="stat-ico" style="--sc:#4F8FF7"><i class="bi bi-journal-check"></i></span>
+      <span class="stat-ico stat-ico--ex"><i class="bi bi-journal-check"></i></span>
       <div><span class="stat-val"><?= (int) $user['ejercicios_resueltos'] ?></span><span class="stat-lbl">ejercicios</span></div>
     </div>
     <div class="stat-card">
-      <span class="stat-ico" style="--sc:#FF5C8A"><i class="bi bi-heart-fill"></i></span>
+      <span class="stat-ico stat-ico--lives"><i class="bi bi-heart-fill"></i></span>
       <div><span class="stat-val"><?= $lives['vidas'] ?>/<?= $lives['max'] ?></span><span class="stat-lbl">vidas</span></div>
     </div>
   </section>

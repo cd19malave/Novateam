@@ -85,7 +85,5 @@ if (!empty($_SESSION['user']['id_usuario'])) {
     }
 }
 
-if (!empty($_SESSION['user']['tema_color']) && $_SESSION['user']['tema_color'] !== 'default') {
-    $tc = tema_colors($_SESSION['user']['tema_color']);
-    echo '<style>:root{--edu-bg:' . $tc['bg'] . ';--edu-dark:' . $tc['text'] . ';--edu-primary:' . $tc['primary'] . ';}body{background:' . $tc['bg'] . ';color:' . $tc['text'] . ';}</style>';
-}
+/* El tema visual ahora se controla con el conmutador claro/oscuro global. */
+

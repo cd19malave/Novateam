@@ -4,8 +4,12 @@ declare(strict_types=1);
 $pageTitle = $pageTitle ?? 'NovaTeam';
 $extraHead = $extraHead ?? '';
 $bodyClass = $bodyClass ?? '';
-$themeColor = $themeColor ?? '#4F8FF7';
+$themeColor = $themeColor ?? '#F5EFE4';
 $metaDescription = $metaDescription ?? '';
+$canonical = $canonical ?? '';
+$ogImage = $ogImage ?? 'assets/icons/icon-512.png';
+$ogType = $ogType ?? 'website';
+$ogImageAbs = preg_match('#^https?://#', $ogImage) ? $ogImage : site_url($ogImage);
 $user = current_user();
 $unreadCount = $user ? unread_messages_count((int) $user['id_usuario']) : 0;
 $notifCount = $user ? unread_notifications_count((int) $user['id_usuario']) : 0;
@@ -47,10 +51,24 @@ $showBottomNav = (bool) $user;
   </script>
   <title><?= e($pageTitle) ?> | NovaTeam</title>
   <?php if ($metaDescription !== ''): ?><meta name="description" content="<?= e($metaDescription) ?>"><?php endif; ?>
+  <?php if ($canonical !== ''): ?>
+  <link rel="canonical" href="<?= e($canonical) ?>">
+  <meta property="og:type" content="<?= e($ogType) ?>">
+  <meta property="og:site_name" content="NovaTeam">
+  <meta property="og:locale" content="es_CO">
+  <meta property="og:title" content="<?= e($pageTitle) ?> | NovaTeam">
+  <?php if ($metaDescription !== ''): ?><meta property="og:description" content="<?= e($metaDescription) ?>"><?php endif; ?>
+  <meta property="og:url" content="<?= e($canonical) ?>">
+  <meta property="og:image" content="<?= e($ogImageAbs) ?>">
+  <meta name="twitter:card" content="summary_large_image">
+  <?php endif; ?>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Quicksand:wght@500;700;800&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,600&family=Fredoka:wght@500;600;700&family=Instrument+Sans:wght@400;500;600;700&family=Quicksand:wght@500;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/app.css?v=13">
+  <link rel="stylesheet" href="assets/css/theme-nova.css?v=3">
   <link rel="manifest" href="manifest.json?v=5">
   <meta name="theme-color" content="<?= e($themeColor) ?>">
   <meta name="mobile-web-app-capable" content="yes">

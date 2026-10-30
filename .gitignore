@@ -15,3 +15,6 @@ Thumbs.db
 
 # Subidas de usuarios
 uploads/perfiles/2026/
+# Acceso temporal de desarrollo
+_dev_login.php
+audit.js

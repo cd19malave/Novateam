@@ -54,7 +54,7 @@ require __DIR__ . '/includes/header.php';
     <?php if (!empty($user['fondo_perfil'])): ?>
       <div style="position:absolute;top:0;left:0;right:0;height:120px;background:linear-gradient(rgba(0,0,0,.3),rgba(0,0,0,.3)),url(<?= e($user['fondo_perfil']) ?>) center/cover;"></div>
     <?php else: ?>
-      <div style="position:absolute;top:0;left:0;right:0;height:120px;background:linear-gradient(135deg,var(--edu-primary),var(--edu-accent));"></div>
+      <div style="position:absolute;top:0;left:0;right:0;height:120px;background:var(--edu-primary);"></div>
     <?php endif; ?>
 
     <div style="position:relative;padding-top:60px;" class="text-center">
@@ -101,16 +101,8 @@ require __DIR__ . '/includes/header.php';
           <textarea class="form-control" name="bio" rows="3" maxlength="300"><?= e($user['bio'] ?? '') ?></textarea>
         </div>
         <div class="col-md-6">
-          <label class="form-label">Tema de color</label>
-          <select class="form-select" name="tema_color">
-            <?php
-            $temas = ['default','oscuro','verde','rosa','purpura'];
-            $temaLabels = ['default' => 'Predeterminado', 'oscuro' => 'Oscuro', 'verde' => 'Verde', 'rosa' => 'Rosa', 'purpura' => 'Púrpura'];
-            $currentTema = $user['tema_color'] ?? 'default';
-            foreach ($temas as $t): ?>
-              <option value="<?= $t ?>" <?= $t === $currentTema ? 'selected' : '' ?>><?= $temaLabels[$t] ?></option>
-            <?php endforeach; ?>
-          </select>
+          <label class="form-label">Tema de la aplicación</label>
+          <p class="form-text mb-0">Usa el botón sol/luna de la barra superior para cambiar entre papel y tinta.</p>
         </div>
       </div>
       <button class="btn btn-edu mt-3" type="submit">Guardar cambios</button>

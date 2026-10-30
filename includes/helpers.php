@@ -6,6 +6,34 @@ function e(?string $value): string
     return htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
 
+/**
+ * URL base del sitio (esquema + host + carpeta donde vive index.php).
+ * Ej: https://novateam.byethost12.com  o  http://localhost/novateam
+ */
+function site_base_url(): string
+{
+    $https = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+    if (!$https && ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https') {
+        $https = true;
+    }
+    $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    $scheme = $https ? 'https' : 'http';
+
+    $script = str_replace('\\', '/', (string) ($_SERVER['SCRIPT_NAME'] ?? '/index.php'));
+    $dir = rtrim(str_replace('\\', '/', dirname($script)), '/');
+    if ($dir === '.' || $dir === '/') {
+        $dir = '';
+    }
+
+    return $scheme . '://' . $host . $dir;
+}
+
+/** URL absoluta a partir de una ruta relativa del proyecto. */
+function site_url(string $path = ''): string
+{
+    return site_base_url() . '/' . ltrim($path, '/');
+}
+
 function current_tab(): ?string
 {
     $t = $_SESSION['active_tab'] ?? null;
@@ -244,11 +272,11 @@ function user_avatar_html(array $user, int $size = 40): string
     $sizeStyle = 'width:' . $size . 'px;height:' . $size . 'px;';
     $initials = mb_strtoupper(mb_substr($user['nombre'], 0, 1));
     if (!empty($user['foto_perfil'])) {
-        $fallback = '<div style="width:' . $size . 'px;height:' . $size . 'px;border-radius:50%;background:linear-gradient(135deg,var(--edu-primary),var(--edu-accent));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:' . ($size * 0.4) . 'px;">' . e($initials) . '</div>';
+        $fallback = '<div style="width:' . $size . 'px;height:' . $size . 'px;border-radius:50%;background:var(--edu-text);display:flex;align-items:center;justify-content:center;color:var(--edu-bg);font-weight:800;font-size:' . ($size * 0.4) . 'px;">' . e($initials) . '</div>';
         $onerror = 'this.outerHTML=' . json_encode($fallback);
         return '<img src="' . e($user['foto_perfil']) . '" alt="' . e($user['nombre']) . '" class="avatar-frame" style="' . $sizeStyle . 'object-fit:cover;border-radius:50%;" onerror="' . e($onerror) . '">';
     }
-    return '<div class="avatar-frame" style="' . $sizeStyle . 'background:linear-gradient(135deg,var(--edu-primary),var(--edu-accent));display:grid;place-items:center;color:#fff;font-weight:800;font-size:' . ($size * 0.4) . 'px;">' . e($initials) . '</div>';
+    return '<div class="avatar-frame" style="' . $sizeStyle . 'background:var(--edu-text);display:grid;place-items:center;color:var(--edu-bg);font-weight:800;font-size:' . ($size * 0.4) . 'px;">' . e($initials) . '</div>';
 }
 
 /* ── Mensajes ── */
@@ -449,27 +477,27 @@ function shop_items(): array
     return [
         'vida_extra' => [
             'nombre' => 'Vida extra', 'icono' => 'heart-fill', 'precio' => 15,
-            'desc' => 'Recupera 1 vida al instante (hasta tu máximo).', 'color' => '#FF5C8A',
+            'desc' => 'Recupera 1 vida al instante (hasta tu máximo).', 'color' => '#B73420',
         ],
         'vidas_full' => [
             'nombre' => 'Recarga total', 'icono' => 'heart', 'precio' => 40,
-            'desc' => 'Llena todas tus vidas de una vez.', 'color' => '#FF7A45',
+            'desc' => 'Llena todas tus vidas de una vez.', 'color' => '#A66A00',
         ],
         'vidas_max' => [
             'nombre' => '+1 vida máxima', 'icono' => 'plus-circle', 'precio' => 80,
-            'desc' => 'Amplía tu máximo de vidas en 1 (permanente).', 'color' => '#8B5CF6',
+            'desc' => 'Amplía tu máximo de vidas en 1 (permanente).', 'color' => '#0D5C4A',
         ],
         'escudo_racha' => [
             'nombre' => 'Escudo de racha', 'icono' => 'shield-fill-check', 'precio' => 30,
-            'desc' => 'Protege tu racha si un día no juegas. Acumula hasta 3.', 'color' => '#4F8FF7',
+            'desc' => 'Protege tu racha si un día no juegas. Acumula hasta 3.', 'color' => '#3E4449',
         ],
         'comodin_50' => [
             'nombre' => 'Comodín 50/50', 'icono' => 'patch-question', 'precio' => 25,
-            'desc' => 'En el quiz elimina 2 respuestas incorrectas.', 'color' => '#FFB84D',
+            'desc' => 'En el quiz elimina 2 respuestas incorrectas.', 'color' => '#B7791F',
         ],
         'doble_puntos' => [
             'nombre' => 'Doble puntos', 'icono' => 'lightning-charge-fill', 'precio' => 45,
-            'desc' => 'Duplica los puntos del próximo quiz que completes.', 'color' => '#56D39F',
+            'desc' => 'Duplica los puntos del próximo quiz que completes.', 'color' => '#0D5C4A',
         ],
     ];
 }

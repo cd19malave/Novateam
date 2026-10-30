@@ -50,7 +50,7 @@ declare(strict_types=1);
 <?php endif; ?>
 <footer class="edu-footer text-center py-4 mt-5">
   <div class="container">
-    <span class="edu-logo" style="color:#fff"><span class="logo-mark">N</span> NovaTeam</span>
+    <span class="edu-logo" style="color:var(--edu-footer-text)"><span class="logo-mark">N</span> NovaTeam</span>
     <div class="d-flex justify-content-center gap-3 mt-2 flex-wrap">
       <a href="descargar.php" class="text-decoration-none small"><i class="bi bi-phone"></i> Descargar app</a>
       <a href="login.php" class="text-decoration-none small"><i class="bi bi-box-arrow-in-right"></i> Iniciar sesión</a>
@@ -77,7 +77,7 @@ function togglePass(id, btn) {
   if (!btns.length) return;
   const updateMeta = (t) => {
     const m = document.querySelector('meta[name="theme-color"]');
-    if (m) m.setAttribute('content', t === 'dark' ? '#17181A' : '#4F8FF7');
+    if (m) m.setAttribute('content', t === 'dark' ? '#121517' : '#F5EFE4');
   };
   const syncIcons = (t) => {
     btns.forEach(b => {

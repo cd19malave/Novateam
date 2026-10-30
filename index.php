@@ -26,9 +26,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ]);
 
     $contactEmail = env('CONTACTO_EMAIL', 'novateamrecuperacion@gmail.com') ?? 'novateamrecuperacion@gmail.com';
-    $body = '<div style="font-family:Arial,Helvetica,sans-serif;background:#17181A;padding:24px;border-radius:16px;max-width:520px;margin:0 auto">'
-        . '<div style="background:#1F2126;border:1px solid #2A2D33;border-radius:14px;padding:20px;color:#E8E8F2">'
-        . '<h1 style="font-size:16px;margin:0 0 12px;color:#fff">Nueva solicitud de institución</h1>'
+    $body = '<div style="font-family:\'Instrument Sans\',Arial,Helvetica,sans-serif;background:#F5EFE4;padding:24px;border-radius:16px;max-width:520px;margin:0 auto">'
+        . '<div style="background:#FFFDF8;border:2px solid #161A1D;border-radius:14px;padding:20px;color:#161A1D">'
+        . '<h1 style="font-family:Georgia,\'Times New Roman\',serif;font-size:18px;margin:0 0 12px;color:#161A1D">Nueva solicitud de institución</h1>'
         . '<p style="margin:0 0 6px;font-size:14px"><strong>Nombre:</strong> ' . e($nombre) . '</p>'
         . '<p style="margin:0 0 6px;font-size:14px"><strong>Correo:</strong> ' . e($correo) . '</p>'
         . '<p style="margin:0 0 6px;font-size:14px"><strong>Institución:</strong> ' . e($institucion) . '</p>'
@@ -45,10 +45,18 @@ $pageTitle = 'Aprender practicando';
 $bodyClass = 'landing-page';
 $themeColor = '#F5EFE4';
 $metaDescription = 'NovaTeam convierte las guías de matemáticas e inglés de 4.º en retos con puntos, vidas e insignias. El docente ve el avance del grupo sin planillas.';
-$extraHead = '<link rel="preconnect" href="https://fonts.googleapis.com">'
-    . '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
-    . '<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,600&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">'
-    . '<link rel="stylesheet" href="assets/css/landing.css?v=1">';
+$canonical = site_url('/');
+$structuredData = [
+    '@context' => 'https://schema.org',
+    '@type' => 'EducationalOrganization',
+    'name' => 'NovaTeam',
+    'url' => $canonical,
+    'description' => $metaDescription,
+    'areaServed' => ['@type' => 'Country', 'name' => 'Colombia'],
+    'address' => ['@type' => 'PostalAddress', 'addressLocality' => 'Cúcuta', 'addressCountry' => 'CO'],
+];
+$extraHead = '<link rel="stylesheet" href="assets/css/landing.css?v=1">'
+    . '<script type="application/ld+json">' . json_encode($structuredData, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . '</script>';
 require __DIR__ . '/includes/header.php';
 ?>
 <script>document.documentElement.classList.add('has-reveal');</script>

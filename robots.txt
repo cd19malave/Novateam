@@ -1,0 +1,32 @@
+User-agent: *
+Allow: /$
+Allow: /index.php
+Allow: /registro.php
+Allow: /descargar.php
+Allow: /politica-privacidad.html
+Allow: /assets/
+
+Disallow: /api/
+Disallow: /config/
+Disallow: /database/
+Disallow: /includes/
+Disallow: /uploads/
+Disallow: /admin.php
+Disallow: /alumnos.php
+Disallow: /crear-guia.php
+Disallow: /editar-guia.php
+Disallow: /estudiante.php
+Disallow: /guia.php
+Disallow: /leaderboard.php
+Disallow: /login.php
+Disallow: /logout.php
+Disallow: /mensajes.php
+Disallow: /notificaciones.php
+Disallow: /nueva-clave.php
+Disallow: /perfil.php
+Disallow: /profesor.php
+Disallow: /progreso.php
+Disallow: /recuperar.php
+Disallow: /tienda.php
+
+Sitemap: https://novateam.example/sitemap.xml

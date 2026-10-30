@@ -95,7 +95,7 @@ require __DIR__ . '/includes/header.php';
             ?>
             <a href="mensajes.php?para=<?= (int) $c['id_usuario'] ?>"
                class="list-group-item list-group-item-action <?= $paraId === (int) $c['id_usuario'] ? 'active' : '' ?> d-flex align-items-center gap-2"
-               style="<?= $paraId === (int) $c['id_usuario'] ? 'background:var(--edu-primary);color:#fff;' : '' ?>">
+               style="<?= $paraId === (int) $c['id_usuario'] ? 'background:var(--edu-primary);color:var(--edu-on-primary);' : '' ?>">
               <?= user_avatar_html($c, 36) ?>
               <div class="flex-grow-1 min-w-0">
                 <div class="fw-bold small text-truncate"><?= e($c['nombre']) ?></div>
@@ -126,7 +126,7 @@ require __DIR__ . '/includes/header.php';
               <?php $isMe = (int) $msg['id_emisor'] === $user['id_usuario']; ?>
               <div class="mb-2 d-flex <?= $isMe ? 'justify-content-end' : 'justify-content-start' ?>">
                 <div class="px-3 py-2 rounded-3 <?= $isMe ? '' : 'chat-bubble-recv' ?>"
-                     style="max-width:75%;background:<?= $isMe ? 'var(--edu-primary);color:#fff;' : 'var(--edu-surface);border:1px solid var(--edu-border);' ?>;word-break:break-word;">
+                     style="max-width:75%;background:<?= $isMe ? 'var(--edu-primary);color:var(--edu-on-primary);' : 'var(--edu-surface);border:1px solid var(--edu-border);' ?>;word-break:break-word;">
                   <div style="font-size:.9rem;line-height:1.4;"><?= nl2br(e($msg['contenido'])) ?></div>
                   <?php
                   $archivos = $pdo->prepare(
@@ -137,7 +137,7 @@ require __DIR__ . '/includes/header.php';
                   $archivos->execute(['mid' => $msg['id_mensaje']]);
                   $archList = $archivos->fetchAll();
                   foreach ($archList as $ar): ?>
-                    <a href="<?= e($ar['nombre_guardado']) ?>" target="_blank" class="chat-archivo <?= $isMe ? '' : '' ?>" style="<?= $isMe ? 'color:#fff;' : 'color:var(--edu-primary);' ?>">
+                    <a href="<?= e($ar['nombre_guardado']) ?>" target="_blank" class="chat-archivo <?= $isMe ? '' : '' ?>" style="<?= $isMe ? 'color:var(--edu-on-primary);' : 'color:var(--edu-primary);' ?>">
                       <?= file_icon($ar['tipo_mime']) ?>
                       <span class="text-truncate" style="max-width:140px;"><?= e($ar['nombre_original']) ?></span>
                     </a>

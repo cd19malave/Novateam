@@ -33,19 +33,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $resetUrl = $scheme . '://' . $host . '/nueva-clave.php?token=' . $token;
 
         $html = '
-        <div style="font-family:Arial,Helvetica,sans-serif;background:#17181A;padding:24px;border-radius:16px;max-width:480px;margin:0 auto">
+        <div style="font-family:\'Instrument Sans\',Arial,Helvetica,sans-serif;background:#F5EFE4;padding:24px;border-radius:16px;max-width:480px;margin:0 auto;color:#161A1D">
           <div style="text-align:center;margin-bottom:16px">
-            <span style="display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#4F8FF7,#8B5CF6,#EC6BB2);color:#fff;font-weight:800;font-size:22px">N</span>
-            <div style="color:#fff;font-size:22px;font-weight:800;margin-top:8px">NovaTeam</div>
+            <span style="display:inline-block;width:44px;height:44px;line-height:44px;border-radius:12px;background:#161A1D;color:#F5EFE4;font-weight:800;font-size:22px;text-align:center">N</span>
+            <div style="color:#161A1D;font-family:Georgia,\'Times New Roman\',serif;font-size:22px;font-weight:700;margin-top:8px">NovaTeam</div>
           </div>
-          <div style="background:#1F2126;border:1px solid #2A2D33;border-radius:14px;padding:20px;color:#E8E8F2">
-            <h1 style="font-size:16px;margin:0 0 8px;color:#fff">Restablecer contraseña</h1>
-            <p style="font-size:14px;line-height:1.5;margin:0 0 16px">
+          <div style="background:#FFFDF8;border:2px solid #161A1D;border-radius:14px;padding:20px;color:#161A1D">
+            <h1 style="font-family:Georgia,\'Times New Roman\',serif;font-size:18px;margin:0 0 8px;color:#161A1D">Restablecer contraseña</h1>
+            <p style="font-size:14px;line-height:1.55;margin:0 0 16px">
               Hola ' . e($user['nombre']) . ', recibimos una solicitud para restablecer tu contraseña de NovaTeam.
               El enlace es válido por 1 hora.
             </p>
-            <a href="' . e($resetUrl) . '" style="display:inline-block;background:linear-gradient(135deg,#4F8FF7,#8B5CF6);color:#fff;text-decoration:none;font-weight:700;font-size:14px;padding:12px 20px;border-radius:10px">Restablecer contraseña</a>
-            <p style="font-size:12px;color:#9CA3AF;margin:16px 0 0">Si no solicitaste esto, ignora este correo.</p>
+            <a href="' . e($resetUrl) . '" style="display:inline-block;background:#B73420;color:#FFFDF8;text-decoration:none;font-weight:700;font-size:14px;padding:12px 20px;border-radius:12px">Restablecer contraseña</a>
+            <p style="font-size:12px;color:#4E5358;margin:16px 0 0">Si no solicitaste esto, ignora este correo.</p>
           </div>
         </div>';
 
