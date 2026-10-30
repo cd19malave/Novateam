@@ -1,0 +1,13 @@
+{
+  "siteUrl": "https://tu-cuenta.byethostX.com",
+  "ftpHost": "ftp.byethostX.com",
+  "ftpUser": "bXX_XXXXXXXX",
+  "ftpPass": "clave-ftp",
+  "remoteRoot": "/htdocs",
+  "dbHost": "sqlXXX.byethostX.com",
+  "dbName": "bXX_XXXXXXXX_novateam",
+  "dbUser": "bXX_XXXXXXXX",
+  "dbPass": "clave-mysql",
+  "brevoApiKey": "",
+  "smtpFrom": "novateamrecuperacion@gmail.com"
+}

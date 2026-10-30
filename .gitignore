@@ -18,3 +18,7 @@ uploads/perfiles/2026/
 # Acceso temporal de desarrollo
 _dev_login.php
 audit.js
+
+# Credenciales de despliegue
+.byethost.local.json
+.env.production

@@ -1,11 +1,33 @@
 # Publicar NovaTeam en ByetHost
 
-Guía corta para dejar el sitio y la base de datos funcionando en tu cuenta de ByetHost.
-No subas `.env`, `.git` ni los archivos de `Dockerfile`/`entrypoint.sh` (son solo para Railway).
+Guía para dejar el sitio y la base de datos funcionando en tu cuenta de ByetHost.
+No subas `.env`, `.git` ni `Dockerfile`/`entrypoint.sh` (son solo para Railway).
+
+## 0. Camino rápido (recomendado)
+
+El proyecto ya trae un script que hace todo por FTP:
+
+1. Copia `tools/byethost.config.example.json` a `.byethost.local.json` (en la raíz del proyecto).
+2. Rellena ahí tus datos (URL, FTP, MySQL). Ese archivo está en `.gitignore`, no se publica.
+3. Simula la subida para ver la lista de archivos:
+
+   ```powershell
+   powershell -ExecutionPolicy Bypass -File tools\deploy-byethost.ps1 -DryRun
+   ```
+
+4. Sube de verdad:
+
+   ```powershell
+   powershell -ExecutionPolicy Bypass -File tools\deploy-byethost.ps1
+   ```
+
+El script actualiza `robots.txt`/`sitemap.xml` con tu dominio real, genera el `.env` de producción, sube todo a `htdocs` y omite `.env` local, `.git`, `tools`, `_dev_login.php` y las fotos de prueba.
+
+Lo único manual es **importar la base** desde phpMyAdmin (paso 2).
 
 ## 1. Datos que necesito de tu cuenta
 
-Copia los valores **exactos** desde tu vPanel (`https://dash.byet.host`) y mándamelos por el chat:
+Copia los valores **exactos** desde tu vPanel (`https://dash.byet.host`):
 
 | Dato | Dónde verlo |
 |---|---|
@@ -34,7 +56,7 @@ Recomendación de seguridad: crea un **usuario FTP temporal** y un **usuario MyS
 
 ## 3. Subir los archivos
 
-Sube el contenido del proyecto a la carpeta **`htdocs`** por FTP (FileZilla o similar):
+Con el script del paso 0 no hay que hacer nada más. Si prefieres hacerlo a mano, sube el contenido del proyecto a la carpeta **`htdocs`** por FTP (FileZilla o similar):
 
 ```
 htdocs/
@@ -51,7 +73,7 @@ htdocs/
   .htaccess
 ```
 
-No subas: `.git/`, `.env` local, `Dockerfile`, `entrypoint.sh`, `_dev_login.php`, ni los `.zip` de trabajo.
+No subas: `.git/`, `.env` local, `tools/`, `Dockerfile`, `entrypoint.sh`, `_dev_login.php`, ni los `.zip` de trabajo.
 
 Permisos recomendados por FTP:
 
