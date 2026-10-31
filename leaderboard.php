@@ -3,7 +3,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/includes/bootstrap.php';
 require_login();
 
-$rows = db()->query('SELECT * FROM vw_leaderboard ORDER BY puntos DESC, ejercicios_resueltos DESC LIMIT 50')->fetchAll();
+$rows = leaderboard_rows(50);
 
 $pageTitle = 'Ranking';
 require __DIR__ . '/includes/header.php';

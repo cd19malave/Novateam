@@ -201,6 +201,7 @@
   }
 
   function pollUnread() {
+    if (document.hidden) return;
     fetch('api/notificaciones.php?accion=unread')
       .then(function (r) { return r.json(); })
       .then(function (d) { if (d && d.ok) setBadge(d.count); })
@@ -209,12 +210,20 @@
 
   function startFallback() {
     if (fallbackTimer) return;
-    fallbackTimer = setInterval(pollUnread, 30000);
+    // Cada 90 s: suficiente para avisos y muy por debajo de los límites del hosting.
+    fallbackTimer = setInterval(pollUnread, 90000);
+    document.addEventListener('visibilitychange', function () {
+      if (!document.hidden) pollUnread();
+    });
   }
 
   function start() {
-    if (!('EventSource' in window)) {
+    var sse = document.querySelector('meta[name="nt-sse"]');
+    // SSE se desactiva por defecto: mantiene una conexión abierta que agota
+    // los procesos del hosting gratuito. Actívalo con NOTIF_SSE=1.
+    if (!sse || sse.getAttribute('content') !== '1' || !('EventSource' in window)) {
       startFallback();
+      pollUnread();
       return;
     }
     source = new EventSource('api/notificaciones_sse.php?tab=' + encodeURIComponent(token));

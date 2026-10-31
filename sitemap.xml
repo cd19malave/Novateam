@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://novateam.example/</loc>
+    <loc>https://novateam.byethost16.com/</loc>
     <lastmod>2026-10-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://novateam.example/registro.php</loc>
+    <loc>https://novateam.byethost16.com/registro.php</loc>
     <lastmod>2026-10-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://novateam.example/descargar.php</loc>
+    <loc>https://novateam.byethost16.com/descargar.php</loc>
     <lastmod>2026-10-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://novateam.example/politica-privacidad.html</loc>
+    <loc>https://novateam.byethost16.com/politica-privacidad.html</loc>
     <lastmod>2026-10-30</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>

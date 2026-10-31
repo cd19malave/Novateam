@@ -68,8 +68,9 @@ $showBottomNav = (bool) $user;
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,600&family=Fredoka:wght@500;600;700&family=Instrument+Sans:wght@400;500;600;700&family=Quicksand:wght@500;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/app.css?v=13">
-  <link rel="stylesheet" href="assets/css/theme-nova.css?v=3">
+  <link rel="stylesheet" href="assets/css/theme-nova.css?v=4">
   <link rel="manifest" href="manifest.json?v=5">
+  <meta name="nt-sse" content="<?= e((string) env('NOTIF_SSE', '0')) ?>">
   <meta name="theme-color" content="<?= e($themeColor) ?>">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -77,6 +78,8 @@ $showBottomNav = (bool) $user;
   <meta name="apple-mobile-web-app-title" content="NovaTeam">
   <meta name="application-name" content="NovaTeam">
   <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/icons/icon-512.png">
   <?= $extraHead ?>
 </head>
 <body class="<?= e(trim(($showBottomNav ? 'has-bottom-nav' : '') . ' ' . $bodyClass)) ?>">

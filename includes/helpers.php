@@ -400,6 +400,29 @@ function is_enrolled(int $userId, string $materia): bool
     return (bool) $stmt->fetch();
 }
 
+/**
+ * Ranking de estudiantes.
+ * No depende de la vista vw_leaderboard porque algunos hostings
+ * (ByetHost) no conceden el privilegio CREATE VIEW.
+ */
+function leaderboard_rows(int $limit = 50): array
+{
+    $limit = max(1, min(200, $limit));
+    $sql = "SELECT u.id_usuario, u.nombre, u.grado, u.foto_perfil,
+                   COALESCE(SUM(CASE WHEN i.completado = 1 THEN i.puntaje ELSE NULL END), 0) AS puntos,
+                   u.ejercicios_resueltos,
+                   COUNT(DISTINCT ui.id_insignia) AS total_insignias
+            FROM usuarios u
+            LEFT JOIN intentos i ON i.id_usuario = u.id_usuario
+            LEFT JOIN usuario_insignias ui ON ui.id_usuario = u.id_usuario
+            WHERE u.rol = 'estudiante' AND u.activo = 1
+            GROUP BY u.id_usuario, u.nombre, u.grado, u.foto_perfil, u.ejercicios_resueltos
+            ORDER BY puntos DESC, u.ejercicios_resueltos DESC
+            LIMIT {$limit}";
+    return db()->query($sql)->fetchAll();
+}
+
+
 /* ── Vidas, tienda y potenciadores ── */
 
 function lives_regen_hours(): int
