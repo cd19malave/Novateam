@@ -77,7 +77,7 @@ function togglePass(id, btn) {
   if (!btns.length) return;
   const updateMeta = (t) => {
     const m = document.querySelector('meta[name="theme-color"]');
-    if (m) m.setAttribute('content', t === 'dark' ? '#121517' : '#F5EFE4');
+    if (m) m.setAttribute('content', t === 'dark' ? '#160A2B' : '#FFF7FD');
   };
   const syncIcons = (t) => {
     btns.forEach(b => {

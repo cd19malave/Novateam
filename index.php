@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $pageTitle = 'Aprender practicando';
 $bodyClass = 'landing-page';
-$themeColor = '#F5EFE4';
+$themeColor = '#FFF7FD';
 $metaDescription = 'NovaTeam convierte las guías de matemáticas e inglés de 4.º en retos con puntos, vidas e insignias. El docente ve el avance del grupo sin planillas.';
 $canonical = site_url('/');
 $structuredData = [
@@ -55,25 +55,41 @@ $structuredData = [
     'areaServed' => ['@type' => 'Country', 'name' => 'Colombia'],
     'address' => ['@type' => 'PostalAddress', 'addressLocality' => 'Cúcuta', 'addressCountry' => 'CO'],
 ];
-$extraHead = '<link rel="stylesheet" href="assets/css/landing.css?v=1">'
+$extraHead = '<link rel="stylesheet" href="assets/css/landing.css?v=2">'
     . '<script type="application/ld+json">' . json_encode($structuredData, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . '</script>';
 require __DIR__ . '/includes/header.php';
 ?>
 <script>document.documentElement.classList.add('has-reveal');</script>
 
 <section class="l-hero" id="inicio" aria-labelledby="l-hero-title">
+  <div class="l-hero__bg" aria-hidden="true">
+    <span class="l-blob l-blob--1"></span>
+    <span class="l-blob l-blob--2"></span>
+    <span class="l-blob l-blob--3"></span>
+    <span class="l-float l-float--1">🚀</span>
+    <span class="l-float l-float--2">🌈</span>
+    <span class="l-float l-float--3">⭐</span>
+    <span class="l-float l-float--4">🦉</span>
+    <span class="l-float l-float--5">✨</span>
+  </div>
+
   <div class="l-wrap l-hero__grid">
     <div class="l-hero__copy">
       <p class="l-eyebrow"><span class="l-dot" aria-hidden="true"></span>Piloto 2026 · 4.º de primaria · SENA ADSO</p>
-      <h1 id="l-hero-title">Se aprende mejor cuando el <em>reto</em> se siente como un <span class="l-mark">juego</span>.</h1>
+      <h1 id="l-hero-title">Aprender es una <span class="l-grad">aventura</span> que se juega.</h1>
       <p class="l-lead">
         NovaTeam convierte las guías de matemáticas e inglés en retos con puntos, vidas e insignias.
         El estudiante practica a su ritmo; el docente ve el avance el mismo día, sin planillas.
       </p>
       <div class="l-actions">
-        <a class="l-btn l-btn--ink" href="registro.php">Entrar al piloto <span aria-hidden="true">→</span></a>
+        <a class="l-btn l-btn--ink" href="registro.php">Empezar la aventura <span aria-hidden="true">→</span></a>
         <a class="l-btn l-btn--ghost" href="#como-funciona">Ver cómo funciona</a>
       </div>
+      <ul class="l-stats">
+        <li><strong>2</strong><span>materias</span></li>
+        <li><strong>+6</strong><span>retos listos</span></li>
+        <li><strong>100%</strong><span>en el navegador</span></li>
+      </ul>
       <p class="l-note">Se instala como app <i>·</i> Corre en el navegador del colegio</p>
     </div>
 
@@ -107,33 +123,93 @@ require __DIR__ . '/includes/header.php';
         </div>
         <p class="l-score__foot">Vista de ejemplo del reto</p>
       </div>
-      <span class="l-tag" aria-hidden="true">Insignia: Genio lógico</span>
+      <span class="l-tag" aria-hidden="true">🏅 Insignia: Genio lógico</span>
+      <span class="l-spark l-spark--1" aria-hidden="true">✦</span>
+      <span class="l-spark l-spark--2" aria-hidden="true">✦</span>
     </div>
+  </div>
+
+  <div class="l-wave" aria-hidden="true">
+    <svg viewBox="0 0 1440 120" preserveAspectRatio="none" focusable="false">
+      <path d="M0,64L60,58.7C120,53,240,43,360,48C480,53,600,75,720,80C840,85,960,75,1080,64C1200,53,1320,43,1380,37.3L1440,32L1440,120L0,120Z"></path>
+    </svg>
   </div>
 </section>
 
 <div class="l-ticker" aria-hidden="true">
   <div class="l-ticker__track">
-    <span>Guías con opción múltiple</span>
-    <span>Puntos y ranking</span>
-    <span>Insignias por logros</span>
-    <span>Vidas que se recargan</span>
-    <span>Comodín 50/50</span>
-    <span>Mensajes con archivos</span>
-    <span>Notificaciones</span>
-    <span>Panel docente</span>
-    <span>App instalable</span>
-    <span>Guías con opción múltiple</span>
-    <span>Puntos y ranking</span>
-    <span>Insignias por logros</span>
-    <span>Vidas que se recargan</span>
-    <span>Comodín 50/50</span>
-    <span>Mensajes con archivos</span>
-    <span>Notificaciones</span>
-    <span>Panel docente</span>
-    <span>App instalable</span>
+    <span>🧮 Guías con opción múltiple</span>
+    <span>🏆 Puntos y ranking</span>
+    <span>🏅 Insignias por logros</span>
+    <span>❤️ Vidas que se recargan</span>
+    <span>🎲 Comodín 50/50</span>
+    <span>💬 Mensajes con archivos</span>
+    <span>🔔 Notificaciones</span>
+    <span>📊 Panel docente</span>
+    <span>📱 App instalable</span>
+    <span>🧮 Guías con opción múltiple</span>
+    <span>🏆 Puntos y ranking</span>
+    <span>🏅 Insignias por logros</span>
+    <span>❤️ Vidas que se recargan</span>
+    <span>🎲 Comodín 50/50</span>
+    <span>💬 Mensajes con archivos</span>
+    <span>🔔 Notificaciones</span>
+    <span>📊 Panel docente</span>
+    <span>📱 App instalable</span>
   </div>
 </div>
+
+<section class="l-section l-explore" id="explora" aria-labelledby="l-explore-title">
+  <div class="l-wrap">
+    <div class="l-explore__head reveal">
+      <span class="l-kicker">Explora NovaTeam</span>
+      <h2 id="l-explore-title">Elige tu próxima <span class="l-grad">aventura</span></h2>
+      <p class="l-lead">Cinco rincones para aprender jugando: retos, insignias, práctica y un panel para el docente.</p>
+    </div>
+    <div class="l-explore__grid">
+      <a class="l-card l-card--math reveal" href="#materias">
+        <span class="l-card__tag">Lógica y cálculo</span>
+        <span class="l-card__icon" aria-hidden="true">🧮</span>
+        <h3>Matemáticas</h3>
+        <p>Secuencias, operaciones y comparaciones con dificultad que sube paso a paso.</p>
+        <span class="l-card__link">Ver retos <span aria-hidden="true">→</span></span>
+        <span class="l-card__watermark" aria-hidden="true">🔢</span>
+      </a>
+      <a class="l-card l-card--eng reveal" href="#materias" style="--d:1">
+        <span class="l-card__tag">Vocabulary</span>
+        <span class="l-card__icon" aria-hidden="true">🇬🇧</span>
+        <h3>Inglés</h3>
+        <p>Vocabulario, colores, animales y lecturas cortas para practicar sin miedo.</p>
+        <span class="l-card__link">Ver retos <span aria-hidden="true">→</span></span>
+        <span class="l-card__watermark" aria-hidden="true">💬</span>
+      </a>
+      <a class="l-card l-card--play reveal" href="#como-funciona" style="--d:2">
+        <span class="l-card__tag">4 pasos</span>
+        <span class="l-card__icon" aria-hidden="true">🎮</span>
+        <h3>Cómo funciona</h3>
+        <p>Publicar, practicar, sumar puntos y revisar el avance. Así de simple.</p>
+        <span class="l-card__link">Conocer el circuito <span aria-hidden="true">→</span></span>
+        <span class="l-card__watermark" aria-hidden="true">🚀</span>
+      </a>
+      <a class="l-card l-card--teach reveal" href="#docente" style="--d:3">
+        <span class="l-card__tag">Panel</span>
+        <span class="l-card__icon" aria-hidden="true">👩‍🏫</span>
+        <h3>Docentes</h3>
+        <p>Menos planilla: puntos, intentos e insignias del grupo en un solo lugar.</p>
+        <span class="l-card__link">Ver el panel <span aria-hidden="true">→</span></span>
+        <span class="l-card__watermark" aria-hidden="true">📊</span>
+      </a>
+      <a class="l-card l-card--join reveal" href="registro.php" style="--d:4">
+        <span class="l-card__tag">Piloto 2026</span>
+        <span class="l-card__icon" aria-hidden="true">🌟</span>
+        <h3>Únete</h3>
+        <p>Crea tu cuenta de estudiante y empieza a ganar puntos e insignias.</p>
+        <span class="l-card__link">Crear mi cuenta <span aria-hidden="true">→</span></span>
+        <span class="l-card__watermark" aria-hidden="true">🎈</span>
+      </a>
+    </div>
+  </div>
+</section>
 
 <section class="l-section" id="problema" aria-labelledby="l-prob-title">
   <div class="l-wrap l-prob">
@@ -186,21 +262,25 @@ require __DIR__ . '/includes/header.php';
     </div>
     <div class="l-loop">
       <div class="l-loop__step reveal" style="--d:1">
+        <span class="l-loop__emoji" aria-hidden="true">📝</span>
         <span class="l-loop__n">01</span>
         <h3>El docente publica la guía</h3>
         <p>Elige materia, escribe preguntas de opción múltiple y decide cuándo se abre.</p>
       </div>
       <div class="l-loop__step reveal" style="--d:2">
+        <span class="l-loop__emoji" aria-hidden="true">🧠</span>
         <span class="l-loop__n">02</span>
         <h3>El estudiante resuelve</h3>
         <p>Cada intento consume una vida. Puede gastar un comodín 50/50; las respuestas se revelan al enviar.</p>
       </div>
       <div class="l-loop__step reveal" style="--d:3">
+        <span class="l-loop__emoji" aria-hidden="true">🏆</span>
         <span class="l-loop__n">03</span>
         <h3>Sube puntos y ranking</h3>
         <p>Los aciertos suman puntos. Las insignias y la racha premian la constancia, no solo la prisa.</p>
       </div>
       <div class="l-loop__step reveal" style="--d:4">
+        <span class="l-loop__emoji" aria-hidden="true">📊</span>
         <span class="l-loop__n">04</span>
         <h3>El docente revisa</h3>
         <p>Puntos, intentos, guías completadas e insignias por estudiante, sin hojas de cálculo.</p>
@@ -212,7 +292,7 @@ require __DIR__ . '/includes/header.php';
   </div>
 </section>
 
-<section class="l-section l-section--tint" id="docente" aria-labelledby="l-teach-title">
+<section class="l-section l-section--soft" id="docente" aria-labelledby="l-teach-title">
   <div class="l-wrap l-teach">
     <div class="reveal">
       <p class="l-kicker"><span>03</span> Para el docente</p>
@@ -268,7 +348,7 @@ require __DIR__ . '/includes/header.php';
     </div>
     <div class="l-subj">
       <div class="l-subj__row reveal" style="--d:1">
-        <div class="l-subj__name"><small>Materia 01</small>Matemáticas</div>
+        <div class="l-subj__name"><small>Materia 01</small><span class="l-subj__emoji" aria-hidden="true">🧮</span>Matemáticas</div>
         <div class="l-subj__body">
           <p>Retos de lógica y cálculo con dificultad progresiva: primero reconocer el patrón, después resolverlo con fluidez.</p>
           <div class="l-tags">
@@ -277,7 +357,7 @@ require __DIR__ . '/includes/header.php';
         </div>
       </div>
       <div class="l-subj__row reveal" style="--d:2">
-        <div class="l-subj__name"><small>Materia 02</small>Inglés</div>
+        <div class="l-subj__name"><small>Materia 02</small><span class="l-subj__emoji" aria-hidden="true">🇬🇧</span>Inglés</div>
         <div class="l-subj__body">
           <p>Vocabulario y estructuras de uso diario. Cada guía mezcla reconocimiento, lectura corta y respuesta rápida.</p>
           <div class="l-tags">
@@ -289,7 +369,7 @@ require __DIR__ . '/includes/header.php';
   </div>
 </section>
 
-<section class="l-section l-section--tint" id="piloto" aria-labelledby="l-pilot-title">
+<section class="l-section l-section--soft" id="piloto" aria-labelledby="l-pilot-title">
   <div class="l-wrap">
     <div class="reveal">
       <p class="l-kicker"><span>05</span> Puesta en marcha</p>
@@ -352,7 +432,21 @@ require __DIR__ . '/includes/header.php';
   </div>
 </section>
 
-<section class="l-section l-section--tint" id="contacto" aria-labelledby="l-contact-title">
+<section class="l-cta">
+  <div class="l-wrap">
+    <div class="l-cta__card reveal">
+      <span class="l-cta__emoji l-cta__emoji--1" aria-hidden="true">🎈</span>
+      <span class="l-cta__emoji l-cta__emoji--2" aria-hidden="true">⭐</span>
+      <span class="l-cta__emoji l-cta__emoji--3" aria-hidden="true">🪁</span>
+      <span class="l-cta__emoji l-cta__emoji--4" aria-hidden="true">🌈</span>
+      <h2>¿Listo para empezar la aventura?</h2>
+      <p>Únete al piloto de NovaTeam y convierte la práctica de matemáticas e inglés en un juego con puntos, vidas e insignias.</p>
+      <a class="l-btn l-btn--light" href="registro.php">Quiero mi cuenta <span aria-hidden="true">→</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="l-section l-section--soft" id="contacto" aria-labelledby="l-contact-title">
   <div class="l-wrap l-contact">
     <div class="reveal">
       <p class="l-kicker"><span>07</span> Contacto</p>

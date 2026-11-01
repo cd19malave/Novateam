@@ -4,24 +4,85 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Política de Privacidad — NovaTeam</title>
+<meta name="description" content="Política de privacidad de NovaTeam: qué datos recopilamos, para qué los usamos y cómo los protegemos.">
+<link rel="canonical" href="https://novateam.byethost16.com/politica-privacidad.html">
+<meta name="google-site-verification" content="veEsoCakgwHW31yRksy1txxWtAfq1YskiZ2r1tkfyCU">
+<meta name="theme-color" content="#FFF7FD">
 <link rel="icon" href="/assets/icons/icon-512.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-  :root { --azul:#4F8FF7; --fondo:#17181A; --tarjeta:#212226; --texto:#EAEAEA; }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { background:var(--fondo); color:var(--texto); font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; line-height:1.7; padding:24px; }
-  .wrap { max-width:780px; margin:0 auto; }
-  h1 { color:#fff; font-size:26px; margin-bottom:8px; }
-  h2 { color:var(--azul); font-size:19px; margin:28px 0 10px; }
-  p { margin:10px 0; }
-  ul { margin:10px 0 10px 22px; }
-  .fecha { color:#9aa; font-size:14px; margin-bottom:24px; }
-  .card { background:var(--tarjeta); border:1px solid #2e2f34; border-radius:12px; padding:20px; margin-top:16px; }
-  code { background:#2a2b30; padding:2px 6px; border-radius:6px; font-size:14px; }
-  footer { margin-top:36px; font-size:13px; color:#9aa; border-top:1px solid #2e2f34; padding-top:14px; }
+  :root{
+    --purple:#7C3AED; --pink:#DB2777; --ink:#2A1650; --muted:#63507F;
+    --bg:#FFF7FD; --surface:#FFFFFF; --border:#F0D9EC; --pill:#F6E9F7;
+    --gradient:linear-gradient(120deg,#7C3AED,#DB2777);
+    --shadow:0 14px 34px rgba(80,30,120,.12);
+    color-scheme:light;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --ink:#F7EEFF; --muted:#C3B0DD; --bg:#160A2B; --surface:#241046;
+      --border:#3D2566; --pill:#2F1857; --purple:#C084FC;
+      --shadow:0 14px 34px rgba(0,0,0,.45);
+      color-scheme:dark;
+    }
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    background:
+      radial-gradient(46rem 30rem at 8% -10%,rgba(168,85,247,.14),transparent 60%),
+      radial-gradient(46rem 30rem at 100% 0%,rgba(236,72,153,.12),transparent 60%),
+      var(--bg);
+    background-attachment:fixed;
+    color:var(--ink);
+    font-family:'Nunito','Segoe UI',Arial,sans-serif;
+    line-height:1.7;
+    padding:28px 20px 48px;
+  }
+  .wrap{max-width:800px;margin:0 auto}
+  .top{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:28px}
+  .logo{display:inline-flex;align-items:center;gap:.6rem;font-family:'Baloo 2','Trebuchet MS',sans-serif;font-weight:800;font-size:1.35rem;color:var(--ink);text-decoration:none}
+  .logo span{
+    width:40px;height:40px;display:grid;place-items:center;border-radius:14px;
+    background:var(--gradient);color:#fff;transform:rotate(-4deg);
+    box-shadow:0 8px 18px rgba(236,72,153,.32);font-family:'Baloo 2',sans-serif;font-weight:800;
+  }
+  .back{
+    display:inline-flex;align-items:center;gap:.4rem;min-height:44px;padding:.5rem 1.1rem;
+    border-radius:999px;background:var(--surface);border:2px solid var(--border);
+    color:var(--ink);text-decoration:none;font-weight:800;font-size:.9rem;
+    box-shadow:0 4px 0 rgba(124,58,237,.12);
+  }
+  .back:hover{border-color:var(--purple);color:var(--purple)}
+  h1{font-family:'Baloo 2','Trebuchet MS',sans-serif;font-size:clamp(1.9rem,5vw,2.6rem);line-height:1.15;margin-bottom:8px}
+  h1::after{content:"";display:block;width:84px;height:6px;border-radius:999px;background:var(--gradient);margin-top:14px}
+  .fecha{color:var(--muted);font-size:.9rem;margin:14px 0 26px}
+  h2{font-family:'Baloo 2','Trebuchet MS',sans-serif;color:var(--purple);font-size:1.2rem;margin:30px 0 10px}
+  p{margin:10px 0}
+  ul{margin:10px 0 10px 22px}
+  li{margin:6px 0}
+  strong{color:inherit}
+  .card{
+    background:var(--surface);border:1px solid var(--border);border-radius:26px;
+    padding:clamp(1.2rem,4vw,2rem);box-shadow:var(--shadow);
+  }
+  code{background:var(--pill);color:var(--purple);padding:2px 7px;border-radius:8px;font-size:.88em;font-weight:700}
+  a{color:var(--purple)}
+  footer{
+    margin-top:32px;font-size:.82rem;color:var(--muted);border-top:1px solid var(--border);
+    padding-top:16px;text-align:center;
+  }
+  footer a{font-weight:800;text-decoration:none}
+  footer a:hover{color:var(--pink)}
 </style>
 </head>
 <body>
 <div class="wrap">
+  <div class="top">
+    <a class="logo" href="/"><span>N</span>NovaTeam</a>
+    <a class="back" href="/">← Volver al inicio</a>
+  </div>
   <h1>Política de Privacidad</h1>
   <p class="fecha">NovaTeam — Plataforma Educativa · Última actualización: 15 de septiembre de 2026</p>
 
@@ -63,7 +124,7 @@
   <p>Podemos actualizar esta política de privacidad cuando sea necesario. Los cambios se publicarán en esta misma página con su fecha de actualización.</p>
   </div>
 
-  <footer>NovaTeam · Plataforma educativa para el aprendizaje de matemáticas e inglés</footer>
+  <footer>NovaTeam · Plataforma educativa para el aprendizaje de matemáticas e inglés · <a href="/">novateam.byethost16.com</a></footer>
 </div>
 </body>
 </html>

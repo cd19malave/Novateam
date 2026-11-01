@@ -4,7 +4,7 @@ declare(strict_types=1);
 $pageTitle = $pageTitle ?? 'NovaTeam';
 $extraHead = $extraHead ?? '';
 $bodyClass = $bodyClass ?? '';
-$themeColor = $themeColor ?? '#F5EFE4';
+$themeColor = $themeColor ?? '#FFF7FD';
 $metaDescription = $metaDescription ?? '';
 $canonical = $canonical ?? '';
 $ogImage = $ogImage ?? 'assets/icons/icon-512.png';
@@ -21,6 +21,7 @@ $showBottomNav = (bool) $user;
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="google-site-verification" content="veEsoCakgwHW31yRksy1txxWtAfq1YskiZ2r1tkfyCU">
   <script>
     (function(){
       var t = localStorage.getItem('novateam-theme');
@@ -66,9 +67,10 @@ $showBottomNav = (bool) $user;
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,600&family=Fredoka:wght@500;600;700&family=Instrument+Sans:wght@400;500;600;700&family=Quicksand:wght@500;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/app.css?v=13">
   <link rel="stylesheet" href="assets/css/theme-nova.css?v=4">
+  <link rel="stylesheet" href="assets/css/theme-jako.css?v=1">
   <link rel="manifest" href="manifest.json?v=5">
   <meta name="nt-sse" content="<?= e((string) env('NOTIF_SSE', '0')) ?>">
   <meta name="theme-color" content="<?= e($themeColor) ?>">

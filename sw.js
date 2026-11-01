@@ -1,10 +1,11 @@
-const CACHE_NAME = 'novateam-v24';
+const CACHE_NAME = 'novateam-v25';
 
 /* Solo activos estáticos: las páginas son dinámicas y dependen de la sesión. */
 const ASSETS = [
   '/assets/css/app.css?v=13',
-  '/assets/css/landing.css?v=1',
+  '/assets/css/landing.css?v=2',
   '/assets/css/theme-nova.css?v=4',
+  '/assets/css/theme-jako.css?v=1',
   '/assets/js/tab.js?v=3',
   '/assets/js/notificaciones.js?v=3',
   '/assets/js/quiz.js?v=3',
