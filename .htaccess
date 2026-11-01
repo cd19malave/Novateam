@@ -7,6 +7,16 @@ AddDefaultCharset UTF-8
   Require all denied
 </FilesMatch>
 
+# --- HTTPS en produccion ------------------------------------------------
+# Solo en el dominio publicado: en local (localhost) se sigue usando HTTP.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTP_HOST} ^novateam\.byethost16\.com$ [NC]
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https
+  RewriteRule ^ https://novateam.byethost16.com%{REQUEST_URI} [R=301,L]
+</IfModule>
+
 # --- Carpetas internas --------------------------------------------------
 <IfModule mod_rewrite.c>
   RewriteEngine On
