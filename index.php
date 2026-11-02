@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $pageTitle = 'Aprender practicando';
 $bodyClass = 'landing-page';
-$themeColor = '#FFF7FD';
+$themeColor = '#FFFFFF';
 $metaDescription = 'NovaTeam convierte las guías de matemáticas e inglés de 4.º en retos con puntos, vidas e insignias. El docente ve el avance del grupo sin planillas.';
 $canonical = site_url('/');
 $structuredData = [
@@ -55,7 +55,7 @@ $structuredData = [
     'areaServed' => ['@type' => 'Country', 'name' => 'Colombia'],
     'address' => ['@type' => 'PostalAddress', 'addressLocality' => 'Cúcuta', 'addressCountry' => 'CO'],
 ];
-$extraHead = '<link rel="stylesheet" href="assets/css/landing.css?v=2">'
+$extraHead = '<link rel="stylesheet" href="assets/css/landing.css?v=4">'
     . '<script type="application/ld+json">' . json_encode($structuredData, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . '</script>';
 require __DIR__ . '/includes/header.php';
 ?>
@@ -136,26 +136,28 @@ require __DIR__ . '/includes/header.php';
   </div>
 </section>
 
+<?php
+$tickerA = ['🧮 Guías con opción múltiple', '🏆 Puntos y ranking', '🏅 Insignias por logros', '❤️ Vidas que se recargan', '🎲 Comodín 50/50', '💬 Mensajes con archivos', '🔔 Notificaciones', '📊 Panel docente', '📱 App instalable'];
+$tickerB = ['✏️ Matemáticas', '🇬🇧 Inglés', '🎯 Retos', '🏆 Ranking', '🏅 Insignias', '🔥 Rachas', '📈 Progreso', '🛍️ Tienda', '💬 Mensajes'];
+?>
 <div class="l-ticker" aria-hidden="true">
-  <div class="l-ticker__track">
-    <span>🧮 Guías con opción múltiple</span>
-    <span>🏆 Puntos y ranking</span>
-    <span>🏅 Insignias por logros</span>
-    <span>❤️ Vidas que se recargan</span>
-    <span>🎲 Comodín 50/50</span>
-    <span>💬 Mensajes con archivos</span>
-    <span>🔔 Notificaciones</span>
-    <span>📊 Panel docente</span>
-    <span>📱 App instalable</span>
-    <span>🧮 Guías con opción múltiple</span>
-    <span>🏆 Puntos y ranking</span>
-    <span>🏅 Insignias por logros</span>
-    <span>❤️ Vidas que se recargan</span>
-    <span>🎲 Comodín 50/50</span>
-    <span>💬 Mensajes con archivos</span>
-    <span>🔔 Notificaciones</span>
-    <span>📊 Panel docente</span>
-    <span>📱 App instalable</span>
+  <div class="l-ticker__lane">
+    <div class="l-ticker__track">
+      <?php foreach ([0, 1] as $copy): ?>
+      <div class="l-ticker__group">
+        <?php foreach ($tickerA as $item): ?><span class="l-pill"><?= e($item) ?></span><?php endforeach; ?>
+      </div>
+      <?php endforeach; ?>
+    </div>
+  </div>
+  <div class="l-ticker__lane l-ticker__lane--alt">
+    <div class="l-ticker__track l-ticker__track--rev">
+      <?php foreach ([0, 1] as $copy): ?>
+      <div class="l-ticker__group">
+        <?php foreach ($tickerB as $item): ?><span class="l-pill"><?= e($item) ?></span><?php endforeach; ?>
+      </div>
+      <?php endforeach; ?>
+    </div>
   </div>
 </div>
 
@@ -312,7 +314,8 @@ require __DIR__ . '/includes/header.php';
       <div class="l-table">
         <div class="l-table__head">
           <span>Alumnos · Guía 03</span>
-          <span>Matemáticas</span>
+          <span>Puntos</span>
+          <span>Guías</span>
         </div>
         <div class="l-table__row is-top">
           <span>Sara Méndez</span>

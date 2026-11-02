@@ -4,7 +4,7 @@ declare(strict_types=1);
 $pageTitle = $pageTitle ?? 'NovaTeam';
 $extraHead = $extraHead ?? '';
 $bodyClass = $bodyClass ?? '';
-$themeColor = $themeColor ?? '#FFF7FD';
+$themeColor = $themeColor ?? '#FFFFFF';
 $metaDescription = $metaDescription ?? '';
 $canonical = $canonical ?? '';
 $ogImage = $ogImage ?? 'assets/icons/icon-512.png';
@@ -67,11 +67,11 @@ $showBottomNav = (bool) $user;
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/app.css?v=13">
   <link rel="stylesheet" href="assets/css/theme-nova.css?v=4">
-  <link rel="stylesheet" href="assets/css/theme-jako.css?v=1">
-  <link rel="manifest" href="manifest.json?v=5">
+  <link rel="stylesheet" href="assets/css/theme-jako.css?v=3">
+  <link rel="manifest" href="manifest.json?v=6">
   <meta name="nt-sse" content="<?= e((string) env('NOTIF_SSE', '0')) ?>">
   <meta name="theme-color" content="<?= e($themeColor) ?>">
   <meta name="mobile-web-app-capable" content="yes">
